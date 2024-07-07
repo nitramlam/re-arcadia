@@ -1,7 +1,5 @@
-<?php
-include '../includes/header.php';
-getHeader('Bienvenue sur mon site');
-?>
+<?php require_once (__DIR__ . '/../includes/header.php'); ?>
+
 <link rel="stylesheet" href="style.css">
 <main>
     <!-- intro -->
@@ -90,7 +88,5 @@ getHeader('Bienvenue sur mon site');
     </div>
     <!------------- fin avis--------------->
 </main>
-<?php
-include '../includes/footer.php';
-getFooter();
-?>
+
+<?php require_once (__DIR__ . '/../includes/footer.php'); ?>

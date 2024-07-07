@@ -1,9 +1,4 @@
-<?php
-function getFooter() {
-    echo '</div>
-
-    <footer class="footer">
-
+<footer class="footer">
         <div class="container">
             <div class="row"> 
                 <div class="col-md-3 col-sm-6">
@@ -55,6 +50,4 @@ function getFooter() {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>
-    </html>';
-}
-?>
+    </html>

@@ -217,7 +217,7 @@ main {
    margin-top: 30%;
 }
 
-.habitats {
+a.habitats {
     width: 100%;
     background-color: blue;
     grid-area: habitats;
@@ -225,6 +225,7 @@ main {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 20% 40% 40%;
     gap: 0px;
+    color: #F7EDD9;
 }
 
 .flecheHabitats {
@@ -236,8 +237,9 @@ main {
     transition: transform 0.5s ease;
     
 }
-.flecheHabitats:hover{
-transform: translateX(-20px);
+
+a.habitats:hover > .flecheHabitats {
+    transform: translateX(-20px);
 }
 
 .toucan {

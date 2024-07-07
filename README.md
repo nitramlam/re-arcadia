@@ -27,7 +27,7 @@ You can connect to web server using `docker compose exec` command to perform var
 docker compose exec webserver bash
 ```
 
-## Drop database
+## load database
 
 ```shell
 docker compose down -v

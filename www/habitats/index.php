@@ -12,27 +12,11 @@ if ($pdo) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php require_once (__DIR__ . '/../includes/header.php'); ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+<link rel="stylesheet" href="style.css">
 
-<body>
-    <?php
-    // Affichage des habitats dans une liste
-    foreach ($habitats as $habitat) {
-        echo "<article>";
-        echo "<h2>" . htmlspecialchars($habitat['nom']) . "</h2>";
-        echo "<p>" . htmlspecialchars($habitat['description']) . "</p>";
-        echo "<p><strong>Commentaire:</strong> " . htmlspecialchars($habitat['commentaire_habitat']) . "</p>";
-        echo "</article>";
-    }
-    ?>
+<main>
     <div class="habitats">
         <div class="introHabitats">
             <h1 class="titreHabitats"> NOS HABITATS</h1>
@@ -44,6 +28,20 @@ if ($pdo) {
 
             </p>
             <img src="habitats/panthere-habitats.png" alt="" class="panthere">
+        </div>
+
+        <div class="row">
+            <?php
+            // Affichage des habitats dans une liste
+            foreach ($habitats as $habitat) {
+                echo '<div class="col-md-4">';
+                echo "<h2>" . htmlspecialchars($habitat['nom']) . "</h2>";
+                echo "<p>" . htmlspecialchars($habitat['description']) . "</p>";
+                echo "<p><strong>Commentaire:</strong> " . htmlspecialchars($habitat['commentaire_habitat']) . "</p>";
+                echo '<img src="data:image/jpeg;base64,' . base64_encode($habitat['image_data']) . '"/>';
+                echo "</div>";
+            }
+            ?>
         </div>
         <div class="hoverHabitats">
             <div class="savane">
@@ -63,7 +61,6 @@ if ($pdo) {
         </div>
 
     </div>
+</main>
 
-</body>
-
-</html>
+<?php require_once (__DIR__ . '/../includes/footer.php'); ?>

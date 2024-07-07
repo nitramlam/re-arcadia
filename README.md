@@ -35,6 +35,15 @@ rm -rf ./data/mysql/*
 docker compose up -d --build
 ```
 
+### Execute srcript from bash
+
+```shell
+docker compose exec database bash
+mysql -p // mdp arcadia
+USE arcadia
+source /docker-entrypoint-initdb.d/init.sql
+```
+
 ## phpMyAdmin
 
 phpMyAdmin is configured to run on port 8080. Use following default credentials.

@@ -2,6 +2,7 @@
 include '../includes/header.php';
 getHeader('Bienvenue sur mon site');
 ?>
+<link rel="stylesheet" href="style.css">
 <main>
     <!-- intro -->
     <div class="intro">
@@ -12,12 +13,12 @@ getHeader('Bienvenue sur mon site');
         <p class="lorem">Depuis 1960, le Zoo Écologique de la Forêt de Brocéliande s'inscrit dans le respect de la
             nature de la légendaire forêt de Brocéliande en Bretagne. Venez explorer nos habitats naturels et
             découvrir notre engagement en faveur de la conservation environnementale.</p>
-        <img src="accueil/lion-accueil.png" alt="" class="lion">
+        <img src="assets/lion-accueil.png" alt="" class="lion">
     </div>
     <!-- ------------- fin intro----------- -->
     <!-- /* -----------icons-------------*/-->
     <div class="icons">
-        <img src="accueil/icons-accueil.png" alt="">
+        <img src="assets/icons-accueil.png" alt="">
     </div>
     <!-- /* ----------- fin icons-------------*/-->
     <!-------------services--------------->
@@ -27,7 +28,7 @@ getHeader('Bienvenue sur mon site');
             <h3 class="titreServices">Les services</h3>
             <p class="description">Découvrez notre restaurant, notre petit train et bénéficiez d'un guide gratuit
                 pour enrichir votre expérience au Zoo Écologique de la Forêt de Brocéliande.</p>
-            <img class="fleche" src="accueil/fleches-accueil.png" alt="fleche pour acceder aux services">
+            <img class="fleche" src="assets/fleches-accueil.png" alt="fleche pour acceder aux services">
             <div class="autruche"></div>
         </div>
         <div class="zebre">
@@ -46,18 +47,18 @@ getHeader('Bienvenue sur mon site');
             <h3 class="titreAnimaux">LES ANIMAUX</h3>
             <p class="paragrapheAnimaux">Rencontrez nos résidents exceptionnels, <br>élevés dans un environnement
                 respectueux de leur bien-être et de la nature.</p>
-            <img src="accueil/paresseux-accueil.png" alt="" class="paresseux">
-            <img class="flecheAnimaux" src="accueil/fleches-accueil.png" alt="">
+            <img src="assets/paresseux-accueil.png" alt="" class="paresseux">
+            <img class="flecheAnimaux" src="assets/fleches-accueil.png" alt="">
         </div>
         <div class="carrousel"></div>
-        <div class="habitats">
+        <a class="habitats" href="/habitats">
             <h3 class="titreHabitats">LES HABITATS</h3>
             <p class="paragrapheHabitats">Explorez notre variété d'animaux <br>dans des habitats reconstitués :
                 <br>la jungle luxuriante, les marais préservés<br> et la savane durablement aménagée.
             </p>
-            <img src="accueil/toucan-accueil.png" alt="" class="toucan">
-            <img class="flecheHabitats" src="accueil/fleches-accueil.png" alt="">
-        </div>
+            <img src="assets/toucan-accueil.png" alt="" class="toucan">
+            <img class="flecheHabitats" src="assets/fleches-accueil.png" alt="">
+        </a>
     </div>
     <!------------- fin block habitats--------------->
     <!------------- avis--------------->
@@ -66,7 +67,7 @@ getHeader('Bienvenue sur mon site');
             <h3 class="titreAvis">Votre avis compte !</h3>
         </div>
         <div class="commentaireCarrousel">
-            <img class="photoUtilisateur" src="accueil/avis.png" alt="">
+            <img class="photoUtilisateur" src="assets/avis.png" alt="">
             <p class="commentairePseudo">Pierre H</p>
             <p class="commentaireUtilisateur"> "super visite !!"</p>
         </div>

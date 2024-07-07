@@ -24,3 +24,19 @@ INSERT INTO service (nom, description) VALUES
 ('Restaurant', 'Découvrez notre zoo de manière enrichissante avec un restaurant proposant des produits locaux et biologiques, des visites guidées interactives gratuites qui vous plongent dans l univers captivant de nos animaux. et des circuits en petit train électrique respectueux de notre écosystème.'),
 ('Visite guidée', 'Participez à nos visites guidées gratuites, où nos guides passionnés vous feront découvrir les comportements et les habitats de nos animaux. Une expérience éducative enrichissante pour toute la famille, à ne pas manquer lors de votre visite !\n\nPour réserver votre visite guidée, utilisez notre formulaire de contact en ligne. Assurez-vous de réserver au moins 24 heures à l avance.'),
 ('Visite en train', 'Plongez dans une aventure captivante à bord de notre petit train écologique, et laissez-vous transporter dans une expérience immersive et enrichissante.\n\nTarif : 2 € par Personne\nPour plus de détails, veuillez vous renseigner à l\accueil lors de votre visite.');
+
+CREATE TABLE IF NOT EXISTS animal (
+    animal_id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(255) NOT NULL,
+    espece VARCHAR(255) NOT NULL,
+    etat_general ENUM('En bonne santé', 'Malade') NOT NULL,
+    regime ENUM('Protéine', 'Légumes & Fruits', 'Graines'),
+    poids DECIMAL(6, 2),
+    sexe ENUM('H', 'F'),
+    derniere_visite DATE,
+    commentaire TEXT,
+    continent_origine VARCHAR(255),
+    age INT,
+    habitat ENUM('Jungle', 'Marais', 'Savane'),
+    grammage DECIMAL(6, 2)
+);

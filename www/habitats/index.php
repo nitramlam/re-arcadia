@@ -30,16 +30,14 @@ if ($pdo) {
             <img src="assets/panthere-habitats.png" alt="" class="panthere">
         </div>
 
-        <div class="row">
+        <div class="row m-0">
             <?php
             // Affichage des habitats dans une liste
             foreach ($habitats as $habitat) {
-                echo '<a class="col-md-4">';
-                echo "<h2>" . htmlspecialchars($habitat['nom']) . "</h2>";
-                echo "<p>" . htmlspecialchars($habitat['description']) . "</p>";
-                echo "<p><strong>Commentaire:</strong> " . htmlspecialchars($habitat['commentaire_habitat']) . "</p>";
-                echo '<img src="' . $habitat['image_path'] . '"/>';
-                echo "</a>";
+                echo '<div class="col-md-4 p-0">';
+                echo '<img class="habitat-image" src="' . $habitat['image_path'] . '"/>';
+                echo '<a class="habitat-link" href="/habitat/' . $habitat['habitat_id'] . '">' . htmlspecialchars($habitat['nom']) . "</a>";
+                echo "</div>";
             }
             ?>
         </div>

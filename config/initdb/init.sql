@@ -70,7 +70,7 @@ VALUES
     avis_id INT AUTO_INCREMENT PRIMARY KEY,
     pseudo VARCHAR(50),
     commentaire VARCHAR(50),
-    isVisible BOOL
+    isVisible BOOL,
 );
 INSERT INTO AVIS (pseudo, commentaire, isVisible) VALUE
 ('martin', 'super visite', true),

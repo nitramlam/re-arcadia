@@ -4,12 +4,6 @@ require '../config/db.php';
 // Obtenir une connexion à la base de données
 $pdo = getDatabaseConnection();
 
-if ($pdo) {
-    // Sélection et affichage des avis
-    $sql_avis = "SELECT * FROM AVIS";
-    $stmt_avis = $pdo->query($sql_avis);
-    $avis = $stmt_avis->fetchAll();
-}
 $pseudo = "";
 $commentaire = "";
 $isFormSubmitted = false;
@@ -20,24 +14,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pseudo = $_POST['pseudo'];
     $commentaire = $_POST['commentaire'];
     $isVisible = true; // Par défaut, le nouvel avis est visible
-
-    // Validation éventuelle des données (par exemple, longueur maximale du pseudo et du commentaire)
+    $isApproved = false; // Nouvel avis non validé par défaut
 
     // Insertion des données dans la base de données
     $pdo = getDatabaseConnection();
     if ($pdo) {
-        $sql = "INSERT INTO AVIS (pseudo, commentaire, isVisible) VALUES (:pseudo, :commentaire, :isVisible)";
+        $sql = "INSERT INTO AVIS (pseudo, commentaire, isVisible, isApproved) VALUES (:pseudo, :commentaire, :isVisible, :isApproved)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':pseudo', $pseudo, PDO::PARAM_STR);
         $stmt->bindParam(':commentaire', $commentaire, PDO::PARAM_STR);
         $stmt->bindParam(':isVisible', $isVisible, PDO::PARAM_BOOL);
+        $stmt->bindParam(':isApproved', $isApproved, PDO::PARAM_BOOL);
 
         if ($stmt->execute()) {
-            // Marquer que le formulaire a été soumis avec succès
-            $isFormSubmitted = true;
-            // Rafraîchir la page pour afficher le nouvel avis
-            header('Location: ' . $_SERVER['PHP_SELF']);
-            exit;
+            // Envoyer un email de confirmation
+            $to = 'josearcadia33@gmail.com';
+            $subject = 'Nouveau commentaire en attente de validation';
+            $message = "Un nouveau commentaire a été soumis par $pseudo.\n\nCommentaire : $commentaire\n\n";
+
+            $headers = 'From: no-reply@votre-domaine.com' . "\r\n" .
+                'Reply-To: no-reply@votre-domaine.com' . "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
+
+            // Envoi de l'email
+            if (mail($to, $subject, $message, $headers)) {
+                $isFormSubmitted = true;
+                header('Location: ' . $_SERVER['PHP_SELF']);
+                exit;
+            } else {
+                echo "Erreur lors de l'envoi de l'email.";
+            }
         } else {
             echo "Erreur lors de l'ajout de votre avis.";
         }
@@ -47,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Sélection et affichage des avis existants
 $pdo = getDatabaseConnection();
 if ($pdo) {
-    $sql_avis = "SELECT * FROM AVIS WHERE isVisible = true"; // Sélectionner uniquement les avis visibles
+    $sql_avis = "SELECT * FROM AVIS WHERE isVisible = true AND isApproved = true"; // Sélectionner uniquement les avis visibles et approuvés
     $stmt_avis = $pdo->query($sql_avis);
     $avis = $stmt_avis->fetchAll();
 }

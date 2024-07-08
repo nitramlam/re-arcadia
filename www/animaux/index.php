@@ -48,7 +48,7 @@ if ($pdo) {
                         <p><strong>Poids:</strong> <?= $animal['poids'] ?> kg</p>
                         <p><strong>Sexe:</strong> <?= htmlspecialchars($animal['sexe']) ?></p>
                         <p><strong>Dernière visite:</strong> <?= $animal['derniere_visite'] ?></p>
-                        <?php if (isset($animal['commentaire'])): ?>
+                         <?php if (isset($animal['commentaire'])): ?>
                 <p><strong>Commentaire:</strong> <?= htmlspecialchars($animal['commentaire']) ?></p>
             <?php else: ?>
                 <p><strong>Commentaire:</strong> Aucun commentaire disponible</p>

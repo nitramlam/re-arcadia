@@ -66,15 +66,17 @@ VALUES
 
     ('Narsil', 'héron cendré des Everglades', 'En bonne santé','Le héron cendré des Everglades, connu sous son nom scientifique Ardea herodias, est une espèce emblématique des marais et des zones humides de Floride. Reconnaissable à son plumage cendré, à son long cou et à ses pattes jaunes, il se nourrit principalement de poissons, de grenouilles et d\'insectes qu\'il chasse avec agilité dans les eaux peu profondes. Ce héron joue un rôle crucial dans l\'écosystème en régulant les populations de poissons et en contribuant à la biodiversité des habitats aquatiques.', 'Protéine', 10.00, 'M', '2024-02-01', NULL, 'Amérique du Nord', 11, 'Marais', 2.00);
 
-    CREATE TABLE IF NOT EXISTS AVIS (
+CREATE TABLE IF NOT EXISTS AVIS (
     avis_id INT AUTO_INCREMENT PRIMARY KEY,
     pseudo VARCHAR(50),
     commentaire VARCHAR(50),
     isVisible BOOL,
+    isApproved BOOL DEFAULT false
 );
-INSERT INTO AVIS (pseudo, commentaire, isVisible) VALUE
-('martin', 'super visite', true),
-('jules', 'yessai', true);
+
+INSERT INTO AVIS (pseudo, commentaire, isVisible, isApproved) VALUES
+('martin', 'super visite', true, true),
+('jules', 'yessai', true, true);
 
 
 
@@ -84,4 +86,3 @@ INSERT INTO AVIS (pseudo, commentaire, isVisible) VALUE
 ALTER TABLE animal CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE service CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE habitat CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER DATABASE votre_base_de_donnees CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

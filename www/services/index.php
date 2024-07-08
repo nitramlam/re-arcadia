@@ -28,22 +28,21 @@ if ($pdo) {
         <div class="icons-services">
             <img src="assets/icons-services.png" alt="">
         </div>
-
         <div class="row m-0">
-            <?php
-            // Affichage des habitats dans une liste
-            foreach ($services as $service) {
-                echo '<div class="col-md-4 p-0">';
-                echo '<h3 class="service-titre">' . htmlspecialchars($service['nom']) . "</h3>";
-                echo '<p class="service.description">' .
-                htmlspecialchars($service['description']) . "</p>";
-                
+    <?php
+ 
+    foreach ($services as $service) {
 
-                echo "</div>";
-            }
-            ?>
-        </div>
-    </div>
-</main>
+        $isVisible = true; 
+
+        if ($isVisible) {
+            echo '<div class="col-md-4 p-0">';
+            echo '<h3 class="service-titre">' . htmlspecialchars($service['nom']) . "</h3>";
+            echo '<p class="service.description">' . htmlspecialchars($service['description']) . "</p>";
+            echo "</div>";
+        }
+    }
+    ?>
+</div>
 
 <?php require_once (__DIR__ . '/../includes/footer.php'); ?>

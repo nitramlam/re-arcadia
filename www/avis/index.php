@@ -46,16 +46,11 @@ $avis = $stmt_avis->fetchAll();
 
 <head>
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../avis/avis.css">
 </head>
-<main>
-    <div class="avis">
-        <div class="introAvis">
-            <h1 class="titreAvis"> NOS AVIS</h1>
-            <p class="paragrapheAvis">
-                Découvrez les avis de nos visiteurs sur notre zoo et nos services. Votre opinion compte pour nous!
-            </p>
-        </div>
+
+ <div class="avis">
+        
 
         <!-- Formulaire pour laisser un avis -->
         <div class="nouvelAvis">
@@ -75,10 +70,9 @@ $avis = $stmt_avis->fetchAll();
             <?php endif; ?>
         </div>
 
-        <!-- Affichage des avis existants -->
-         <!-- Carrousel d'avis -->
-<div class="avis-carousel">
-    <?php if (!empty($avis)) : ?>
+       
+        <div class="avis-carousel">
+        <?php if (!empty($avis)) : ?>
         <div class="carousel-container">
             <?php foreach ($avis as $avis_item) : ?>
                 <div class="avis-slide">
@@ -113,6 +107,6 @@ $avis = $stmt_avis->fetchAll();
 
       
     </div>
-</main>
+
 
 <?php require_once (__DIR__ . '/../includes/footer.php'); ?>

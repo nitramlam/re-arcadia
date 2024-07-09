@@ -1,0 +1,7 @@
+.avis{
+    background-color: #5D6A41;
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr; 
+    grid-template-rows: 0.5fr 0.5fr; 
+
+}

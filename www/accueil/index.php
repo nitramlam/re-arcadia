@@ -60,33 +60,7 @@
     </div>
     <!------------- fin block habitats--------------->
     <!------------- avis--------------->
-    <div class="commentaire">
-        <div class="avis">
-            <h3 class="titreAvis">Votre avis compte !</h3>
-        </div>
-        <div class="commentaireCarrousel">
-            <img class="photoUtilisateur" src="assets/avis.png" alt="">
-            <p class="commentairePseudo">Pierre H</p>
-            <p class="commentaireUtilisateur"> "super visite !!"</p>
-        </div>
-        <div class="formulaireAvis">
-            <form action="formulaire.php" method="post">
-                <div class="champ">
-                    <label for="pseudo">Votre pseudo</label>
-                    <input type="text" id="pseudo" name="pseudo" placeholder="Entrez votre pseudo">
-                </div>
-                <div class="champ">
-                    <label for="commentaire">Votre commentaire</label>
-                    <div class="commentaire-container">
-                        <textarea id="commentaire" name="commentaire" rows="5" cols="30"
-                            placeholder="Laissez votre commentaire"></textarea>
-                        <button type="submit">Envoyer</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!------------- fin avis--------------->
-</main>
+    <?php require_once (__DIR__ . '/../avis/index.php'); ?>
+ 
 
 <?php require_once (__DIR__ . '/../includes/footer.php'); ?>

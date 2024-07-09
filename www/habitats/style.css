@@ -1,0 +1,55 @@
+.habitats {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.5fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    "introHabitats"
+    "hoverHabitats";
+}
+.introHabitats {
+  color: #f7edd9;
+  height: 560px;
+  background-color: #5d6a41;
+  grid-area: introHabitats;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-columns: 0.75fr 0.25fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas: "titreHabitats panthere";
+}
+.titreHabitats {
+  grid-area: titreHabitats;
+  justify-self: start;
+  align-self: center;
+  margin-left: 20%;
+  margin-bottom: 20%;
+}
+.paragrapheHabitats {
+  width: 80%;
+  height: 30%;
+  grid-area: titreHabitats;
+  align-self: center;
+  justify-self: center;
+  flex-wrap: wrap;
+}
+.panthere {
+  grid-area: panthere;
+  width: 70%;
+  justify-self: end;
+  align-self: end;
+}
+
+.habitat-image {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+}
+
+.habitat-link {
+  color: #f7edd9;
+  background-color: #b6be64;
+  height: 100px;
+}

@@ -3,107 +3,53 @@ require '../config/db.php';
 
 $pdo = getDatabaseConnection();
 
-$message = ""; // Message de confirmation
-
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
-    $avisId = $_GET['id'];
-
-    // Récupérer les détails de l'avis à valider
-    $sql = "SELECT * FROM AVIS WHERE avis_id = :avisId";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':avisId', $avisId, PDO::PARAM_INT);
-    $stmt->execute();
-    $avis = $stmt->fetch();
-
-    if (!$avis) {
-        die("Avis non trouvé.");
-    }
-} else {
-    die("Accès non autorisé.");
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && isset($_POST['avis_id'])) {
+    $avis_id = $_POST['avis_id'];
     $action = $_POST['action'];
 
-    if ($action === "approve") {
-        // Mettre à jour la visibilité de l'avis
-        $sql = "UPDATE AVIS SET isVisible = true, isApproved = true WHERE avis_id = :avisId";
+    if ($action === 'approve') {
+        $sql = "UPDATE AVIS SET isApproved = true, isVisible = true WHERE avis_id = :avis_id";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':avisId', $avisId, PDO::PARAM_INT);
-        if ($stmt->execute()) {
-            $message = "L'avis a été approuvé et publié.";
-        } else {
-            $message = "Erreur lors de l'approbation de l'avis.";
-        }
-    } elseif ($action === "reject") {
-        // Supprimer l'avis
-        $sql = "DELETE FROM AVIS WHERE avis_id = :avisId";
+        $stmt->bindParam(':avis_id', $avis_id, PDO::PARAM_INT);
+        $stmt->execute();
+    } elseif ($action === 'delete') {
+        $sql = "DELETE FROM AVIS WHERE avis_id = :avis_id";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':avisId', $avisId, PDO::PARAM_INT);
-        if ($stmt->execute()) {
-            $message = "L'avis a été rejeté.";
-        } else {
-            $message = "Erreur lors du rejet de l'avis.";
-        }
+        $stmt->bindParam(':avis_id', $avis_id, PDO::PARAM_INT);
+        $stmt->execute();
     }
 }
+
+$sql_pending_avis = "SELECT * FROM AVIS WHERE isApproved = false";
+$stmt_pending_avis = $pdo->query($sql_pending_avis);
+$pending_avis = $stmt_pending_avis->fetchAll();
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Validation de l'Avis</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h2>Validation de l'Avis</h2>
-    <h3><?php echo htmlspecialchars($avis['pseudo']); ?></h3>
-    <p><?php echo htmlspecialchars($avis['commentaire']); ?></p>
+<?php require_once (__DIR__ . '/../includes/header.php'); ?>
 
-    <?php if (!empty($message)) : ?>
-        <div class="message"><?php echo htmlspecialchars($message); ?></div>
-    <?php endif; ?>
+<link rel="stylesheet" href="style.css">
 
-    <form action="<?php echo $_SERVER['PHP_SELF'] . "?id=$avisId"; ?>" method="post">
-        <input type="hidden" name="action" value="approve">
-        <button type="submit">Approuver et Publier</button>
-    </form>
+<main>
+    <div class="validation">
+        <h1>Validation des Avis</h1>
+        <?php if (empty($pending_avis)) : ?>
+            <p>Aucun avis en attente de validation.</p>
+        <?php else : ?>
+            <ul>
+                <?php foreach ($pending_avis as $avis) : ?>
+                    <li>
+                        <p><strong>Pseudo:</strong> <?php echo htmlspecialchars($avis['pseudo']); ?></p>
+                        <p><strong>Commentaire:</strong> <?php echo htmlspecialchars($avis['commentaire']); ?></p>
+                        <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                            <input type="hidden" name="avis_id" value="<?php echo $avis['avis_id']; ?>">
+                            <button type="submit" name="action" value="approve">Oui</button>
+                            <button type="submit" name="action" value="delete">Non</button>
+                        </form>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    </div>
+</main>
 
-    <form action="<?php echo $_SERVER['PHP_SELF'] . "?id=$avisId"; ?>" method="post">
-        <input type="hidden" name="action" value="reject">
-        <button type="submit">Rejeter</button>
-    </form>
-</body>
-</html>
-
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Validation de l'Avis</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h2>Validation de l'Avis</h2>
-    <h3><?php echo htmlspecialchars($avis['pseudo']); ?></h3>
-    <p><?php echo htmlspecialchars($avis['commentaire']); ?></p>
-
-    <?php if (!empty($message)) : ?>
-        <div class="message"><?php echo htmlspecialchars($message); ?></div>
-    <?php endif; ?>
-
-    <form action="<?php echo $_SERVER['PHP_SELF'] . "?id=$avisId"; ?>" method="post">
-        <input type="hidden" name="action" value="approve">
-        <button type="submit">Approuver et Publier</button>
-    </form>
-
-    <form action="<?php echo $_SERVER['PHP_SELF'] . "?id=$avisId"; ?>" method="post">
-        <input type="hidden" name="action" value="reject">
-        <button type="submit">Rejeter</button>
-    </form>
-</body>
-</html>
+<?php require_once (__DIR__ . '/../includes/footer.php'); ?>

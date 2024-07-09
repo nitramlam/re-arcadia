@@ -1,0 +1,58 @@
+.avis {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.sousTitreAvis {
+    margin: 0;
+    padding: 10px 0;
+}
+
+.avis-content {
+    display: flex;
+    gap: 20px;
+}
+
+.avis-carousel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-height: calc(100vh - 80px); /* Adjust based on the desired height */
+    overflow-y: auto;
+}
+
+.carousel-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.avis-slide {
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.nouvelAvis {
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-height: calc(100vh - 80px); /* Adjust based on the desired height */
+    overflow-y: auto;
+}
+
+#avis-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#avis-form label,
+#avis-form input,
+#avis-form textarea {
+    width: 100%;
+}

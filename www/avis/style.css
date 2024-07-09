@@ -1,0 +1,41 @@
+/* Carrousel d'avis */
+.avis-carousel {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.avis-slide {
+    display: none;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.avis-slide:last-child {
+    border-bottom: none;
+}
+
+.avis-content {
+    margin-bottom: 10px;
+}
+
+.avis-titre {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.avis-description {
+    font-size: 14px;
+    color: #666;
+}

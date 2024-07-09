@@ -43,8 +43,11 @@ $avis = $stmt_avis->fetchAll();
 
 <?php require_once (__DIR__ . '/../includes/header.php'); ?>
 
-<link rel="stylesheet" href="style.css">
 
+<head>
+
+<link rel="stylesheet" href="style.css">
+</head>
 <main>
     <div class="avis">
         <div class="introAvis">
@@ -73,17 +76,42 @@ $avis = $stmt_avis->fetchAll();
         </div>
 
         <!-- Affichage des avis existants -->
-        <div class="row m-0">
+         <!-- Carrousel d'avis -->
+<div class="avis-carousel">
+    <?php if (!empty($avis)) : ?>
+        <div class="carousel-container">
             <?php foreach ($avis as $avis_item) : ?>
-                <div class="col-md-4 p-0">
+                <div class="avis-slide">
                     <h3 class="avis-titre"><?php echo htmlspecialchars($avis_item['pseudo']); ?></h3>
                     <p class="avis-description"><?php echo htmlspecialchars($avis_item['commentaire']); ?></p>
-                  
-                     
-                    </form>
                 </div>
             <?php endforeach; ?>
         </div>
+    <?php else : ?>
+        <p>Aucun avis validé pour le moment.</p>
+    <?php endif; ?>
+</div>
+
+<!-- Script JavaScript pour le carrousel -->
+<script>
+    let slideIndex = 0;
+    carousel();
+
+    function carousel() {
+        let slides = document.getElementsByClassName("avis-slide");
+        for (let i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {
+            slideIndex = 1;
+        }
+        slides[slideIndex - 1].style.display = "block";
+        setTimeout(carousel, 2000); // Change tous les 2 secondes
+    }
+</script>
+
+      
     </div>
 </main>
 

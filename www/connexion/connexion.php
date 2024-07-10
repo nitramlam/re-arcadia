@@ -1,5 +1,5 @@
 <?php
-session_start(); // Assurez-vous de démarrer la session en haut du script
+session_start(); // Démarrer la session
 
 require '../config/db.php'; // Inclure le fichier de configuration de la base de données
 
@@ -18,20 +18,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute(['email' => $email]);
             $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($utilisateur && $utilisateur['password'] === $password) { // Comparaison directe ici
+            if ($utilisateur && $utilisateur['password'] === $password) {
                 $_SESSION['email'] = $utilisateur['email'];
                 $_SESSION['role'] = $utilisateur['role'];
 
                 // Rediriger chaque rôle vers son dashboard respectif
                 switch ($_SESSION['role']) {
                     case 'administateur':
-                        header("Location: ../dashboard/dashboardAdmin.php"); // Assurez-vous que le chemin est correct
+                        header("Location: ../dashboard/dashboardAdmin.php");
                         exit;
                     case 'employe':
-                        header("Location: ../dashboard/dashboardEmploye.php"); // Assurez-vous que le chemin est correct
+                        header("Location: ../dashboard/dashboardEmploye.php");
                         exit;
                     case 'veterinaire':
-                        header("Location: ../dashboard/dashboardVeto.php"); // Assurez-vous que le chemin est correct
+                        header("Location: ../dashboard/dashboardVeto.php");
                         exit;
                     default:
                         $error_message = "Accès non autorisé pour ce rôle.";
@@ -49,7 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<?php require_once (__DIR__ . '/../includes/header.php'); ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -62,6 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
+    <?php require_once(__DIR__ . '/../includes/header.php'); ?>
     <h1>Connexion</h1>
     <?php if (!empty($error_message)) : ?>
         <p class="error"><?= $error_message; ?></p>

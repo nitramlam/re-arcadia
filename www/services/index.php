@@ -1,3 +1,4 @@
+<?php require_once (__DIR__ . '/../includes/header.php'); ?>
 <?php
 require '../config/db.php';
 
@@ -12,7 +13,6 @@ if ($pdo) {
 }
 ?>
 
-<?php require_once (__DIR__ . '/../includes/header.php'); ?>
 
 <link rel="stylesheet" href="style.css">
 
@@ -21,7 +21,7 @@ if ($pdo) {
         <div class="introServices">
             <h1 class="titreServices"> NOS SERVICES</h1>
             <p class="paragrapheServices">
-            Découvrez notre zoo de manière enrichissante avec un restaurant proposant des produits locaux et biologiques, des visites guidées interactives gratuites qui vous plongent dans l'univers captivant de nos animaux. et des circuits en petit train électrique respectueux de notre écosystème.
+            Découvrez notre zoo de manière enrichissante avec un restaurantt proposant des produits locaux et biologiques, des visites guidées interactives gratuites qui vous plongent dans l'univers captivant de nos animaux. et des circuits en petit train électrique respectueux de notre écosystème.
             </p>
             <img src="assets/restaurant-services.png" alt="" class="restaurant">
         </div>

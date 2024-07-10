@@ -1,3 +1,4 @@
+<?php require_once (__DIR__ . '/../includes/header.php'); ?>
 <?php
 require '../config/db.php';
 
@@ -12,7 +13,6 @@ if ($pdo) {
 }
 ?>
 
-<?php require_once (__DIR__ . '/../includes/header.php'); ?>
 
 <link rel="stylesheet" href="style.css">
 

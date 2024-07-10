@@ -27,7 +27,7 @@ $pending_avis = $stmt_pending_avis->fetchAll();
 
 <?php require_once (__DIR__ . '/../includes/header.php'); ?>
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../avis/validation.css">
 
 <main>
     <div class="validation">
@@ -42,8 +42,8 @@ $pending_avis = $stmt_pending_avis->fetchAll();
                         <p><strong>Commentaire:</strong> <?php echo htmlspecialchars($avis['commentaire']); ?></p>
                         <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                             <input type="hidden" name="avis_id" value="<?php echo $avis['avis_id']; ?>">
-                            <button type="submit" name="action" value="approve">Oui</button>
-                            <button type="submit" name="action" value="delete">Non</button>
+                            <button class="oui"   type="submit" name="action" value="approve">Oui</button>
+                            <button  class="non" type="submit" name="action" value="delete">Non</button>
                         </form>
                     </li>
                 <?php endforeach; ?>

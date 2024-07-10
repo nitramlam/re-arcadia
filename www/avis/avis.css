@@ -22,14 +22,40 @@
     justify-self: center;
     align-self: center;
     width: 90%;
+    height: 80%;
+    margin-bottom: 5%;
 
  }
  .avisSlide{
-    gap: 50px;
-    justify-items: center;
+    width: 100%;
+    height: 60%;
+    gap: 2%;
+    display: flex;
+    justify-content: center;
     align-items: center;
-
-
+    flex-direction: column; 
+ }
+ .avisTitre{
+    display: flex; 
+    width: 70%; /* Ajustez la largeur selon vos besoins */
+    height: auto; /* Hauteur automatique pour s'adapter au contenu */
+    text-align: center; /* Centrer le texte horizontalement */
+    line-height: 1.6; /* Espacement entre les lignes */
+    flex-wrap: wrap;
+    justify-self: center; /* Centrer horizontalement */
+    align-self: center;
+    margin-top: 5%;
+ }
+ .avisDescription{
+    display: flex; 
+    width: 70%; /* Ajustez la largeur selon vos besoins */
+    height: auto; /* Hauteur automatique pour s'adapter au contenu */
+    text-align: center; /* Centrer le texte horizontalement */
+    line-height: 1.6; /* Espacement entre les lignes */
+    flex-wrap: wrap;
+    justify-self: center; /* Centrer horizontalement */
+    align-self: center;
+    margin-top: 5%;
  }
 
 
@@ -55,12 +81,14 @@
 }
 .pseudoForm {
      grid-area: pseudoForm;
+     border-radius: 20px;
      }
 .commentairePseudo { 
     grid-area: commentairePseudo; 
 }
 .input {
     border-radius: 20px;
+    border: none;
     color: #F7EDD9;
     background-color: #A54835;
      grid-area: input;
@@ -68,7 +96,11 @@
      height: 50px;
     justify-self: center;
     align-self: center;
+    transition: background-color 0.5s ease;
     }
+.input:hover{
+    background-color: rgba(165, 72, 53, 0.5);
+}
 
 
  

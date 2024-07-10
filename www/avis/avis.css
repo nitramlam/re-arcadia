@@ -1,0 +1,74 @@
+.avis {
+    background-color: #5D6A41;
+    width: 100%;
+    display: grid; 
+    grid-auto-columns: 1fr; 
+    grid-template-columns: 1fr 1fr; 
+    grid-template-rows: 1fr 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      "sousTitreAvis avisForm"
+      "avisCarousel avisForm"; 
+  }
+ .sousTitreAvis{
+    grid-area: sousTitreAvis;
+    justify-self: center;
+    align-self: center;
+   
+ }
+ .avisCarousel{
+    background-color: #F7EDD9;
+    grid-area: avisCarousel;
+    justify-self: center;
+    align-self: center;
+    width: 90%;
+
+ }
+ .avisSlide{
+    gap: 50px;
+    justify-items: center;
+    align-items: center;
+
+
+ }
+
+
+
+
+
+ .avisForm{
+    background-color: #F7EDD9;
+    grid-area: avisForm;
+    justify-self: center;
+    align-self: center;
+    height: 80%;
+    width: 70%;
+    padding: 20px;
+    display: grid; 
+    grid-auto-columns: 1fr; 
+    grid-template-columns: 1fr 1fr; 
+    grid-template-rows: 1fr 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+        "pseudoForm ."
+        "commentairePseudo input"; 
+}
+.pseudoForm {
+     grid-area: pseudoForm;
+     }
+.commentairePseudo { 
+    grid-area: commentairePseudo; 
+}
+.input {
+    border-radius: 20px;
+    color: #F7EDD9;
+    background-color: #A54835;
+     grid-area: input;
+     width: 150px;
+     height: 50px;
+    justify-self: center;
+    align-self: center;
+    }
+
+
+ 

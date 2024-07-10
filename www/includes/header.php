@@ -21,10 +21,10 @@
                 </a>
                 <nav>
                     <ul>
-                        <li><a href="#">Les animaux</a></li>
-                        <li><a href="#">Les habitats</a></li>
-                        <li><a href="#">Les Services</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="/animaux/index.php">Les animaux</a></li>
+                        <li><a href="/habitats/index.php">Les habitats</a></li>
+                        <li><a href="/services/index.php">Les Services</a></li>
+                        <li><a href="/contact/index.php">Contact</a></li>
                     </ul>
                 </nav>
                 <div class="connexion">

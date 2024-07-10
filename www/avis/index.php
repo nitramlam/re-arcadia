@@ -53,31 +53,35 @@ $avis = $stmt_avis->fetchAll();
         
 
         <!-- Formulaire pour laisser un avis -->
-        <div class="nouvelAvis">
+       
             <h2 class="sousTitreAvis"> Laissez votre avis</h2>
             <?php if ($isFormSubmitted) : ?>
-                <p id="confirmation-message"><?php echo htmlspecialchars($confirmationMessage); ?></p>
+                <p id="confirmationMessage"><?php echo htmlspecialchars($confirmationMessage); ?></p>
             <?php else : ?>
-                <form id="avis-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                    <label for="pseudo">Pseudo :</label><br>
-                    <input type="text" id="pseudo" name="pseudo" value="<?php echo htmlspecialchars($pseudo); ?>" required><br><br>
+                <form id="avisForm" class="avisForm" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 
-                    <label for="commentaire">Commentaire :</label><br>
-                    <textarea id="commentaire" name="commentaire" rows="4" required><?php echo htmlspecialchars($commentaire); ?></textarea><br><br>
+                    <div class="pseudoForm">
+                        <label for="pseudo"   >Pseudo :</label><br>
+                        <input type="text" id="pseudo" name="pseudo" value="<?php echo htmlspecialchars($pseudo); ?>" required><br><br>
+                    </div>
+                    <div class="commentairePseudo">
+                        <label for="commentaire">Commentaire :</label><br>
+                         <textarea id="commentaire" name="commentaire" rows="4"   style="resize: none;" required><?php echo htmlspecialchars($commentaire); ?></textarea><br><br>
+                     </div>
 
-                    <input type="submit" value="Laisser un avis">
+                         <input type="submit"  class="input" value="Laisser un avis">
                 </form>
             <?php endif; ?>
-        </div>
+      
 
        
-        <div class="avis-carousel">
+        <div class="avisCarousel">
         <?php if (!empty($avis)) : ?>
-        <div class="carousel-container">
-            <?php foreach ($avis as $avis_item) : ?>
-                <div class="avis-slide">
-                    <h3 class="avis-titre"><?php echo htmlspecialchars($avis_item['pseudo']); ?></h3>
-                    <p class="avis-description"><?php echo htmlspecialchars($avis_item['commentaire']); ?></p>
+      
+            <?php foreach ($avis as $avisItem) : ?>
+                <div class="avisSlide">
+                    <h3 class="avisTitre"><?php echo htmlspecialchars($avisItem['pseudo']); ?></h3>
+                    <p class="avisDescription"><?php echo htmlspecialchars($avisItem['commentaire']); ?></p>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -92,21 +96,20 @@ $avis = $stmt_avis->fetchAll();
     carousel();
 
     function carousel() {
-        let slides = document.getElementsByClassName("avis-slide");
+        let slides = document.getElementsByClassName("avisSlide");
         for (let i = 0; i < slides.length; i++) {
             slides[i].style.display = "none";
+           
         }
         slideIndex++;
         if (slideIndex > slides.length) {
             slideIndex = 1;
         }
-        slides[slideIndex - 1].style.display = "block";
+        slides[slideIndex - 1].style.display = "flex";
         setTimeout(carousel, 2000); // Change tous les 2 secondes
     }
 </script>
 
       
-    </div>
 
 
-<?php require_once (__DIR__ . '/../includes/footer.php'); ?>

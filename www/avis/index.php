@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Récupération des données du formulaire
     $pseudo = $_POST['pseudo'];
     $commentaire = $_POST['commentaire'];
-    $isVisible = true; // Par défaut, le nouvel avis est visible
+    $isVisible = false; // Par défaut, le nouvel avis est visible
     $isApproved = false; // Nouvel avis non validé par défaut
 
     // Insertion des données dans la base de données
@@ -62,14 +62,14 @@ $avis = $stmt_avis->fetchAll();
 
                     <div class="pseudoForm">
                         <label for="pseudo"   >Pseudo :</label><br>
-                        <input type="text" id="pseudo" name="pseudo" value="<?php echo htmlspecialchars($pseudo); ?>" required><br><br>
+                        <input type="text" id="pseudo" name="pseudo" value="" maxlength="15" style="border-radius: 10px"<?php echo htmlspecialchars($pseudo); ?>" required><br><br>
                     </div>
                     <div class="commentairePseudo">
                         <label for="commentaire">Commentaire :</label><br>
-                         <textarea id="commentaire" name="commentaire" rows="4"   style="resize: none;" required><?php echo htmlspecialchars($commentaire); ?></textarea><br><br>
+                         <textarea id="commentaire" name="commentaire" rows="4" maxlength="50"  style="resize: none; border-radius: 10px" required><?php echo htmlspecialchars($commentaire); ?></textarea><br><br>
                      </div>
 
-                         <input type="submit"  class="input" value="Laisser un avis">
+                         <input type="submit" id="input" class="input" value="Laisser un avis">
                 </form>
             <?php endif; ?>
       
@@ -99,17 +99,14 @@ $avis = $stmt_avis->fetchAll();
         let slides = document.getElementsByClassName("avisSlide");
         for (let i = 0; i < slides.length; i++) {
             slides[i].style.display = "none";
-           
         }
         slideIndex++;
         if (slideIndex > slides.length) {
             slideIndex = 1;
         }
         slides[slideIndex - 1].style.display = "flex";
-        setTimeout(carousel, 2000); // Change tous les 2 secondes
+        setTimeout(carousel, 15000);
+        
     }
+
 </script>
-
-      
-
-

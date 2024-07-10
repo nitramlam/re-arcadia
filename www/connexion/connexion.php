@@ -1,23 +1,35 @@
 <?php
-require '../config/db.php';
+// Vérification du formulaire de connexion
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    require '../config/db.php'; // Inclure le fichier de configuration de la base de données
 
-// Obtenir une connexion à la base de données
-$pdo = getDatabaseConnection();
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-// Requête SQL pour sélectionner tous les utilisateurs
-if ($pdo) {
-    try {
-        // Sélection et affichage des utilisateurs
-        $sql = "SELECT email, role FROM utilisateurs";
-        $stmt = $pdo->query($sql);
-        $utilisateurs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        echo "Erreur lors de la récupération des utilisateurs: " . $e->getMessage();
-        exit;
+    // Obtenir une connexion à la base de données
+    $pdo = getDatabaseConnection();
+
+    if ($pdo) {
+        try {
+            // Requête SQL pour vérifier les informations d'authentification
+            $sql = "SELECT email, role FROM utilisateurs WHERE email = :email AND password = :password";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['email' => $email, 'password' => $password]);
+            $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($utilisateur) {
+                // Authentification réussie, rediriger vers une page connectée
+                header("Location: processConnexion.php");
+                exit;
+            } else {
+                $error_message = "Identifiants incorrects. Veuillez réessayer.";
+            }
+        } catch (PDOException $e) {
+            $error_message = "Erreur lors de l'authentification: " . $e->getMessage();
+        }
+    } else {
+        $error_message = "Erreur: Impossible de se connecter à la base de données.";
     }
-} else {
-    echo "Erreur: Impossible de se connecter à la base de données.";
-    exit;
 }
 ?>
 
@@ -26,15 +38,28 @@ if ($pdo) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des utilisateurs</title>
+    <title>Page de Connexion</title>
+    <style>
+        /* Styles CSS optionnels pour la mise en forme */
+        form { max-width: 300px; margin: auto; }
+        .error { color: red; }
+    </style>
 </head>
 <body>
-    <h1>Liste des utilisateurs</h1>
-    <ul>
-        <?php foreach ($utilisateurs as $utilisateur): ?>
-            <li><?= htmlspecialchars($utilisateur['email']); ?> (<?= htmlspecialchars($utilisateur['role']); ?>)</li>
-        <?php endforeach; ?>
-    </ul>
+    <h1>Connexion</h1>
+
+    <?php if (!empty($error_message)) : ?>
+        <p class="error"><?= $error_message; ?></p>
+    <?php endif; ?>
+
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="password">Mot de passe:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <input type="submit" value="Se connecter">
+    </form>
 </body>
 </html>
-

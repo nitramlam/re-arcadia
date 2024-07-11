@@ -73,10 +73,10 @@ nav ul li :hover {
 }
 
 .mobile-link {
-  display: none; /* Caché par défaut */
+  display: none; 
 }
 
-/* @media (max-width: 768px) {
+ @media (max-width: 768px) {
   .header-container {
     width: 90%;
     justify-content: center;
@@ -109,4 +109,4 @@ nav ul li :hover {
     color: #2b390d;
     border: 2px solid #2b390d;
   }
-} */
+} 

@@ -53,7 +53,7 @@ transition: opacity 0.5s ease;
 .footer .social-icons a:hover {
 opacity: 0.5;
 }
-/* Ensure no underline for social icons */
+
 .footer .social-icons a::after {
 display: none;
 }

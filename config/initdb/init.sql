@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS HABITAT (
 );
 
 INSERT INTO HABITAT (nom, description, commentaire_habitat, image_path) VALUES 
-('Savane', 'Une grande plaine herbeuse, souvent parsemée d\'arbres dispersés.', 'Climat chaud avec saisons sèches et humides.', 'assets/savane-habitats.png'),
-('Jungle', 'Une forêt dense et humide avec une grande biodiversité.', 'Climat tropical avec de fortes précipitations.', 'assets/jungle-habitats.png'),
-('Marais', 'Une zone humide souvent inondée, riche en biodiversité aquatique.', 'Terrain marécageux avec une végétation spécifique.', 'assets/marais-habitats.png');
+('Savane', 'Une grande plaine herbeuse, souvent parsemée d\'arbres dispersés.', 'propre.', 'assets/savane-habitats.png'),
+('Jungle', 'Une forêt dense et humide avec une grande biodiversité.', 'sale', 'assets/jungle-habitats.png'),
+('Marais', 'Une zone humide souvent inondée, riche en biodiversité aquatique.', 'propre.', 'assets/marais-habitats.png');
 
 CREATE TABLE IF NOT EXISTS service (
     service_id INT AUTO_INCREMENT PRIMARY KEY,

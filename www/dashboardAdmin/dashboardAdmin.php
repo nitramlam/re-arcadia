@@ -22,7 +22,7 @@
                     <a href="#">MODIFIER LES ANIMAUX</a>
                 </div>
                 <div class="grid-item brown">
-                    <a href="#">MODIFIER LES HABITATS</a>
+                    <a href="/dashboardAdmin/modifierHabitats.php">MODIFIER LES HABITATS</a>
                 </div>
                 <div class="grid-item light-blue">
                     <a href="#">AFFICHER LES COMPTES RENDU DE L'ANIMAL</a>

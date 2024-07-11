@@ -1,4 +1,4 @@
-<!-- index.php -->
+<?php require_once (__DIR__ . '/../includes/header.php'); ?><!-- index.php -->
 <?php
 require '../config/db.php';
 
@@ -41,7 +41,7 @@ $stmt_avis = $pdo->query($sql_avis);
 $avis = $stmt_avis->fetchAll();
 ?>
 
-<?php require_once (__DIR__ . '/../includes/header.php'); ?>
+
 
 
 <head>
@@ -105,7 +105,7 @@ $avis = $stmt_avis->fetchAll();
             slideIndex = 1;
         }
         slides[slideIndex - 1].style.display = "flex";
-        setTimeout(carousel, 15000);
+        setTimeout(carousel, 2000);
         
     }
 

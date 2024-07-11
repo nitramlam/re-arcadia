@@ -1,52 +1,91 @@
-/* Style pour la page de modification des habitats */
-
-.container {
-    width: 80%;
-    margin: 0 auto;
+.habitats {
+    margin: 20px;
 }
 
-h1 {
+.introHabitats {
     text-align: center;
-    color: #4CAF50;
 }
 
-.habitat {
-    border: 1px solid #ddd;
+.titreHabitats {
+    font-size: 2em;
     margin-bottom: 20px;
-    padding: 10px;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-md-12 {
+    flex: 1 1 100%;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    padding: 20px;
     background-color: #f9f9f9;
 }
 
-.habitat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.habitat-card {
+    margin-bottom: 20px;
 }
 
-.habitat-actions button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    margin-left: 10px;
+.add-habitat {
+    margin-top: 40px;
 }
 
-.habitat-animals, .habitat-comment, .habitat-description {
-    margin: 5px 0;
-}
-
-.add-btn, .submit-btn {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
+button {
+    padding: 10px 20px;
+    background-color: #008CBA;
     color: white;
     border: none;
     cursor: pointer;
-    margin-top: 20px;
-    text-align: center;
+    margin-top: 10px;
 }
 
-.add-btn:hover, .submit-btn:hover {
+button:hover {
+    background-color: #005f6b;
+}
+
+.edit-form-container, .add-form {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    z-index: 1000;
+}
+
+.edit-form-container {
+    display: none;
+}
+
+.edit-form textarea, .add-form textarea, .edit-form input, .add-form input {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.edit-btn {
+    margin-right: 10px;
+    background-color: #4CAF50;
+}
+
+.edit-btn:hover {
+    background-color: #45a049;
+}
+
+.delete-form button {
+    background-color: #f44336;
+}
+
+.delete-form button:hover {
+    background-color: #da190b;
+}
+
+.add-btn {
+    background-color: #4CAF50;
+}
+
+.add-btn:hover {
     background-color: #45a049;
 }

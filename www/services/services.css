@@ -1,0 +1,103 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #F0EAD6;
+}
+
+main {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.services {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #F0EAD6;
+}
+
+.introServices {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.titreServices {
+    font-size: 36px;
+    color: #2F3E19;
+    margin-bottom: 20px;
+}
+
+.paragrapheServices {
+    font-size: 18px;
+    color: #2F3E19;
+    margin-bottom: 20px;
+}
+
+.zoo-map {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+    margin: 0 auto;
+    display: block;
+}
+
+.icons-services {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.icons-services img {
+    max-width: 100%;
+    height: auto;
+}
+
+.opening-hours {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.opening-hours h2 {
+    font-size: 28px;
+    color: #2F3E19;
+    margin-bottom: 10px;
+}
+
+.opening-hours p {
+    font-size: 18px;
+    color: #2F3E19;
+}
+
+.services-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.service-item {
+    background-color: #A4C639;
+    color: #FFFFFF;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    width: calc(33% - 20px);
+    box-sizing: border-box;
+}
+
+.service-titre {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.service-description {
+    font-size: 16px;
+}
+
+.service-item:nth-child(odd) {
+    background-color: #4169E1; /* Blue */
+}
+
+.service-item:nth-child(even) {
+    background-color: #9ACD32; /* Light Green */
+}

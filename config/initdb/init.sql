@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS service (
     service_id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    icons_path VARCHAR(255)
+    icons_path VARCHAR(255),
 );
 
 -- Insérer des données dans la table service

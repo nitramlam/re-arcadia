@@ -4,6 +4,7 @@ require '../config/db.php';
 
 // Obtenir une connexion à la base de données
 $pdo = getDatabaseConnection();
+$services = [];
 
 if ($pdo) {
     // Sélection et affichage des données
@@ -13,36 +14,33 @@ if ($pdo) {
 }
 ?>
 
-
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="services.css">
 
 <main>
     <div class="services">
         <div class="introServices">
-            <h1 class="titreServices"> NOS SERVICES</h1>
+            <h1 class="titreServices">NOS SERVICES</h1>
             <p class="paragrapheServices">
-            Découvrez notre zoo de manière enrichissante avec un restaurantt proposant des produits locaux et biologiques, des visites guidées interactives gratuites qui vous plongent dans l'univers captivant de nos animaux. et des circuits en petit train électrique respectueux de notre écosystème.
+                Découvrez notre zoo de manière enrichissante avec un restaurant proposant des produits locaux et biologiques, des visites guidées interactives gratuites qui vous plongent dans l'univers captivant de nos animaux, et des circuits en petit train électrique respectueux de notre écosystème.
             </p>
-            <img src="assets/restaurant-services.png" alt="" class="restaurant">
+            <img src="assets/restaurant-services.png" alt="Zoo Map" class="zoo-map">
         </div>
         <div class="icons-services">
-            <img src="assets/icons-services.png" alt="">
+            <img src="assets/icons-services.png" alt="Icons Services">
         </div>
-        <div class="row m-0">
-    <?php
- 
-    foreach ($services as $service) {
-
-        $isVisible = true; 
-
-        if ($isVisible) {
-            echo '<div class="col-md-4 p-0">';
-            echo '<h3 class="service-titre">' . htmlspecialchars($service['nom']) . "</h3>";
-            echo '<p class="service.description">' . htmlspecialchars($service['description']) . "</p>";
-            echo "</div>";
-        }
-    }
-    ?>
-</div>
+        <div class="opening-hours">
+            <h2>HORAIRES D'OUVERTURE</h2>
+            <p>Ouvert tous les jours de 10h à 20h</p>
+        </div>
+        <div class="services-list">
+            <?php foreach ($services as $service): ?>
+                <div class="service-item">
+                    <h3 class="service-titre"><?= htmlspecialchars($service['nom']) ?></h3>
+                    <p class="service-description"><?= nl2br(htmlspecialchars($service['description'])) ?></p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</main>
 
 <?php require_once (__DIR__ . '/../includes/footer.php'); ?>

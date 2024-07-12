@@ -14,10 +14,10 @@
                     <a href="/dashboardAdmin/modifierHabitats.php">HABITAT</a>
                 </div>
                 <div class="grid-item blue">
-                    <a href="/dashboardAdmin/modifierAnimaux.php">ANIMAUX</a>
+                    <a href="">passage employé</a>
                 </div>
                 <div class="grid-item brown">
-                    <a href="/avis/validation.php">COMPTE RENDU</a>
+                    <a href="/dashboardVeto/compteRendu.php">COMPTE RENDU</a>
                 </div>
         </section>
     </main>

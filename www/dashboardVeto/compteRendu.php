@@ -7,13 +7,15 @@ $pdo = getDatabaseConnection();
 // Gestion des soumissions des formulaires
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['update_animal'])) {
-        // Mettre à jour les informations de passage de l'employé
+        // Mettre à jour les informations vétérinaires de l'animal
         $animal_id = $_POST['animal_id'];
-        $date_heure_passage_employe = $_POST['date_heure_passage_employe'];
-        $grammage_donne = $_POST['grammage_donne'];
-        $nourriture_donnee = $_POST['nourriture_donnee'];
-        $stmt = $pdo->prepare("UPDATE animal SET date_heure_passage_employe = ?, grammage_donne = ?, nourriture_donnee = ? WHERE animal_id = ?");
-        $stmt->execute([$date_heure_passage_employe, $grammage_donne, $nourriture_donnee, $animal_id]);
+        $etat_general = $_POST['etat_general'];
+        $regime = $_POST['regime'];
+        $grammage = $_POST['grammage'];
+        $derniere_visite = $_POST['derniere_visite'];
+        $commentaire = $_POST['commentaire'];
+        $stmt = $pdo->prepare("UPDATE animal SET etat_general = ?, regime = ?, grammage = ?, derniere_visite = ?, commentaire = ? WHERE animal_id = ?");
+        $stmt->execute([$etat_general, $regime, $grammage, $derniere_visite, $commentaire, $animal_id]);
     }
 }
 
@@ -26,14 +28,14 @@ $animals = $animalQuery->fetchAll(PDO::FETCH_ASSOC);
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Page Employé</title>
-    <link rel="stylesheet" href="alim.css">
+    <title>Page Vétérinaire</title>
+    <link rel="stylesheet" href="compteRendu.css">
 </head>
 <body>
     <main>
         <section class="intro">
-            <h2>Gestion des Passages des Employés</h2>
-          
+            <h2>Suivi Vétérinaire des Animaux</h2>
+            <p>Sur cette page, les vétérinaires peuvent mettre à jour l'état général des animaux, leur régime alimentaire, le grammage de nourriture, la date de visite et ajouter des commentaires.</p>
         </section>
         <section class="animal-list">
             <?php foreach ($animals as $animal): ?>
@@ -42,9 +44,11 @@ $animals = $animalQuery->fetchAll(PDO::FETCH_ASSOC);
                     <button class="edit-toggle">✏️</button>
                     <form method="POST" class="animal-form" style="display: none;">
                         <input type="hidden" name="animal_id" value="<?php echo htmlspecialchars($animal['animal_id'] ?? ''); ?>">
-                        <label>Date et Heure de Passage: <input type="datetime-local" name="date_heure_passage_employe" value="<?php echo htmlspecialchars($animal['date_heure_passage_employe'] ?? ''); ?>" required></label>
-                        <label>Grammage Donné: <input type="number" step="0.01" name="grammage_donne" value="<?php echo htmlspecialchars($animal['grammage_donne'] ?? ''); ?>" required></label>
-                        <label>Nourriture Donnée: <input type="text" name="nourriture_donnee" value="<?php echo htmlspecialchars($animal['nourriture_donnee'] ?? ''); ?>" required></label>
+                        <label>État général: <input type="text" name="etat_general" value="<?php echo htmlspecialchars($animal['etat_general'] ?? ''); ?>" required></label>
+                        <label>Nourriture proposée: <input type="text" name="regime" value="<?php echo htmlspecialchars($animal['regime'] ?? ''); ?>" required></label>
+                        <label>Grammage proposé: <input type="number" step="0.01" name="grammage" value="<?php echo htmlspecialchars($animal['grammage'] ?? ''); ?>" required></label>
+                        <label>Date de visite: <input type="date" name="derniere_visite" value="<?php echo htmlspecialchars($animal['derniere_visite'] ?? ''); ?>" required></label>
+                        <label>Commentaire: <textarea name="commentaire"><?php echo htmlspecialchars($animal['commentaire'] ?? ''); ?></textarea></label>
                         <button type="submit" name="update_animal" class="edit-btn">Mettre à jour</button>
                     </form>
                 </div>

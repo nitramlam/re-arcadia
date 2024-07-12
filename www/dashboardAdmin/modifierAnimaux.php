@@ -10,25 +10,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Modifier un animal
         $animal_id = $_POST['animal_id'];
         $nom = $_POST['nom'];
-        $espece = $_POST['espece'];
-        $etat_general = $_POST['etat_general'];
         $description = $_POST['description'];
-        $regime = $_POST['regime'];
         $poids = $_POST['poids'];
         $sexe = $_POST['sexe'];
-        $derniere_visite = $_POST['derniere_visite'];
-        $commentaire = $_POST['commentaire'];
         $continent_origine = $_POST['continent_origine'];
         $age = $_POST['age'];
         $habitat = $_POST['habitat'];
-        $grammage = $_POST['grammage'];
-        $stmt = $pdo->prepare("UPDATE animal SET nom = ?, espece = ?, etat_general = ?, description = ?, regime = ?, poids = ?, sexe = ?, derniere_visite = ?, commentaire = ?, continent_origine = ?, age = ?, habitat = ?, grammage = ? WHERE animal_id = ?");
-        $stmt->execute([$nom, $espece, $etat_general, $description, $regime, $poids, $sexe, $derniere_visite, $commentaire, $continent_origine, $age, $habitat, $grammage, $animal_id]);
+        $stmt = $pdo->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat = ? WHERE animal_id = ?");
+        $stmt->execute([$nom, $description, $poids, $sexe, $continent_origine, $age, $habitat, $animal_id]);
     } elseif (isset($_POST['delete_animal'])) {
         // Supprimer un animal
         $animal_id = $_POST['animal_id'];
         $stmt = $pdo->prepare("DELETE FROM animal WHERE animal_id = ?");
         $stmt->execute([$animal_id]);
+    } elseif (isset($_POST['add_animal'])) {
+        // Ajouter un nouvel animal
+        $nom = $_POST['nom'];
+        $description = $_POST['description'];
+        $poids = $_POST['poids'];
+        $sexe = $_POST['sexe'];
+        $continent_origine = $_POST['continent_origine'];
+        $age = $_POST['age'];
+        $habitat = $_POST['habitat'];
+        $stmt = $pdo->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$nom, $description, $poids, $sexe, $continent_origine, $age, $habitat]);
     }
 }
 
@@ -56,43 +61,43 @@ $animals = $animalQuery->fetchAll(PDO::FETCH_ASSOC);
                     <h3><?php echo htmlspecialchars($animal['nom'] ?? ''); ?></h3>
                     <button class="view-report">Afficher le compte rendu</button>
                     <div class="animal-details" style="display: none;">
-                        <p><strong>Espèce:</strong> <?php echo htmlspecialchars($animal['espece'] ?? ''); ?></p>
                         <p><strong>État général:</strong> <?php echo htmlspecialchars($animal['etat_general'] ?? ''); ?></p>
-                        <p><strong>Description:</strong> <?php echo htmlspecialchars($animal['description'] ?? ''); ?></p>
-                        <p><strong>Régime:</strong> <?php echo htmlspecialchars($animal['regime'] ?? ''); ?></p>
-                        <p><strong>Poids:</strong> <?php echo htmlspecialchars($animal['poids'] ?? ''); ?> kg</p>
-                        <p><strong>Sexe:</strong> <?php echo htmlspecialchars($animal['sexe'] ?? ''); ?></p>
+                        <p><strong>Nourriture proposée:</strong> <?php echo htmlspecialchars($animal['regime'] ?? ''); ?></p>
+                        <p><strong>Grammage proposé:</strong> <?php echo htmlspecialchars($animal['grammage'] ?? ''); ?> kg</p>
                         <p><strong>Dernière visite:</strong> <?php echo htmlspecialchars($animal['derniere_visite'] ?? ''); ?></p>
                         <p><strong>Commentaire:</strong> <?php echo htmlspecialchars($animal['commentaire'] ?? ''); ?></p>
-                        <p><strong>Continent d'origine:</strong> <?php echo htmlspecialchars($animal['continent_origine'] ?? ''); ?></p>
-                        <p><strong>Âge:</strong> <?php echo htmlspecialchars($animal['age'] ?? ''); ?> ans</p>
-                        <p><strong>Habitat:</strong> <?php echo htmlspecialchars($animal['habitat'] ?? ''); ?></p>
-                        <p><strong>Grammage:</strong> <?php echo htmlspecialchars($animal['grammage'] ?? ''); ?> kg</p>
                     </div>
                     <button class="edit-toggle">✏️</button>
                     <form method="POST" class="animal-form" style="display: none;">
                         <input type="hidden" name="animal_id" value="<?php echo htmlspecialchars($animal['animal_id'] ?? ''); ?>">
                         <label>Nom: <input type="text" name="nom" value="<?php echo htmlspecialchars($animal['nom'] ?? ''); ?>" required></label>
-                        <label>Espèce: <input type="text" name="espece" value="<?php echo htmlspecialchars($animal['espece'] ?? ''); ?>" required></label>
-                        <label>État général: <input type="text" name="etat_general" value="<?php echo htmlspecialchars($animal['etat_general'] ?? ''); ?>" required></label>
-                        <label>Description: <textarea name="description" required><?php echo htmlspecialchars($animal['description'] ?? ''); ?></textarea></label>
-                        <label>Régime: <input type="text" name="regime" value="<?php echo htmlspecialchars($animal['regime'] ?? ''); ?>" required></label>
+                        <label>Description: <textarea name="description"  required><?php echo htmlspecialchars($animal['description'] ?? ''); ?></textarea></label>
                         <label>Poids: <input type="number" step="0.01" name="poids" value="<?php echo htmlspecialchars($animal['poids'] ?? ''); ?>" required></label>
                         <label>Sexe: <input type="text" name="sexe" value="<?php echo htmlspecialchars($animal['sexe'] ?? ''); ?>" required></label>
-                        <label>Dernière visite: <input type="date" name="derniere_visite" value="<?php echo htmlspecialchars($animal['derniere_visite'] ?? ''); ?>" required></label>
-                        <label>Commentaire: <textarea name="commentaire"><?php echo htmlspecialchars($animal['commentaire'] ?? ''); ?></textarea></label>
                         <label>Continent d'origine: <input type="text" name="continent_origine" value="<?php echo htmlspecialchars($animal['continent_origine'] ?? ''); ?>" required></label>
                         <label>Âge: <input type="number" name="age" value="<?php echo htmlspecialchars($animal['age'] ?? ''); ?>" required></label>
                         <label>Habitat: <input type="text" name="habitat" value="<?php echo htmlspecialchars($animal['habitat'] ?? ''); ?>" required></label>
-                        <label>Grammage: <input type="number" step="0.01" name="grammage" value="<?php echo htmlspecialchars($animal['grammage'] ?? ''); ?>" required></label>
                         <button type="submit" name="update_animal" class="edit-btn">Modifier</button>
                         <button type="submit" name="delete_animal" class="delete-btn">Supprimer</button>
                     </form>
                 </div>
             <?php endforeach; ?>
         </section>
-        <button class="add-animal">Ajouter un animal</button>
-        <button class="validate">Valider</button>
+
+        <!-- Formulaire d'ajout d'un nouvel animal -->
+        <button class="add-animal" onclick="openAddForm()">Ajouter un animal</button>
+        <form method="POST" class="add-animal-form" id="add-animal-form" style="display: none;">
+            <label>Nom: <input type="text" name="nom" required></label>
+            <label>Description: <textarea name="description" required></textarea></label>
+            <label>Poids: <input type="number" step="0.01" name="poids" required></label>
+            <label>Sexe: <input type="text" name="sexe" required></label>
+            <label>Continent d'origine: <input type="text" name="continent_origine" required></label>
+            <label>Âge: <input type="number" name="age" required></label>
+            <label>Habitat: <input type="text" name="habitat" required></label>
+            <button type="submit" name="add_animal">Ajouter</button>
+            <button type="button" onclick="closeAddForm()">Annuler</button>
+        </form>
+
     </main>
     <?php require_once (__DIR__ . '/../includes/footer.php'); ?>
     <script>
@@ -112,7 +117,16 @@ $animals = $animalQuery->fetchAll(PDO::FETCH_ASSOC);
                     form.style.display = form.style.display === 'block' ? 'none' : 'block';
                 });
             });
+
+            const addAnimalButton = document.querySelector('.add-animal');
+            addAnimalButton.addEventListener('click', () => {
+                document.getElementById('add-animal-form').style.display = 'block';
+            });
         });
+
+        function closeAddForm() {
+            document.getElementById('add-animal-form').style.display = 'none';
+        }
     </script>
 </body>
 </html>

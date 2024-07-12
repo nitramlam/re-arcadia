@@ -16,7 +16,7 @@
                     <a href="/dashboardAdmin/creerCompte.php">CRÉER UN COMPTE UTILISATEUR</a>
                 </div>
                 <div class="grid-item blue">
-                    <a href="#">MODIFIER LES SERVICES</a>
+                    <a href="/dashboardAdmin/modifierServices.php">MODIFIER LES SERVICES</a>
                 </div>
                 <div class="grid-item light-green">
                     <a href="#">MODIFIER LES ANIMAUX</a>

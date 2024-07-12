@@ -1,4 +1,6 @@
-<!-- Formspree form with additional fields -->
+<?php require_once(__DIR__ . '/../includes/header.php'); ?>
+
+
 <form action="https://formspree.io/f/mqazkvvd" method="POST">
     <label>
         votre mail:
@@ -15,6 +17,5 @@
         <textarea name="message" rows="4" cols="50" required></textarea>
     </label><br><br>
 
-    <!-- your other form fields go here -->
     <button type="submit">envoyer</button>
 </form>

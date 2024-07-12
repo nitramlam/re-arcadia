@@ -1,3 +1,4 @@
+<?php require_once (__DIR__ . '/../includes/header.php'); ?>
 <?php
 require '../config/db.php';
 
@@ -12,7 +13,6 @@ if ($pdo) {
     $animaux = $stmt->fetchAll();
 }
 ?>
-<?php require_once (__DIR__ . '/../includes/header.php'); ?>
 
 <head>
 

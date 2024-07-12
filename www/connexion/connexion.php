@@ -74,5 +74,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="password" id="password" name="password" required><br><br>
         <input type="submit" value="Se connecter">
     </form>
+    <?php require_once (__DIR__ . '/../includes/footer.php'); ?>
 </body>
 </html>

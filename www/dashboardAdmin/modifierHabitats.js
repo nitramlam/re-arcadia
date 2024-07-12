@@ -1,5 +1,3 @@
-// JavaScript pour gérer l'édition, la suppression et l'ajout d'habitats
-
 function editHabitat(habitatId) {
     // Implémenter la logique pour éditer un habitat
     console.log("Edit habitat: " + habitatId);

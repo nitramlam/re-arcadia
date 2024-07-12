@@ -3,14 +3,14 @@
 
 <head>
  
-    <link rel="stylesheet" href="dashboardAdmin.css">
+    <link rel="stylesheet" href="dashboardemploye.css">
 </head>
 <body>
 
 
     <main>
         <section class="admin-space">
-            <h1>ESPACE ADMINISTRATEUR</h1>
+            <h1>ESPACE EMPLOYE</h1>
             <div class="grid-container">
                 <div class="grid-item green">
                     <a href="/dashboardAdmin/creerCompte.php">CRÉER UN COMPTE UTILISATEUR</a>

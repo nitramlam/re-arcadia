@@ -25,13 +25,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Rediriger chaque rôle vers son dashboard respectif
                 switch ($_SESSION['role']) {
                     case 'administateur':
-                        header("Location: ../dashboard/dashboardAdmin.php");
+                        header("Location: ../dashboardAdmin/dashboardAdmin.php");
                         exit;
                     case 'employe':
-                        header("Location: ../dashboard/dashboardEmploye.php");
+                        header("Location: ../dashboardEmploye/dashboardEmploye.php");
                         exit;
                     case 'veterinaire':
-                        header("Location: ../dashboard/dashboardVeto.php");
+                        header("Location: ../dashboardVeto/dashboardVeto.php");
                         exit;
                     default:
                         $error_message = "Accès non autorisé pour ce rôle.";

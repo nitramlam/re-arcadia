@@ -1,40 +1,29 @@
 <?php require_once(__DIR__ . '/../includes/header.php'); ?>
 
-
+<!DOCTYPE html>
+<html lang="fr">
 <head>
- 
-    <link rel="stylesheet" href="dashboardemploye.css">
+    <meta charset="UTF-8">
+    <title>Dashboard Employé</title>
+    <link rel="stylesheet" href="dashboardEmploye.css">
 </head>
 <body>
-
-
     <main>
-        <section class="admin-space">
-            <h1>ESPACE EMPLOYE</h1>
+        <section class="employee-space">
+            <h1>ESPACE EMPLOYÉ</h1>
             <div class="grid-container">
                 <div class="grid-item green">
-                    <a href="/dashboardAdmin/creerCompte.php">CRÉER UN COMPTE UTILISATEUR</a>
+                    <a href="/dashboardEmploye/alimentation.php">ALIMENTATION ANIMAUX</a>
                 </div>
                 <div class="grid-item blue">
                     <a href="/dashboardAdmin/modifierServices.php">MODIFIER LES SERVICES</a>
                 </div>
-                <div class="grid-item light-green">
-                    <a href="/dashboardAdmin/modifierAnimaux.php">MODIFIER LES ANIMAUX</a>
-                </div>
                 <div class="grid-item brown">
-                    <a href="/dashboardAdmin/modifierHabitats.php">MODIFIER LES HABITATS</a>
-                </div>
-                <div class="grid-item light-blue">
-                    <a href="#">AFFICHER LES COMPTES RENDU DE L'ANIMAL</a>
-                </div>
-                <div class="grid-item dark-green">
-                    <a href="#">DASH BOARD</a>
+                    <a href="/avis/validation.php">ESPACE COMMENTAIRE</a>
                 </div>
             </div>
         </section>
     </main>
-
-
     <?php require_once (__DIR__ . '/../includes/footer.php'); ?>
 </body>
 </html>

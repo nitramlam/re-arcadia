@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/../includes/header.php'); 
 require '../config/db.php';
 
 $pdo = getDatabaseConnection();
@@ -25,10 +26,14 @@ $stmt_pending_avis = $pdo->query($sql_pending_avis);
 $pending_avis = $stmt_pending_avis->fetchAll();
 ?>
 
-<?php require_once (__DIR__ . '/../includes/header.php'); ?>
-
-<link rel="stylesheet" href="../avis/validation.css">
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Validation des Avis</title>
+    <link rel="stylesheet" href="../avis/validation.css">
+</head>
+<body>
 <main>
     <div class="validation">
         <h1>Validation des Avis</h1>
@@ -42,8 +47,8 @@ $pending_avis = $stmt_pending_avis->fetchAll();
                         <p><strong>Commentaire:</strong> <?php echo htmlspecialchars($avis['commentaire']); ?></p>
                         <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                             <input type="hidden" name="avis_id" value="<?php echo $avis['avis_id']; ?>">
-                            <button class="oui"   type="submit" name="action" value="approve">Oui</button>
-                            <button  class="non" type="submit" name="action" value="delete">Non</button>
+                            <button class="oui" type="submit" name="action" value="approve">Oui</button>
+                            <button class="non" type="submit" name="action" value="delete">Non</button>
                         </form>
                     </li>
                 <?php endforeach; ?>
@@ -53,3 +58,5 @@ $pending_avis = $stmt_pending_avis->fetchAll();
 </main>
 
 <?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+</body>
+</html>

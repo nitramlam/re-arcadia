@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    color: #333;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.animals {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.animal {
+    margin-bottom: 20px;
+}
+
+.animal h3 {
+    margin: 0 0 10px;
+}
+
+.animal p {
+    margin: 0 0 10px;
+}
+
+.animal form {
+    display: flex;
+    flex-direction: column;
+}
+
+.animal form label {
+    margin-bottom: 5px;
+}
+
+.animal form input[type="text"],
+.animal form input[type="date"],
+.animal form input[type="number"] {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.animal form button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5cb85c;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.animal form button:hover {
+    opacity: 0.9;
+}

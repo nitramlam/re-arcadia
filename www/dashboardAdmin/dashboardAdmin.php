@@ -19,7 +19,7 @@
                     <a href="/dashboardAdmin/modifierServices.php">MODIFIER LES SERVICES</a>
                 </div>
                 <div class="grid-item light-green">
-                    <a href="#">MODIFIER LES ANIMAUX</a>
+                    <a href="/dashboardAdmin/modifierAnimaux.php">MODIFIER LES ANIMAUX</a>
                 </div>
                 <div class="grid-item brown">
                     <a href="/dashboardAdmin/modifierHabitats.php">MODIFIER LES HABITATS</a>

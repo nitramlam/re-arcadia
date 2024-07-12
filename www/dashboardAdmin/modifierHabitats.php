@@ -1,5 +1,5 @@
-<?php require_once (__DIR__ . '/../includes/header.php'); ?>
-<?php
+<?php 
+require_once (__DIR__ . '/../includes/header.php');
 require '../config/db.php';
 
 $pdo = getDatabaseConnection();
@@ -7,7 +7,7 @@ $pdo = getDatabaseConnection();
 // Suppression d'un habitat
 if (isset($_POST['delete_habitat'])) {
     $habitat_id = $_POST['habitat_id'];
-    $stmt = $pdo->prepare("DELETE FROM HABITAT WHERE habitat_id = :habitat_id");
+    $stmt = $pdo->prepare("DELETE FROM habitat WHERE habitat_id = :habitat_id");
     $stmt->execute([':habitat_id' => $habitat_id]);
 }
 
@@ -16,7 +16,7 @@ if (isset($_POST['add_habitat'])) {
     $nom = $_POST['nom'];
     $description = $_POST['description'];
     $commentaire_habitat = $_POST['commentaire_habitat'];
-    $stmt = $pdo->prepare("INSERT INTO HABITAT (nom, description, commentaire_habitat) VALUES (:nom, :description, :commentaire_habitat)");
+    $stmt = $pdo->prepare("INSERT INTO habitat (nom, description, commentaire_habitat) VALUES (:nom, :description, :commentaire_habitat)");
     $stmt->execute([':nom' => $nom, ':description' => $description, ':commentaire_habitat' => $commentaire_habitat]);
 }
 
@@ -25,13 +25,12 @@ if (isset($_POST['edit_habitat'])) {
     $habitat_id = $_POST['habitat_id'];
     $nom = $_POST['nom'];
     $description = $_POST['description'];
-    $commentaire_habitat = $_POST['commentaire_habitat'];
-    $stmt = $pdo->prepare("UPDATE HABITAT SET nom = :nom, description = :description, commentaire_habitat = :commentaire_habitat WHERE habitat_id = :habitat_id");
-    $stmt->execute([':nom' => $nom, ':description' => $description, ':commentaire_habitat' => $commentaire_habitat, ':habitat_id' => $habitat_id]);
+    $stmt = $pdo->prepare("UPDATE habitat SET nom = :nom, description = :description WHERE habitat_id = :habitat_id");
+    $stmt->execute([':nom' => $nom, ':description' => $description, ':habitat_id' => $habitat_id]);
 }
 
 // Sélection et affichage des données des habitats
-$sql = "SELECT * FROM HABITAT";
+$sql = "SELECT * FROM habitat";
 $stmt = $pdo->query($sql);
 $habitats = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -42,7 +41,6 @@ $animals = $stmt_animals->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <link rel="stylesheet" href="modifierHabitats.css">
-
 
 <main>
     <div class="habitats">
@@ -58,7 +56,10 @@ $animals = $stmt_animals->fetchAll(PDO::FETCH_ASSOC);
                     echo '<div class="col-md-12 p-0 habitat-card">';
                     echo '<h2>' . htmlspecialchars($habitat['nom']) . '</h2>';
                     echo '<p>' . htmlspecialchars($habitat['description']) . '</p>';
+                    echo '<button class="view-comment-btn" onclick="viewComment(' . htmlspecialchars($habitat['habitat_id']) . ')">Afficher le commentaire</button>';
+                    echo '<div class="commentaire-habitat" id="commentaire-' . htmlspecialchars($habitat['habitat_id']) . '" style="display: none;">';
                     echo '<p><em>' . htmlspecialchars($habitat['commentaire_habitat']) . '</em></p>';
+                    echo '</div>';
 
                     // Affichage des animaux pour chaque habitat
                     $hasAnimals = false;
@@ -117,8 +118,6 @@ $animals = $stmt_animals->fetchAll(PDO::FETCH_ASSOC);
             <input type="text" name="nom" id="edit-nom" required>
             <label for="description">Description:</label>
             <textarea name="description" id="edit-description" required></textarea>
-            <label for="commentaire_habitat">Commentaire:</label>
-            <textarea name="commentaire_habitat" id="edit-commentaire_habitat"></textarea>
             <button type="submit" name="edit_habitat">Modifier</button>
             <button type="button" onclick="closeEditForm()">Annuler</button>
         </form>
@@ -126,46 +125,35 @@ $animals = $stmt_animals->fetchAll(PDO::FETCH_ASSOC);
 </main>
 <script src="modifierHabitat.js"></script>
 <script>
-    function editHabitat(habitatId) {
-    // Implémenter la logique pour éditer un habitat
-    console.log("Edit habitat: " + habitatId);
-}
+    function viewComment(habitatId) {
+        var commentDiv = document.getElementById('commentaire-' + habitatId);
+        if (commentDiv.style.display === 'none') {
+            commentDiv.style.display = 'block';
+        } else {
+            commentDiv.style.display = 'none';
+        }
+    }
 
-function deleteHabitat(habitatId) {
-    // Implémenter la logique pour supprimer un habitat
-    console.log("Delete habitat: " + habitatId);
-}
+    function openEditForm(habitatId) {
+        document.getElementById('edit-form-container').style.display = 'block';
+        // Fetch habitat data and fill the form
+        var habitat = <?php echo json_encode($habitats); ?>.find(h => h.habitat_id == habitatId);
+        document.getElementById('edit-habitat-id').value = habitat.habitat_id;
+        document.getElementById('edit-nom').value = habitat.nom;
+        document.getElementById('edit-description').value = habitat.description;
+    }
 
-function addHabitat() {
-    // Implémenter la logique pour ajouter un nouvel habitat
-    console.log("Add new habitat");
-}
+    function closeEditForm() {
+        document.getElementById('edit-form-container').style.display = 'none';
+    }
 
-function submitChanges() {
-    // Implémenter la logique pour soumettre les changements
-    console.log("Submit changes");
-}
-function openEditForm(habitatId) {
-    document.getElementById('edit-form-container').style.display = 'block';
-    // Fetch habitat data and fill the form
-    var habitat = <?php echo json_encode($habitats); ?>.find(h => h.habitat_id == habitatId);
-    document.getElementById('edit-habitat-id').value = habitat.habitat_id;
-    document.getElementById('edit-nom').value = habitat.nom;
-    document.getElementById('edit-description').value = habitat.description;
-    document.getElementById('edit-commentaire_habitat').value = habitat.commentaire_habitat;
-}
+    function openAddForm() {
+        document.getElementById('add-form').style.display = 'block';
+    }
 
-function closeEditForm() {
-    document.getElementById('edit-form-container').style.display = 'none';
-}
-
-function openAddForm() {
-    document.getElementById('add-form').style.display = 'block';
-}
-
-function closeAddForm() {
-    document.getElementById('add-form').style.display = 'none';
-}
+    function closeAddForm() {
+        document.getElementById('add-form').style.display = 'none';
+    }
 </script>
 
 <?php require_once (__DIR__ . '/../includes/footer.php'); ?>

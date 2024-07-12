@@ -11,10 +11,10 @@
             <h1>ESPACE VETERINAIRE</h1>
             <div class="grid-container">
                 <div class="grid-item green">
-                    <a href="/dashboardAdmin/modifierHabitats.php">HABITAT</a>
+                    <a href="/dashboardVeto/habitats.php">HABITAT</a>
                 </div>
                 <div class="grid-item blue">
-                    <a href="">passage employé</a>
+                    <a href="/dashboardVeto/employe.php">passage employé</a>
                 </div>
                 <div class="grid-item brown">
                     <a href="/dashboardVeto/compteRendu.php">COMPTE RENDU</a>

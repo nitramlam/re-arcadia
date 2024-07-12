@@ -1,13 +1,25 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
 .habitats {
     margin: 20px;
 }
 
 .introHabitats {
     text-align: center;
+    margin-bottom: 30px;
 }
 
 .titreHabitats {
-    font-size: 2em;
+    font-size: 2.5em;
+    color: #fff;
+    background-color: #8b0000;
+    padding: 20px;
     margin-bottom: 20px;
 }
 
@@ -20,16 +32,30 @@
     flex: 1 1 100%;
     margin-bottom: 20px;
     border: 1px solid #ddd;
+    background-color: #ffffff;
     padding: 20px;
-    background-color: #f9f9f9;
+    position: relative;
+    border-radius: 10px;
 }
 
-.habitat-card {
-    margin-bottom: 20px;
+.habitat-card h2 {
+    font-size: 1.5em;
+    color: #2f4f4f;
+    margin-bottom: 10px;
 }
 
-.add-habitat {
-    margin-top: 40px;
+.habitat-card p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.habitat-card ul {
+    padding-left: 20px;
+}
+
+.habitat-card ul li {
+    list-style-type: disc;
+    margin-bottom: 5px;
 }
 
 button {
@@ -39,6 +65,7 @@ button {
     border: none;
     cursor: pointer;
     margin-top: 10px;
+    border-radius: 5px;
 }
 
 button:hover {
@@ -54,6 +81,8 @@ button:hover {
     left: 50%;
     transform: translate(-50%, -20%);
     z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
 .edit-form-container {
@@ -63,6 +92,9 @@ button:hover {
 .edit-form textarea, .add-form textarea, .edit-form input, .add-form input {
     width: 100%;
     margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .edit-btn {
@@ -84,8 +116,59 @@ button:hover {
 
 .add-btn {
     background-color: #4CAF50;
+    border-radius: 50%;
+    padding: 10px 15px;
+    font-size: 2em;
+    line-height: 1em;
 }
 
 .add-btn:hover {
     background-color: #45a049;
+}
+
+.add-habitat {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.add-habitat button {
+    font-size: 2em;
+    background-color: #4CAF50;
+    border-radius: 50%;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+
+.add-habitat button:hover {
+    background-color: #45a049;
+}
+
+.validate-btn {
+    background-color: #8b0000;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    text-align: center;
+    margin: 20px auto;
+    display: block;
+}
+
+.validate-btn:hover {
+    background-color: #700000;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    font-weight: bold;
+}
+
+form button {
+    align-self: flex-start;
 }

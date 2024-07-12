@@ -67,7 +67,6 @@ $animals = $stmt_animals->fetchAll(PDO::FETCH_ASSOC);
                             $hasAnimals = true;
                             echo '<li>';
                             echo '<strong>' . htmlspecialchars($animal['nom']) . '</strong> (' . htmlspecialchars($animal['espece']) . ')';
-                            echo '<p>' . htmlspecialchars($animal['description']) . '</p>';
                             echo '<p><em>' . htmlspecialchars($animal['etat_general']) . '</em></p>';
                             echo '</li>';
                         }

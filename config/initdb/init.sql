@@ -1,28 +1,35 @@
-CREATE TABLE IF NOT EXISTS HABITAT (
+CREATE DATABASE IF NOT EXISTS arcadia CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+use arcadia
+
+CREATE TABLE IF NOT EXISTS habitat (
     habitat_id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     commentaire_habitat TEXT,
     image_path VARCHAR(255)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO HABITAT (nom, description, commentaire_habitat, image_path) VALUES 
+-- Insérer des données dans la table habitat
+INSERT INTO habitat (nom, description, commentaire_habitat, image_path) VALUES 
 ('Savane', 'Une grande plaine herbeuse, souvent parsemée d\'arbres dispersés.', 'propre.', 'assets/savane-habitats.png'),
 ('Jungle', 'Une forêt dense et humide avec une grande biodiversité.', 'sale', 'assets/jungle-habitats.png'),
 ('Marais', 'Une zone humide souvent inondée, riche en biodiversité aquatique.', 'propre.', 'assets/marais-habitats.png');
-
 CREATE TABLE IF NOT EXISTS service (
     service_id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     icons_path VARCHAR(255)
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Insérer des données dans la table service
-INSERT INTO service (nom, description) VALUES
-('Restaurant', 'Découvrez notre zoo de manière enrichissante avec un restaurant proposant des produits locaux et biologiques, des visites guidées interactives gratuites qui vous plongent dans l\'univers captivant de nos animaux, et des circuits en petit train électrique respectueux de notre écosystème.'),
-('Visite guidée', 'Participez à nos visites guidées gratuites, où nos guides passionnés vous feront découvrir les comportements et les habitats de nos animaux. Une expérience éducative enrichissante pour toute la famille, à ne pas manquer lors de votre visite !\n\nPour réserver votre visite guidée, utilisez notre formulaire de contact en ligne. Assurez-vous de réserver au moins 24 heures à l\'avance.'),
-('Visite en train', 'Plongez dans une aventure captivante à bord de notre petit train écologique, et laissez-vous transporter dans une expérience immersive et enrichissante.\n\nTarif : 2 € par personne.\nPour plus de détails, veuillez vous renseigner à l\'accueil lors de votre visite.');
+INSERT INTO service (nom, description, icons_path) VALUES
+('Restaurant', 'Découvrez notre zoo de manière enrichissante avec un restaurant proposant des produits locaux et biologiques, des visites guidées interactives gratuites qui vous plongent dans l\'univers captivant de nos animaux, et des circuits en petit train électrique respectueux de notre écosystème.', NULL),
+('Visite guidée', 'Participez à nos visites guidées gratuites, où nos guides passionnés vous feront découvrir les comportements et les habitats de nos animaux. Une expérience éducative enrichissante pour toute la famille, à ne pas manquer lors de votre visite !\n\nPour réserver votre visite guidée, utilisez notre formulaire de contact en ligne. Assurez-vous de réserver au moins 24 heures à l\'avance.', NULL),
+('Visite en train', 'Plongez dans une aventure captivante à bord de notre petit train écologique, et laissez-vous transporter dans une expérience immersive et enrichissante.\n\nTarif : 2 € par personne.\nPour plus de détails, veuillez vous renseigner à l\'accueil lors de votre visite.', NULL);
+
+-- Convertir la table service existante à l'encodage correct
+ALTER TABLE service CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS animal (
     animal_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -48,7 +55,7 @@ VALUES
 
     ('Hinata', 'panthère de Floride', 'En bonne santé', 'La panthère de Floride (Puma concolor coryi) est une sous-espèce rare et protégée du puma, reconnaissable à sa robe beige et à ses taches. Adaptée à son habitat marécageux unique, elle se nourrit principalement de cerfs, de sangliers et d\'autres petits mammifères. La panthère de Floride est un symbole de conservation, représentant les efforts pour protéger les espèces en danger et leurs habitats fragiles.', 'Protéine', 110.00, 'F', '2024-02-01', NULL, 'Amérique du Nord', 2, 'Marais', 6.00),
 
-    -- ('Weasley', 'paresseux', 'En bonne santé','Le paresseux à trois doigts est un mammifère des forêts tropicales d\'Amérique centrale et du Sud. Connus pour leur lenteur et leur régime à base de feuilles, ils sont essentiels à la dispersion des graines et à la biodiversité, symbolisant la conservation des habitats fragiles.', 'Graines', 5.00, 'M', '2024-02-01', NULL, 'Amérique du Sud', 0, 'Jungle', 0.50),
+     ('Weasley', 'paresseux', 'En bonne santé','Le paresseux à trois doigts est un mammifère des forêts tropicales d\'Amérique centrale et du Sud. Connus pour leur lenteur et leur régime à base de feuilles, ils sont essentiels à la dispersion des graines et à la biodiversité, symbolisant la conservation des habitats fragiles.', 'Graines', 5.00, 'M', '2024-02-01', NULL, 'Amérique du Sud', 0, 'Jungle', 0.50),
 
     ('Léonard', 'éléphant d\'Afrique', 'En bonne santé','L\'éléphant d\'Afrique, emblème des savanes et des forêts subsahariennes, est vital pour l\'écosystème en tant qu\'ingénieur du paysage et disperseur de graines. Malheureusement menacé par le braconnage et la perte d\'habitat, sa conservation est essentielle pour préserver la biodiversité africaine.', 'Graines', 1500.00, 'M', '2024-02-01', NULL, 'Afrique', 45, 'Jungle', 15.00),
 

@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS habitat (
     description TEXT NOT NULL,
     commentaire_habitat TEXT,
     image_path VARCHAR(255)
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
 
 -- Insérer des données dans la table habitat
 INSERT INTO habitat (nom, description, commentaire_habitat, image_path) VALUES 
@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS service (
     nom VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     icons_path VARCHAR(255)
-);CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
+
 
 -- Insérer des données dans la table service
 INSERT INTO service (nom, description, icons_path) VALUES
@@ -28,8 +29,16 @@ INSERT INTO service (nom, description, icons_path) VALUES
 ('Visite guidée', 'Participez à nos visites guidées gratuites, où nos guides passionnés vous feront découvrir les comportements et les habitats de nos animaux. Une expérience éducative enrichissante pour toute la famille, à ne pas manquer lors de votre visite !\n\nPour réserver votre visite guidée, utilisez notre formulaire de contact en ligne. Assurez-vous de réserver au moins 24 heures à l\'avance.', NULL),
 ('Visite en train', 'Plongez dans une aventure captivante à bord de notre petit train écologique, et laissez-vous transporter dans une expérience immersive et enrichissante.\n\nTarif : 2 € par personne.\nPour plus de détails, veuillez vous renseigner à l\'accueil lors de votre visite.', NULL);
 
--- Convertir la table service existante à l'encodage correct
-ALTER TABLE service CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS horaires (
+    horaire_id INT AUTO_INCREMENT PRIMARY KEY,
+    ouverture TIME NOT NULL,
+    fermeture TIME NOT NULL
+);
+
+-- Insertion d'une seule ligne dans la table horaires
+INSERT INTO horaires (ouverture, fermeture) VALUES
+('08:00:00', '18:00:00');
+
 
 CREATE TABLE IF NOT EXISTS animal (
     animal_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -103,7 +112,3 @@ VALUES
 
 
 
--- Conversion des tables à l'encodage utf8mb4
-ALTER TABLE animal CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE service CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE habitat CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

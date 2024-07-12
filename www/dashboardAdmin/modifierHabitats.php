@@ -43,6 +43,7 @@ $animals = $stmt_animals->fetchAll(PDO::FETCH_ASSOC);
 
 <link rel="stylesheet" href="modifierHabitats.css">
 
+
 <main>
     <div class="habitats">
         <div class="introHabitats">
@@ -123,7 +124,7 @@ $animals = $stmt_animals->fetchAll(PDO::FETCH_ASSOC);
         </form>
     </div>
 </main>
-
+<script src="modifierHabitat.js"></script>
 <script>
 function openEditForm(habitatId) {
     document.getElementById('edit-form-container').style.display = 'block';

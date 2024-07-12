@@ -14,7 +14,7 @@
                     <a href="/dashboardAdmin/modifierHabitats.php">HABITAT</a>
                 </div>
                 <div class="grid-item blue">
-                    <a href="/dashboardAdmin/modifierServices.php">ANIMAUX</a>
+                    <a href="/dashboardAdmin/modifierAnimaux.php">ANIMAUX</a>
                 </div>
                 <div class="grid-item brown">
                     <a href="/avis/validation.php">COMPTE RENDU</a>

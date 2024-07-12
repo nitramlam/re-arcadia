@@ -29,7 +29,7 @@ if (session_status() == PHP_SESSION_NONE) {
                     <li><a href="/contact/index.php">Contact</a></li>
                     <?php if (isset($_SESSION['email'])) : ?>
                         <?php if ($_SESSION['role'] == 'administateur') : ?>
-                            <li><a href="/dashboard/dashboardAdmin.php">Tableau de bord</a></li>
+                            <li><a href="/dashboardAdmin/dashboardAdmin.php">Tableau de bord</a></li>
                         <?php elseif ($_SESSION['role'] == 'employe') : ?>
                             <li><a href="/dashboard/dashboardEmploye.php">Tableau de bord</a></li>
                         <?php elseif ($_SESSION['role'] == 'veterinaire') : ?>

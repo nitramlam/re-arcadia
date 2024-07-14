@@ -1,0 +1,58 @@
+
+
+.intro {
+    background-color: #556B2F;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.intro h1 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.intro p {
+    margin: 10px 0 0;
+    font-size: 18px;
+}
+
+.animaux {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.animal {
+    width: 100%;
+    padding: 15px 0;
+    text-align: left;
+    box-sizing: border-box;
+    padding-left: 20px;
+}
+
+/* Couleurs alternées */
+.animal:nth-child(3n+1) {
+    background-color: #e6f7ff; /* Couleur 1 */
+}
+
+.animal:nth-child(3n+2) {
+    background-color: #ffedcc; /* Couleur 2 */
+}
+
+.animal:nth-child(3n+3) {
+    background-color: #d6f5d6; /* Couleur 3 */
+}
+
+.animal h3 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.animal p {
+    margin: 5px 0 0;
+    font-size: 18px;
+    color: #666;
+}

@@ -1,5 +1,3 @@
-
-
 .intro {
     background-color: #556B2F;
     color: #fff;
@@ -18,13 +16,13 @@
     font-size: 18px;
 }
 
-.animaux {
+.animaux, .habitats {
     width: 100%;
     margin: 0;
     padding: 0;
 }
 
-.animal {
+.animal, .habitat {
     width: 100%;
     padding: 15px 0;
     text-align: left;
@@ -32,7 +30,7 @@
     padding-left: 20px;
 }
 
-/* Couleurs alternées */
+/* Couleurs alternées pour les animaux */
 .animal:nth-child(3n+1) {
     background-color: #e6f7ff; /* Couleur 1 */
 }
@@ -45,14 +43,47 @@
     background-color: #d6f5d6; /* Couleur 3 */
 }
 
-.animal h3 {
+.animal h3, .habitat h3 {
     margin: 0;
     font-size: 24px;
     color: #333;
 }
 
-.animal p {
+.animal p, .habitat p {
     margin: 5px 0 0;
     font-size: 18px;
     color: #666;
 }
+
+/* Couleurs alternées pour les habitats */
+.habitat:nth-child(3n+1) {
+    background-color: #e6f7ff; /* Couleur 1 */
+}
+
+.habitat:nth-child(3n+2) {
+    background-color: #ffedcc; /* Couleur 2 */
+}
+
+.habitat:nth-child(3n+3) {
+    background-color: #d6f5d6; /* Couleur 3 */
+}
+
+/* Styles pour les animaux dans les habitats */
+.animals-in-habitat {
+    padding-left: 20px;
+}
+
+.animal-in-habitat {
+    margin: 5px 0;
+}
+
+.animal-in-habitat a {
+    font-size: 18px;
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.animal-in-habitat a:hover {
+    text-decoration: underline;
+}
+

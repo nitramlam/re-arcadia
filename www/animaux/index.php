@@ -1,5 +1,5 @@
-<?php require_once (__DIR__ . '/../includes/header.php'); ?>
-<?php
+<?php 
+require_once (__DIR__ . '/../includes/header.php');
 require '../config/db.php';
 
 // Obtenir une connexion à la base de données
@@ -10,6 +10,19 @@ if ($pdo) {
     $sql = "SELECT * FROM animal";
     $stmt = $pdo->query($sql);
     $animaux = $stmt->fetchAll();
+    
+    // Requête SQL pour sélectionner tous les habitats
+    $sql = "SELECT * FROM habitat";
+    $stmt = $pdo->query($sql);
+    $habitats = $stmt->fetchAll();
+    
+    // Récupérer les animaux par habitat
+    $animalsByHabitat = [];
+    foreach ($habitats as $habitat) {
+        $stmt = $pdo->prepare("SELECT * FROM animal WHERE habitat = ?");
+        $stmt->execute([$habitat['nom']]);
+        $animalsByHabitat[$habitat['nom']] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
 
@@ -33,6 +46,23 @@ if ($pdo) {
             <div class="animal">
                 <h3><?= htmlspecialchars($animal['nom']) ?></h3>
                 <p><?= htmlspecialchars($animal['espece']) ?></p>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    
+    <div class="habitats">
+        <h2>Habitats</h2>
+        <?php foreach ($habitats as $habitat): ?>
+            <div class="habitat">
+                <h3><?= htmlspecialchars($habitat['nom']) ?></h3>
+                <p><?= htmlspecialchars($habitat['description']) ?></p>
+                <div class="animals-in-habitat">
+                    <?php foreach ($animalsByHabitat[$habitat['nom']] as $animal): ?>
+                        <div class="animal-in-habitat">
+                            <a href="details.php?animal_id=<?= htmlspecialchars($animal['animal_id']) ?>"><?= htmlspecialchars($animal['nom']) ?></a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
         <?php endforeach; ?>
     </div>

@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS arcadia CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 use arcadia;
+SET NAMES utf8mb4;
 
 CREATE TABLE IF NOT EXISTS habitat (
     habitat_id INT AUTO_INCREMENT PRIMARY KEY,

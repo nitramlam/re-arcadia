@@ -16,8 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $continent_origine = $_POST['continent_origine'];
         $age = $_POST['age'];
         $habitat = $_POST['habitat'];
-        $stmt = $pdo->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat = ? WHERE animal_id = ?");
-        $stmt->execute([$nom, $description, $poids, $sexe, $continent_origine, $age, $habitat, $animal_id]);
+        $espece = $_POST['espece'];
+        $stmt = $pdo->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat = ?, espece = ? WHERE animal_id = ?");
+        $stmt->execute([$nom, $description, $poids, $sexe, $continent_origine, $age, $habitat, $espece, $animal_id]);
     } elseif (isset($_POST['delete_animal'])) {
         // Supprimer un animal
         $animal_id = $_POST['animal_id'];
@@ -32,8 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $continent_origine = $_POST['continent_origine'];
         $age = $_POST['age'];
         $habitat = $_POST['habitat'];
-        $stmt = $pdo->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$nom, $description, $poids, $sexe, $continent_origine, $age, $habitat]);
+        $espece = $_POST['espece']; // Nouveau champ
+        $stmt = $pdo->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat, espece) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$nom, $description, $poids, $sexe, $continent_origine, $age, $habitat, $espece]); // Nouveau champ
     }
 }
 
@@ -71,12 +73,13 @@ $animals = $animalQuery->fetchAll(PDO::FETCH_ASSOC);
                     <form method="POST" class="animal-form" style="display: none;">
                         <input type="hidden" name="animal_id" value="<?php echo htmlspecialchars($animal['animal_id'] ?? ''); ?>">
                         <label>Nom: <input type="text" name="nom" value="<?php echo htmlspecialchars($animal['nom'] ?? ''); ?>" required></label>
-                        <label>Description: <textarea name="description"  required><?php echo htmlspecialchars($animal['description'] ?? ''); ?></textarea></label>
+                        <label>Description: <textarea name="description" required><?php echo htmlspecialchars($animal['description'] ?? ''); ?></textarea></label>
                         <label>Poids: <input type="number" step="0.01" name="poids" value="<?php echo htmlspecialchars($animal['poids'] ?? ''); ?>" required></label>
                         <label>Sexe: <input type="text" name="sexe" value="<?php echo htmlspecialchars($animal['sexe'] ?? ''); ?>" required></label>
                         <label>Continent d'origine: <input type="text" name="continent_origine" value="<?php echo htmlspecialchars($animal['continent_origine'] ?? ''); ?>" required></label>
                         <label>Âge: <input type="number" name="age" value="<?php echo htmlspecialchars($animal['age'] ?? ''); ?>" required></label>
                         <label>Habitat: <input type="text" name="habitat" value="<?php echo htmlspecialchars($animal['habitat'] ?? ''); ?>" required></label>
+                        <label>Espèce: <input type="text" name="espece" value="<?php echo htmlspecialchars($animal['espece'] ?? ''); ?>" required></label> <!-- Nouveau champ -->
                         <button type="submit" name="update_animal" class="edit-btn">Modifier</button>
                         <button type="submit" name="delete_animal" class="delete-btn">Supprimer</button>
                     </form>
@@ -94,6 +97,7 @@ $animals = $animalQuery->fetchAll(PDO::FETCH_ASSOC);
             <label>Continent d'origine: <input type="text" name="continent_origine" required></label>
             <label>Âge: <input type="number" name="age" required></label>
             <label>Habitat: <input type="text" name="habitat" required></label>
+            <label>Espèce: <input type="text" name="espece" required></label> <!-- Nouveau champ obligatoire -->
             <button type="submit" name="add_animal">Ajouter</button>
             <button type="button" onclick="closeAddForm()">Annuler</button>
         </form>

@@ -177,3 +177,23 @@ main {
         flex: 1 1 100%;
     }
 }
+
+.animal-card {
+    max-width: 300px; /* Ajustez cette largeur selon vos besoins */
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    overflow: hidden; /* Pour cacher toute partie de l'image qui dépasse */
+    text-align: center; /* Centrer le contenu à l'intérieur */
+}
+
+.animal-card img {
+    width: 100px; /* Définir une largeur fixe pour l'image */
+    height: 100px; /* Définir une hauteur fixe pour l'image */
+    object-fit: cover; /* S'assurer que l'image couvre entièrement l'espace sans distorsion */
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto 10px; /* Centrer l'image horizontalement et ajouter une marge en bas */
+}

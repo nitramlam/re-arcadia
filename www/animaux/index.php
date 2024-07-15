@@ -32,7 +32,7 @@ if ($pdo) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nos Animaux</title>
-    <link rel="stylesheet" href="animaux.css"> <!-- Remplacez par le chemin correct de votre fichier CSS -->
+    <link rel="stylesheet" href="animaux.css"> <!-- Assurez-vous de remplacer par le chemin correct de votre fichier CSS -->
 </head>
 <body>
 
@@ -46,6 +46,9 @@ if ($pdo) {
             <div class="animal">
                 <h3><?= htmlspecialchars($animal['nom']) ?></h3>
                 <p><?= htmlspecialchars($animal['espece']) ?></p>
+                <a href="/dashboardAdmin/animals/animal_<?= htmlspecialchars($animal['animal_id']) ?>.php">
+                    <img src="<?= htmlspecialchars($animal['image_path'] ?? '/animaux/default.jpg') ?>" alt="<?= htmlspecialchars($animal['nom']) ?>" style="max-width: 200px;">
+                </a>
             </div>
         <?php endforeach; ?>
     </div>
@@ -59,7 +62,7 @@ if ($pdo) {
                 <div class="animals-in-habitat">
                     <?php foreach ($animalsByHabitat[$habitat['nom']] as $animal): ?>
                         <div class="animal-in-habitat">
-                            <a href="details.php?animal_id=<?= htmlspecialchars($animal['animal_id']) ?>"><?= htmlspecialchars($animal['nom']) ?></a>
+                            <a href="/dashboardAdmin/animals/animal_<?= htmlspecialchars($animal['animal_id']) ?>.php"><?= htmlspecialchars($animal['nom']) ?></a>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -69,6 +72,3 @@ if ($pdo) {
 </main>
 
 <?php require_once (__DIR__ . '/../includes/footer.php'); ?>
-
-</body>
-</html>

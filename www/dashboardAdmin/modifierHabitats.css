@@ -165,17 +165,63 @@ main {
     background-color: #c82333;
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
-    .habitat-card {
-        flex: 1 1 calc(50% - 20px);
-    }
+.add-btn {
+    background-color: #4CAF50;
+    border-radius: 50%;
+    padding: 10px 15px;
+    font-size: 2em;
+    line-height: 1em;
 }
 
-@media (max-width: 480px) {
-    .habitat-card {
-        flex: 1 1 100%;
-    }
+.add-btn:hover {
+    background-color: #45a049;
+}
+
+.add-habitat {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.add-habitat button {
+    font-size: 2em;
+    background-color: #4CAF50;
+    border-radius: 50%;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+
+.add-habitat button:hover {
+    background-color: #45a049;
+}
+
+.validate-btn {
+    background-color: #8b0000;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    text-align: center;
+    margin: 20px auto;
+    display: block;
+}
+
+.validate-btn:hover {
+    background-color: #700000;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    font-weight: bold;
+}
+
+form button {
+    align-self: flex-start;
 }
 
 .animal-card {

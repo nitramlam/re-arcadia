@@ -21,7 +21,7 @@
                     <a href="/dashboardAdmin/modifierHabitats.php">MODIFIER LES HABITATS</a>
                 </div>
                 <div class="grid-item light-blue full-width">
-                    <a href="#">AFFICHER LES COMPTES RENDU DE L'ANIMAL</a>
+                    <a href="../animal_detail.php">AFFICHER LES COMPTES RENDU DE L'ANIMAL</a>
                 </div>
             </div>
         </section>

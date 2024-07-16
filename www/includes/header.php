@@ -52,9 +52,9 @@ if (session_status() == PHP_SESSION_NONE) {
             </div>
             <div class="mobile-link">
                 <?php if (isset($_SESSION['email'])) : ?>
-                    <a href="connexion/logout.php" class="connect-link">Se déconnecter</a>
+                    <a href="/connexion/logout.php" class="connect-link">Se déconnecter</a>
                 <?php else : ?>
-                    <a href="/login" class="connect-link">Se connecter</a>
+                    <a href="/connexion/connexion.php" class="connect-link">Se connecter</a>
                 <?php endif; ?>
             </div>
         </div>

@@ -82,11 +82,7 @@ CREATE TABLE IF NOT EXISTS utilisateurs (
     password VARCHAR(255) NOT NULL,
     role ENUM('employe', 'veterinaire', 'administateur') 
 );
-INSERT INTO utilisateurs (email, password, role)
-VALUES
-('veterinaire@example.com', 'veto', 'veterinaire'),
-('employe@example.com','employe', 'employe'),
-('josearcadia33@gmail.com' , 'jose','administateur');
+
 
 
 ALTER TABLE habitat CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

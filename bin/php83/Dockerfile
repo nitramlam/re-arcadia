@@ -2,7 +2,6 @@ FROM php:8.3-apache-bookworm
 
 # Surpresses debconf complaints of trying to install apt packages interactively
 # https://github.com/moby/moby/issues/4032#issuecomment-192327844
- 
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Update
@@ -11,8 +10,7 @@ RUN apt-get -y update --fix-missing && \
     apt-get --no-install-recommends install -y apt-utils && \
     rm -rf /var/lib/apt/lists/*
 
-
-# Install useful tools and install important libaries
+# Install useful tools and install important libraries
 RUN apt-get -y update && \
     apt-get -y --no-install-recommends install nano wget \
 dialog \
@@ -40,10 +38,6 @@ RUN pecl install xdebug-3.3.1 && \
     docker-php-ext-enable xdebug && \
     mkdir /var/log/xdebug
 
-# Install redis
-RUN pecl install redis-6.0.2 && \
-    docker-php-ext-enable redis
-
 # Install imagick
 RUN apt-get update && \
     apt-get -y --no-install-recommends install --fix-missing libmagickwand-dev && \
@@ -66,7 +60,6 @@ RUN cd /usr/local/src && \
     docker-php-ext-enable imagick
 
 # Other PHP8 Extensions
-
 RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install pdo_sqlite && \
     docker-php-ext-install bcmath && \
@@ -79,7 +72,6 @@ RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install calendar && \
     docker-php-ext-install exif
 
-
 # Install Freetype 
 RUN apt-get -y update && \
     apt-get --no-install-recommends install -y libfreetype6-dev \
@@ -88,6 +80,12 @@ libpng-dev && \
     rm -rf /var/lib/apt/lists/* && \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg && \
     docker-php-ext-install gd
+
+# Install MongoDB extension
+RUN apt-get update && \
+    apt-get install -y libssl-dev && \
+    pecl install mongodb && \
+    docker-php-ext-enable mongodb
 
 # Insure an SSL directory exists
 RUN mkdir -p /etc/apache2/ssl

@@ -58,7 +58,9 @@ CREATE TABLE IF NOT EXISTS animal (
     date_heure_passage_employe DATETIME,
     grammage_donne DECIMAL(6, 2),
     nourriture_donnee VARCHAR(255),
-    image_path VARCHAR(255)
+    image_path VARCHAR(255),
+    page_personnalisee_url VARCHAR(255)
+
 );
 
 

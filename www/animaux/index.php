@@ -46,7 +46,7 @@ if ($pdo) {
             <div class="animal">
                 <h3><?= htmlspecialchars($animal['nom']) ?></h3>
                 <p><?= htmlspecialchars($animal['espece']) ?></p>
-                <a href="/dashboardAdmin/animals/animal_<?= htmlspecialchars($animal['animal_id']) ?>.php">
+                <a href="<?= htmlspecialchars($animal['page_personnalisee_url']) ?>">
                     <img src="<?= htmlspecialchars($animal['image_path'] ?? '/animaux/default.jpg') ?>" alt="<?= htmlspecialchars($animal['nom']) ?>" style="max-width: 200px;">
                 </a>
             </div>
@@ -62,7 +62,7 @@ if ($pdo) {
                 <div class="animals-in-habitat">
                     <?php foreach ($animalsByHabitat[$habitat['nom']] as $animal): ?>
                         <div class="animal-in-habitat">
-                            <a href="/dashboardAdmin/animals/animal_<?= htmlspecialchars($animal['animal_id']) ?>.php"><?= htmlspecialchars($animal['nom']) ?></a>
+                            <a href="<?= htmlspecialchars($animal['page_personnalisee_url']) ?>"><?= htmlspecialchars($animal['nom']) ?></a>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -72,3 +72,5 @@ if ($pdo) {
 </main>
 
 <?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+</body>
+</html>

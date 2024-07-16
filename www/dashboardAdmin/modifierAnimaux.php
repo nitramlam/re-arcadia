@@ -19,6 +19,43 @@ function uploadImage($file) {
     return null;
 }
 
+// Fonction pour créer une page personnalisée pour chaque animal
+function createAnimalPage($animalId, $animalData) {
+    $uploadDir = __DIR__ . '/../animaux_pages/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+    $pageContent = "
+    <!DOCTYPE html>
+    <html lang='fr'>
+    <head>
+        <meta charset='UTF-8'>
+        <title>{$animalData['nom']} - Page Personnalisée</title>
+        <link rel='stylesheet' href='../styles/animal_page.css'>
+    </head>
+    <body>
+        <h1>{$animalData['nom']}</h1>
+        <img src='{$animalData['image_path']}' alt='{$animalData['nom']}'>
+        <p><strong>Espèce:</strong> {$animalData['espece']}</p>
+        <p><strong>État général:</strong> {$animalData['etat_general']}</p>
+        <p><strong>Régime:</strong> {$animalData['regime']}</p>
+        <p><strong>Poids:</strong> {$animalData['poids']} kg</p>
+        <p><strong>Sexe:</strong> {$animalData['sexe']}</p>
+        <p><strong>Dernière visite:</strong> {$animalData['derniere_visite']}</p>
+        <p><strong>Commentaire:</strong> {$animalData['commentaire']}</p>
+        <p><strong>Continent d'origine:</strong> {$animalData['continent_origine']}</p>
+        <p><strong>Âge:</strong> {$animalData['age']} ans</p>
+        <p><strong>Habitat:</strong> {$animalData['habitat']}</p>
+        <p><strong>Grammage:</strong> {$animalData['grammage']} kg</p>
+        <p><strong>Description:</strong> {$animalData['description']}</p>
+    </body>
+    </html>";
+
+    $pagePath = $uploadDir . "animal_{$animalId}.php";
+    file_put_contents($pagePath, $pageContent);
+
+    return "/animaux_pages/animal_{$animalId}.php";
+}
 // Gestion des soumissions des formulaires
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['add_animal'])) {
@@ -36,8 +73,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $imagePath = uploadImage($_FILES['image']);
         $stmt = $pdo->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat, espece, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$nom, $description, $poids, $sexe, $continent_origine, $age, $habitat, $espece, $imagePath]);
-    }
-    elseif (isset($_POST['update_animal'])) {
+
+        $animalId = $pdo->lastInsertId();
+        $animalData = [
+            'nom' => $nom,
+            'description' => $description,
+            'poids' => $poids,
+            'sexe' => $sexe,
+            'continent_origine' => $continent_origine,
+            'age' => $age,
+            'habitat' => $habitat,
+            'espece' => $espece,
+            'image_path' => $imagePath,
+            'etat_general' => '',
+            'regime' => '',
+            'derniere_visite' => '',
+            'commentaire' => '',
+            'grammage' => 0.00
+        ];
+        $pageUrl = createAnimalPage($animalId, $animalData);
+
+        // Mise à jour de l'URL de la page personnalisée dans la base de données
+        $stmt = $pdo->prepare("UPDATE animal SET page_personnalisee_url = ? WHERE animal_id = ?");
+        $stmt->execute([$pageUrl, $animalId]);
+    } elseif (isset($_POST['update_animal'])) {
         // Modifier un animal
         $animal_id = $_POST['animal_id'];
         $nom = $_POST['nom'];
@@ -58,8 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat = ?, espece = ? WHERE animal_id = ?");
             $stmt->execute([$nom, $description, $poids, $sexe, $continent_origine, $age, $habitat, $espece, $animal_id]);
         }
-    }
-    elseif (isset($_POST['delete_animal'])) {
+    } elseif (isset($_POST['delete_animal'])) {
         // Supprimer un animal
         $animal_id = $_POST['animal_id'];
         $stmt = $pdo->prepare("DELETE FROM animal WHERE animal_id = ?");

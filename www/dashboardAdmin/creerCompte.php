@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . '/../includes/header.php');
 require '../config/db.php'; // Inclure le fichier de configuration de la base de données
+require_once(__DIR__ . '/mailUser.php'); // Inclure le fichier d'envoi d'email
 
 $error_message = '';
 $success_message = '';
@@ -65,19 +66,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'role' => $role
                 ]);
                 $success_message = "Utilisateur créé avec succès.";
-                echo "<script>alert('Utilisateur créé avec succès.');</script>";
 
-                // Envoi de l'email
+                // Envoi de l'email avec PHPMailer
                 $to = $email;
-                $subject = "Votre compte utilisateur a été créé";
-                $message = "Votre compte utilisateur a été créé avec succès.";
-                $headers = "From: josearcadia33@gmail.com";
+                $subject = "Votre compte Arcadia";
+                $message = "Votre compte utilisateur a été créé avec succès. Veuillez contacter l'administrateur pour obtenir votre mot de passe.";
 
-                if (mail($to, $subject, $message, $headers)) {
-                    echo "<script>alert('Email envoyé avec succès.');</script>";
-                } else {
-                    echo "<script>alert('Échec de l'envoi de l'email.');</script>";
-                }
+                sendEmail($to, $subject, $message);
             } catch (PDOException $e) {
                 $error_message = "Erreur lors de la création de l'utilisateur: " . $e->getMessage();
             }
@@ -121,7 +116,8 @@ if ($pdo) {
             <div class="role-options">
                 <label><input type="radio" name="role" value="veterinaire"> Vétérinaire</label>
                 <label><input type="radio" name="role" value="employe"> Employé</label>
-                           </div>
+                
+            </div>
         </div>
         <div class="form-group">
             <label for="email">Adresse mail:</label>

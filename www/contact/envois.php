@@ -1,22 +1,57 @@
 <?php
-// Récupérer les données du formulaire
-$destinataire = $_POST['destinataire'];
-$sujet = $_POST['sujet'];
-$message = $_POST['message'];
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Paramètres pour l'e-mail
-$headers = "From: webmaster@example.com"; // L'adresse email qui envoie (doit être une adresse validée sur ton serveur)
-$headers .= "Reply-To: webmaster@example.com"; // Adresse de réponse
-$headers .= "MIME-Version: 1.0\r\n";
-$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-// Envoyer l'e-mail
-$result = mail($destinataire, $sujet, $message, $headers);
+$autoload_path = '../vendor/autoload.php';
 
-// Vérifier si l'e-mail a été envoyé avec succès
-if ($result) {
-    echo "L'e-mail a été envoyé avec succès.";
+if (file_exists($autoload_path)) {
+    require $autoload_path;
+    echo "Autoload included successfully.<br>";
 } else {
-    echo "Erreur lors de l'envoi de l'e-mail. Veuillez réessayer.";
+    echo "Autoload file not found at: " . $autoload_path;
+    exit;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $user_email = $_POST['email']; // Adresse e-mail de l'utilisateur
+    $subject = $_POST['subject'];
+    $message = $_POST['message'];
+    $recipient_email = 'josearcadia33@gmail.com'; // Adresse e-mail fixe pour tous les destinataires
+
+    $mail = new PHPMailer(true);
+
+    try {
+        //Server settings
+        $mail->SMTPDebug = 0;                                      // Disable verbose debug output
+        $mail->isSMTP();                                           // Send using SMTP
+        $mail->Host       = 'smtp.gmail.com';                      // Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                  // Enable SMTP authentication
+        $mail->Username   = 'josearcadia33@gmail.com';             // SMTP username
+        $mail->Password   = 'ynqc ecxt olaz ftsv';                 // SMTP password (mot de passe d'application)
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;        // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+        $mail->Port       = 587;                                   // TCP port to connect to
+
+        //Recipients
+        $mail->setFrom('josearcadia33@gmail.com', 'Mailer');       // Adresse e-mail de l'expéditeur
+        $mail->addAddress($recipient_email);                       // Adresse e-mail de destination (toujours josearcadia33@gmail.com)
+        $mail->addReplyTo($user_email);                            // Adresse e-mail de l'utilisateur pour la réponse
+
+        // Content
+        $mail->isHTML(true);                                       // Set email format to HTML
+        $mail->Subject = $subject;
+        $mail->Body    = "Adresse e-mail de l'utilisateur: " . $user_email . "<br><br>" . $message;
+        $mail->AltBody = "Adresse e-mail de l'utilisateur: " . $user_email . "\n\n" . strip_tags($message);
+
+        $mail->send();
+        echo 'Message has been sent';
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+} else {
+    echo 'Invalid request method.';
 }
 ?>

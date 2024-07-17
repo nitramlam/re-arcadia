@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit44656afb675b0da7aad89672e17585ae
+class ComposerStaticInitb31eabbb1c31d34e8ff14cfbec940d04
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -21,6 +21,7 @@ class ComposerStaticInit44656afb675b0da7aad89672e17585ae
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+            'PHPMailer\\PHPMailer\\' => 20,
         ),
         'M' => 
         array (
@@ -40,6 +41,10 @@ class ComposerStaticInit44656afb675b0da7aad89672e17585ae
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'MongoDB\\' => 
         array (
@@ -61,9 +66,9 @@ class ComposerStaticInit44656afb675b0da7aad89672e17585ae
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit44656afb675b0da7aad89672e17585ae::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit44656afb675b0da7aad89672e17585ae::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit44656afb675b0da7aad89672e17585ae::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb31eabbb1c31d34e8ff14cfbec940d04::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb31eabbb1c31d34e8ff14cfbec940d04::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb31eabbb1c31d34e8ff14cfbec940d04::$classMap;
 
         }, null, ClassLoader::class);
     }

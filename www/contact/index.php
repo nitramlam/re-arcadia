@@ -1,9 +1,7 @@
 <?php require_once(__DIR__ . '/../includes/header.php'); ?>
-
-
-<form action="https://formspree.io/f/mqazkvvd" method="POST">
+<form action="envois.php" method="POST">
     <label>
-        votre mail:
+        Votre mail:
         <input type="email" name="email" required>
     </label><br><br>
 
@@ -13,9 +11,9 @@
     </label><br><br>
 
     <label>
-        message:
+        Message:
         <textarea name="message" rows="4" cols="50" required></textarea>
     </label><br><br>
 
-    <button type="submit">envoyer</button>
+    <button type="submit">Envoyer</button>
 </form>

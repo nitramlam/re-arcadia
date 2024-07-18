@@ -1,37 +1,36 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #F0EAD6;
-}
 
+
+/* Main Container */
 main {
     width: 100%;
     padding: 20px;
     box-sizing: border-box;
 }
 
+/* Services Section */
 .services {
-    max-width: 1200px;
+  
     margin: 0 auto;
     padding: 20px;
-    background-color: #F0EAD6;
+    background-color: #F7EDD9
+
 }
 
+/* Introduction Section */
 .introServices {
     text-align: center;
     margin-bottom: 40px;
 }
 
 .titreServices {
-    font-size: 36px;
-    color: #2F3E19;
+    font-size: 2.5rem;
+    color: #2b390d;
     margin-bottom: 20px;
 }
 
 .paragrapheServices {
-    font-size: 18px;
-    color: #2F3E19;
+    font-size: 1.125rem;
+    color: #2b390d;
     margin-bottom: 20px;
 }
 
@@ -41,8 +40,10 @@ main {
     max-width: 600px;
     margin: 0 auto;
     display: block;
+    border-radius: 8px;
 }
 
+/* Icons Section */
 .icons-services {
     text-align: center;
     margin-bottom: 40px;
@@ -51,53 +52,118 @@ main {
 .icons-services img {
     max-width: 100%;
     height: auto;
+    border-radius: 8px;
 }
 
+/* Opening Hours Section */
 .opening-hours {
     text-align: center;
     margin-bottom: 40px;
 }
 
 .opening-hours h2 {
-    font-size: 28px;
-    color: #2F3E19;
+    font-size: 1.75rem;
+    color: #2b390d;
     margin-bottom: 10px;
 }
 
 .opening-hours p {
-    font-size: 18px;
-    color: #2F3E19;
+    font-size: 1.125rem;
+    color: #2b390d;
 }
 
+/* Services List */
 .services-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    gap: 20px;
+    justify-content: center;
 }
 
 .service-item {
     background-color: #A4C639;
-    color: #FFFFFF;
+    color: #F7EDD9;
     padding: 20px;
     margin: 10px;
     border-radius: 8px;
-    width: calc(33% - 20px);
+    flex: 1 1 calc(33% - 40px);
     box-sizing: border-box;
+    transition: transform 0.2s;
+}
+
+.service-item:hover {
+    transform: scale(1.05);
 }
 
 .service-titre {
-    font-size: 24px;
+    font-size: 1.5rem;
     margin-bottom: 10px;
 }
 
 .service-description {
-    font-size: 16px;
+    font-size: 1rem;
 }
 
+/* Alternate Background Colors */
 .service-item:nth-child(odd) {
     background-color: #4169E1; /* Blue */
 }
 
 .service-item:nth-child(even) {
     background-color: #9ACD32; /* Light Green */
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .service-item {
+        flex: 1 1 calc(50% - 40px);
+    }
+
+    .titreServices {
+        font-size: 2rem;
+    }
+
+    .paragrapheServices, .opening-hours p {
+        font-size: 1rem;
+    }
+
+    .opening-hours h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .service-item {
+        flex: 1 1 100%;
+    }
+
+    .titreServices {
+        font-size: 1.75rem;
+    }
+
+    .paragrapheServices, .opening-hours p {
+        font-size: 0.875rem;
+    }
+
+    .opening-hours h2 {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .services {
+        padding: 10px;
+    }
+
+    .titreServices {
+        font-size: 1.5rem;
+    }
+
+    .paragrapheServices, .opening-hours p {
+        font-size: 0.75rem;
+    }
+
+    .opening-hours h2 {
+        font-size: 1rem;
+    }
 }

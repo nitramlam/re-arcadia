@@ -58,11 +58,13 @@ if ($pdo) {
         <?php foreach ($habitats as $habitat): ?>
             <div class="habitat">
                 <h3><?= htmlspecialchars($habitat['nom']) ?></h3>
-                <p><?= htmlspecialchars($habitat['description']) ?></p>
+             
                 <div class="animals-in-habitat">
                     <?php foreach ($animalsByHabitat[$habitat['nom']] as $animal): ?>
                         <div class="animal-in-habitat">
-                            <a href="<?= htmlspecialchars($animal['page_personnalisee_url']) ?>"><?= htmlspecialchars($animal['nom']) ?></a>
+                            <a href="<?= htmlspecialchars($animal['page_personnalisee_url']) ?>">
+                                <img src="<?= htmlspecialchars($animal['image_path'] ?? '/animaux/default.jpg') ?>" alt="<?= htmlspecialchars($animal['nom']) ?>">
+                            </a>
                         </div>
                     <?php endforeach; ?>
                 </div>

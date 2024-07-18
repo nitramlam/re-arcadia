@@ -49,8 +49,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $confirm_password = trim($_POST['confirm-password']);
         $role = isset($_POST['role']) ? $_POST['role'] : '';
 
+        $password_regex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/';
+
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error_message = "Adresse e-mail invalide.";
+        } elseif (!preg_match($password_regex, $password)) {
+            $error_message = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.";
         } elseif ($password !== $confirm_password) {
             $error_message = "Les mots de passe ne correspondent pas.";
         } elseif (empty($role)) {
@@ -92,31 +96,61 @@ if ($pdo) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer un compte utilisateur</title>
-    <link rel="stylesheet" href="../styles/style.css"> <!-- Inclure votre fichier CSS -->
+    <link rel="stylesheet" href="creerCompte.css">
+    <script>
+                function validateForm() {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm-password").value;
+            var passwordError = "";
+
+            var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+            if (!regex.test(password)) {
+                passwordError = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.";
+                document.getElementById("password-error").textContent = passwordError;
+                return false;
+            }
+
+            if (password !== confirmPassword) {
+                passwordError = "Les mots de passe ne correspondent pas.";
+                document.getElementById("password-error").textContent = passwordError;
+                return false;
+            }
+
+            return true;
+        }
+
+        function togglePasswordVisibility(id) {
+            var input = document.getElementById(id);
+            if (input.type === "password") {
+                input.type = "text";
+            } else {
+                input.type = "password";
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>Créer un compte utilisateur</h1>
     <?php if ($error_message): ?>
-        <p class="error-message"><?= $error_message ?></p>
+        <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
     <?php endif; ?>
     <?php if ($success_message): ?>
-        <p class="success-message"><?= $success_message ?></p>
+        <p class="success-message"><?= htmlspecialchars($success_message) ?></p>
     <?php endif; ?>
 
-    <form method="post" action="">
+    <form method="post" action="" onsubmit="return validateForm();">
         <div class="form-group">
             <label for="role">Créer un compte:</label>
             <div class="role-options">
                 <label><input type="radio" name="role" value="veterinaire"> Vétérinaire</label>
                 <label><input type="radio" name="role" value="employe"> Employé</label>
-                <label><input type="radio" name="role" value="administateur"> administateur</label>
                 
             </div>
         </div>
@@ -138,6 +172,7 @@ if ($pdo) {
                 <span class="toggle-password" onclick="togglePasswordVisibility('confirm-password')">👁️</span>
             </div>
         </div>
+        <p id="password-error" class="error-message"></p>
         <button type="submit" class="btn-submit">Valider</button>
     </form>
 

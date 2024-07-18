@@ -22,9 +22,9 @@ function uploadImage($file) {
 // Fonction pour créer une page personnalisée pour chaque animal
 function createAnimalPage($animalId, $animalData) {
     $uploadDir = __DIR__ . '/../animaux_pages/';
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0777, true);
+}
     $pageContent = "
     <!DOCTYPE html>
     <html lang='fr'>
@@ -51,11 +51,12 @@ function createAnimalPage($animalId, $animalData) {
     </body>
     </html>";
 
-    $pagePath = $uploadDir . "animal_{$animalId}.php";
+    $pagePath = __DIR__ . "/../animaux_pages/animal_{$animalId}.php";
     file_put_contents($pagePath, $pageContent);
 
     return "/animaux_pages/animal_{$animalId}.php";
 }
+
 // Gestion des soumissions des formulaires
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['add_animal'])) {

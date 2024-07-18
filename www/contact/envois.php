@@ -10,9 +10,8 @@ $autoload_path = '../vendor/autoload.php';
 
 if (file_exists($autoload_path)) {
     require $autoload_path;
-    echo "Autoload included successfully.<br>";
 } else {
-    echo "Autoload file not found at: " . $autoload_path;
+    echo json_encode(['status' => 'error', 'message' => "Autoload file not found at: " . $autoload_path]);
     exit;
 }
 
@@ -47,11 +46,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->AltBody = "Adresse e-mail de l'utilisateur: " . $user_email . "\n\n" . strip_tags($message);
 
         $mail->send();
-        echo 'Message has been sent';
+        echo json_encode(['status' => 'success', 'message' => 'Message has been sent']);
     } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        echo json_encode(['status' => 'error', 'message' => "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"]);
     }
 } else {
-    echo 'Invalid request method.';
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
 }
 ?>

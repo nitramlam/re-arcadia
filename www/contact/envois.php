@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_email = $_POST['email']; // Adresse e-mail de l'utilisateur
     $subject = $_POST['subject'];
     $message = $_POST['message'];
-    $recipient_email = 'josearcadia33@gmail.com'; // Adresse e-mail fixe pour tous les destinataires
+    $recipient_email = 'employearcadia33@gmail.com'; // Adresse e-mail fixe pour tous les destinataires
 
     $mail = new PHPMailer(true);
 
@@ -30,8 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->isSMTP();                                           // Send using SMTP
         $mail->Host       = 'smtp.gmail.com';                      // Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                  // Enable SMTP authentication
-        $mail->Username   = 'josearcadia33@gmail.com';             // SMTP username
-        $mail->Password   = 'ynqc ecxt olaz ftsv';                 // SMTP password (mot de passe d'application)
+        $mail->Username   = 'employearcadia33@gmail.com';             // SMTP username
+        $mail->Password   = 'rvjk rcrm kfwp jtbd';                 // SMTP password (mot de passe d'application)
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;        // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
         $mail->Port       = 587;                                   // TCP port to connect to
 

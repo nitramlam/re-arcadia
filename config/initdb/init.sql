@@ -11,11 +11,7 @@ CREATE TABLE IF NOT EXISTS habitat (
     image_path VARCHAR(255)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Insérer des données dans la table habitat
-INSERT INTO habitat (nom, description, commentaire_habitat, image_path) VALUES 
-('Savane', 'Une grande plaine herbeuse, souvent parsemée d\'arbres dispersés.', 'propre.', 'assets/savane-habitats.png'),
-('Jungle', 'Une forêt dense et humide avec une grande biodiversité.', 'sale', 'assets/jungle-habitats.png'),
-('Marais', 'Une zone humide souvent inondée, riche en biodiversité aquatique.', 'propre.', 'assets/marais-habitats.png');
+
 CREATE TABLE IF NOT EXISTS service (
     service_id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
@@ -82,6 +78,7 @@ CREATE TABLE IF NOT EXISTS utilisateurs (
     password VARCHAR(255) NOT NULL,
     role ENUM('employe', 'veterinaire', 'administateur') 
 );
+INSERT INTO utilisateurs (email, password, role) VALUES ('josearcadia333@gmail.com', 'jose', 'administateur');
 
 
 

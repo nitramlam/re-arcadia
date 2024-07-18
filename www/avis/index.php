@@ -46,7 +46,7 @@ $avis = $stmt_avis->fetchAll();
 
 <head>
 
-<link rel="stylesheet" href="../avis/avis.css">
+<link rel="stylesheet" href="/avis/avis.css">
 </head>
 
  <div class="avis">

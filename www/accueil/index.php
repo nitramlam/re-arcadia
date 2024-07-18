@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" href="style.css">
 <main>
-    <!-- intro -->
+    <!-- Intro section -->
     <div class="intro">
         <h1 class="parc">parc animalier arcadia</h1>
         <div class="sousTitre">
@@ -11,56 +11,52 @@
         <p class="lorem">Depuis 1960, le Zoo Écologique de la Forêt de Brocéliande s'inscrit dans le respect de la
             nature de la légendaire forêt de Brocéliande en Bretagne. Venez explorer nos habitats naturels et
             découvrir notre engagement en faveur de la conservation environnementale.</p>
-        <img src="assets/lion-accueil.png" alt="" class="lion">
+        <img src="assets/lion-accueil.png" alt="Image d'un lion" class="lion">
     </div>
-    <!-- ------------- fin intro----------- -->
-    <!-- /* -----------icons-------------*/-->
+    <!-- End of intro section -->
+
+    <!-- Icons section -->
     <div class="icons">
-        <img src="assets/icons-accueil.png" alt="">
+        <img src="assets/icons-accueil.png" alt="Icônes d'accueil">
     </div>
-    <!-- /* ----------- fin icons-------------*/-->
-    <!-------------services--------------->
-
     <div class="services">
-        <div class="lesServices">
-            <h3 class="titreServices">Les services</h3>
-            <p class="description">Découvrez notre restaurant, notre petit train et bénéficiez d'un guide gratuit
-                pour enrichir votre expérience au Zoo Écologique de la Forêt de Brocéliande.</p>
-            <img class="fleche" src="assets/fleches-accueil.png" alt="fleche pour acceder aux services">
-            <div class="autruche"></div>
+        <h2 class="servicesTitre">LES SERVICES</h2>
+        <p class="servicesLorem">Découvrez notre restaurant, notre petit train et bénéficiez d'un guide gratuit pour enrichir votre expérience au Zoo Écologique de la Forêt de Brocéliande.</p>
+        <img  class="autruche"  src="assets/autruche-accueil.png" alt="autruche">
+        <img class="flecheServices" src="assets/fleches-accueil.png" alt="Fleche pour voir les animaux">
+
+    </div>
+    <!-- End of icons section -->
+
+    <!-- Grid section -->
+    <div class="grid-section">
+        <div class="gridEnergie">
+            <h3>Le premier zoo au monde 100% autonome en energie<h3>
         </div>
-        <div class="zebre">
+        <div class="gridHabitats">
+            <h3  class="titreHabitats" >LES HABITATS</h3>
+            <p class="loremHabitats">Explorez notre variété d'animaux dans des habitats reconstitués : la jungle luxuriante, les marais préservés et la savane durablement aménagée.</p>
+            <img class="toucan"  src="assets/toucan-accueil.png" alt="Image d'un toucan">
+            <img class="flecheHabitats" src="assets/fleches-accueil.png" alt="Fleche pour voir les habitats">
+        </div>
+        <div class="gridAnimaux">
+            <h3 class="animauxTitre">LES ANIMAUX</h3>
+            <p class="animauxLorem">Rencontrez nos résidents exceptionnels, élevés dans un environnement respectueux de leur bien-être et de la nature.</p>
+            <img class="paresseux" src="assets/paresseux-accueil.png" alt="Image d'un paresseux">
+            <img class="flecheAnimaux" src="assets/fleches-accueil.png" alt="Fleche pour voir les animaux">
+        </div>
+        <div class="gridImage">
+            <img src="assets/zoo-image.png" alt="Image du zoo">
         </div>
     </div>
+    <!-- End of grid section -->
 
-
-
-    <!------------- fin services--------------->
-    <!------------- block habitats--------------->
-    <div class="block">
-        <div class="energie">
-            <h3 class="titreEnergie">Le premier zoo au monde <br> 100% autonome en energie</h3>
-        </div>
-        <div class="animaux">
-            <h3 class="titreAnimaux">LES ANIMAUX</h3>
-            <p class="paragrapheAnimaux">Rencontrez nos résidents exceptionnels, <br>élevés dans un environnement
-                respectueux de leur bien-être et de la nature.</p>
-            <img src="assets/paresseux-accueil.png" alt="" class="paresseux">
-            <img class="flecheAnimaux" src="assets/fleches-accueil.png" alt="">
-        </div>
-        <div class="carrousel"></div>
-        <a class="habitats" href="/habitats">
-            <h3 class="titreHabitats">LES HABITATS</h3>
-            <p class="paragrapheHabitats">Explorez notre variété d'animaux <br>dans des habitats reconstitués :
-                <br>la jungle luxuriante, les marais préservés<br> et la savane durablement aménagée.
-            </p>
-            <img src="assets/toucan-accueil.png" alt="" class="toucan">
-            <img class="flecheHabitats" src="assets/fleches-accueil.png" alt="">
-        </a>
-    </div>
-    <!------------- fin block habitats--------------->
-    <!------------- avis--------------->
-    <?php require_once (__DIR__ . '/../avis/index.php'); ?>
+    <!-- Avis section -->
  
+        <?php require_once (__DIR__ . '/../avis/index.php'); ?>
+    
+    <!-- End of avis section -->
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
 
 <?php require_once (__DIR__ . '/../includes/footer.php'); ?>

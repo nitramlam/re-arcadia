@@ -116,6 +116,7 @@ if ($pdo) {
             <div class="role-options">
                 <label><input type="radio" name="role" value="veterinaire"> Vétérinaire</label>
                 <label><input type="radio" name="role" value="employe"> Employé</label>
+                <label><input type="radio" name="role" value="administateur"> administateur</label>
                 
             </div>
         </div>

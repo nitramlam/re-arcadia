@@ -1,6 +1,6 @@
 <?php
 require '../config/db.php';
-require_once(__DIR__ . '/../includes/auth.php');  // Inclure le fichier de configuration de la base de données
+// Inclure le fichier de configuration de la base de données
 
 $pdo = getDatabaseConnection();
 

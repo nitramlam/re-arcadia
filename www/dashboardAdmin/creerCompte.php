@@ -1,8 +1,9 @@
 <?php
-require_once(__DIR__ . '/../includes/header.php');
+require_once(__DIR__ . '/../includes/auth.php'); 
+require_once(__DIR__ . '/../includes/header.php'); 
 require '../config/db.php'; // Inclure le fichier de configuration de la base de données
 require_once(__DIR__ . '/mailUser.php');
-require_once(__DIR__ . '/../includes/auth.php');  //
+
 $error_message = '';
 $success_message = '';
 

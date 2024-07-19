@@ -23,8 +23,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if ($user && password_verify($password, $user['password'])) {
                     $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['email'] = $user['email']; // Ajout de cette ligne
+                    $_SESSION['email'] = $user['email'];
                     $_SESSION['role'] = $user['role'];
+
+                    error_log("Rôle de l'utilisateur : " . $user['role']); // Débogage
 
                     switch ($user['role']) {
                         case 'administateur':
@@ -38,15 +40,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             exit();
                         default:
                             $error_message = "Rôle d'utilisateur inconnu.";
+                            error_log($error_message); // Débogage
                     }
                 } else {
                     $error_message = "Identifiants incorrects.";
+                    error_log($error_message); // Débogage
                 }
             } catch (PDOException $e) {
                 $error_message = "Erreur lors de la connexion: " . $e->getMessage();
+                error_log($error_message); // Débogage
             }
         } else {
             $error_message = "Erreur: Impossible de se connecter à la base de données.";
+            error_log($error_message); // Débogage
         }
     }
 }

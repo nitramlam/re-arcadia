@@ -2,6 +2,7 @@
 require '../vendor/autoload.php'; // Inclure l'autoloader de Composer pour PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+require_once(__DIR__ . '/../includes/auth.php'); 
 
 function sendEmail($to, $subject, $body) {
     $mail = new PHPMailer(true);

@@ -1,6 +1,7 @@
 <?php 
 require_once (__DIR__ . '/../includes/header.php');
 require '../config/db.php';
+require_once(__DIR__ . '/../includes/auth.php'); 
 
 $pdo = getDatabaseConnection();
 
@@ -20,36 +21,62 @@ function uploadImage($file) {
 }
 
 // Fonction pour créer une page personnalisée pour chaque animal
-function createAnimalPage($animalId, $animalData) {
+function createAnimalPage($animalId) {
+    global $pdo;
+    
+    $stmt = $pdo->prepare("SELECT * FROM animal WHERE animal_id = ?");
+    $stmt->execute([$animalId]);
+    $animal = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$animal) {
+        throw new Exception("Animal not found");
+    }
+
     $uploadDir = __DIR__ . '/../animaux_pages/';
-if (!is_dir($uploadDir)) {
-    mkdir($uploadDir, 0777, true);
-}
-    $pageContent = "
-    <!DOCTYPE html>
-    <html lang='fr'>
-    <head>
-        <meta charset='UTF-8'>
-        <title>{$animalData['nom']} - Page Personnalisée</title>
-        <link rel='stylesheet' href='../styles/animal_page.css'>
-    </head>
-    <body>
-        <h1>{$animalData['nom']}</h1>
-        <img src='{$animalData['image_path']}' alt='{$animalData['nom']}'>
-        <p><strong>Espèce:</strong> {$animalData['espece']}</p>
-        <p><strong>État général:</strong> {$animalData['etat_general']}</p>
-        <p><strong>Régime:</strong> {$animalData['regime']}</p>
-        <p><strong>Poids:</strong> {$animalData['poids']} kg</p>
-        <p><strong>Sexe:</strong> {$animalData['sexe']}</p>
-        <p><strong>Dernière visite:</strong> {$animalData['derniere_visite']}</p>
-        <p><strong>Commentaire:</strong> {$animalData['commentaire']}</p>
-        <p><strong>Continent d'origine:</strong> {$animalData['continent_origine']}</p>
-        <p><strong>Âge:</strong> {$animalData['age']} ans</p>
-        <p><strong>Habitat:</strong> {$animalData['habitat']}</p>
-        <p><strong>Grammage:</strong> {$animalData['grammage']} kg</p>
-        <p><strong>Description:</strong> {$animalData['description']}</p>
-    </body>
-    </html>";
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+
+    $pageContent = <<<PHP
+<?php require_once (__DIR__ . '/../includes/header.php'); ?>
+<!DOCTYPE html>
+<html lang='fr'>
+<head>
+    <meta charset='UTF-8'>
+    <title>{$animal['nom']} - Page Personnalisée</title>
+    <link rel='stylesheet' href='animauxPage.css'>
+</head>
+<body>
+    <div class="animal-main">
+        <h1 class="animal-title">{$animal['nom']}</h1>
+        <img class="animal-photo" src="{$animal['image_path']}" alt="{$animal['nom']}">
+        <div class="info-section">
+            <h2>Informations Générales</h2>
+            <div class="general-info">
+                <p class="species-info"><strong>Espèce:</strong> {$animal['espece']}</p>
+                <p class="description-info"><strong>Description:</strong> {$animal['description']}</p>
+                <p class="weight-info"><strong>Poids:</strong> {$animal['poids']} kg</p>
+                <p class="sex-info"><strong>Sexe:</strong> {$animal['sexe']}</p>
+                <p class="origin-continent-info"><strong>Continent d'origine:</strong> {$animal['continent_origine']}</p>
+                <p class="habitat-info"><strong>Habitat:</strong> {$animal['habitat']}</p>
+            </div>
+        </div>
+
+        <div class="medical-section">
+            <h2>Données Médicales</h2>
+            <div class="medical-info">
+                <p class="diet-info"><strong>Régime:</strong> {$animal['regime']}</p>
+                <p class="last-visit-info"><strong>Dernière visite:</strong> {$animal['derniere_visite']}</p>
+                <p class="general-state-info"><strong>État général:</strong> {$animal['etat_general']}</p>
+                <p class="weight-info"><strong>Grammage:</strong> {$animal['grammage']} kg</p>
+                <p class="comment-info"><strong>Commentaire:</strong> {$animal['commentaire']}</p>
+            </div>
+        </div>
+    </div>
+    <?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+</body>
+</html>
+PHP;
 
     $pagePath = __DIR__ . "/../animaux_pages/animal_{$animalId}.php";
     file_put_contents($pagePath, $pageContent);
@@ -76,27 +103,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$nom, $description, $poids, $sexe, $continent_origine, $age, $habitat, $espece, $imagePath]);
 
         $animalId = $pdo->lastInsertId();
-        $animalData = [
-            'nom' => $nom,
-            'description' => $description,
-            'poids' => $poids,
-            'sexe' => $sexe,
-            'continent_origine' => $continent_origine,
-            'age' => $age,
-            'habitat' => $habitat,
-            'espece' => $espece,
-            'image_path' => $imagePath,
-            'etat_general' => '',
-            'regime' => '',
-            'derniere_visite' => '',
-            'commentaire' => '',
-            'grammage' => 0.00
-        ];
-        $pageUrl = createAnimalPage($animalId, $animalData);
+        createAnimalPage($animalId);
 
         // Mise à jour de l'URL de la page personnalisée dans la base de données
         $stmt = $pdo->prepare("UPDATE animal SET page_personnalisee_url = ? WHERE animal_id = ?");
-        $stmt->execute([$pageUrl, $animalId]);
+        $stmt->execute(["/animaux_pages/animal_{$animalId}.php", $animalId]);
     } elseif (isset($_POST['update_animal'])) {
         // Modifier un animal
         $animal_id = $_POST['animal_id'];
@@ -118,6 +129,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat = ?, espece = ? WHERE animal_id = ?");
             $stmt->execute([$nom, $description, $poids, $sexe, $continent_origine, $age, $habitat, $espece, $animal_id]);
         }
+
+        // Recréer la page personnalisée
+        createAnimalPage($animal_id);
     } elseif (isset($_POST['delete_animal'])) {
         // Supprimer un animal
         $animal_id = $_POST['animal_id'];

@@ -1,196 +1,148 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
-.habitats {
-    margin: 20px;
-}
-
-.introHabitats {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.titreHabitats {
-    font-size: 2.5em;
-    color: #fff;
-    background-color: #8b0000;
+main {
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
+}
+
+.intro {
+    text-align: center;
     margin-bottom: 20px;
 }
 
-.row {
+.animal-list {
     display: flex;
     flex-wrap: wrap;
-}
-
-.col-md-12 {
-    flex: 1 1 100%;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    background-color: #ffffff;
-    padding: 20px;
-    position: relative;
-    border-radius: 10px;
-}
-
-.habitat-card h2 {
-    font-size: 1.5em;
-    color: #2f4f4f;
-    margin-bottom: 10px;
-}
-
-.habitat-card p {
-    margin: 10px 0;
-    line-height: 1.6;
-}
-
-.habitat-card ul {
-    padding-left: 20px;
-}
-
-.habitat-card ul li {
-    list-style-type: disc;
-    margin-bottom: 5px;
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #008CBA;
-    color: white;
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
-    border-radius: 5px;
-}
-
-button:hover {
-    background-color: #005f6b;
-}
-
-.edit-form-container, .add-form {
-    background-color: white;
-    border: 1px solid #ddd;
-    padding: 20px;
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -20%);
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-.edit-form-container {
-    display: none;
-}
-
-.edit-form textarea, .add-form textarea, .edit-form input, .add-form input {
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.edit-btn {
-    margin-right: 10px;
-    background-color: #4CAF50;
-}
-
-.edit-btn:hover {
-    background-color: #45a049;
-}
-
-.delete-form button {
-    background-color: #f44336;
-}
-
-.delete-form button:hover {
-    background-color: #da190b;
-}
-
-.add-btn {
-    background-color: #4CAF50;
-    border-radius: 50%;
-    padding: 10px 15px;
-    font-size: 2em;
-    line-height: 1em;
-}
-
-.add-btn:hover {
-    background-color: #45a049;
-}
-
-.add-habitat {
-    margin-top: 40px;
-    text-align: center;
-}
-
-.add-habitat button {
-    font-size: 2em;
-    background-color: #4CAF50;
-    border-radius: 50%;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    color: white;
-}
-
-.add-habitat button:hover {
-    background-color: #45a049;
-}
-
-.validate-btn {
-    background-color: #8b0000;
-    color: white;
-    padding: 15px 30px;
-    font-size: 1.2em;
-    border-radius: 5px;
-    text-align: center;
-    margin: 20px auto;
-    display: block;
-}
-
-.validate-btn:hover {
-    background-color: #700000;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-form label {
-    font-weight: bold;
-}
-
-form button {
-    align-self: flex-start;
+    justify-content: space-around;
 }
 
 .animal-card {
-    max-width: 300px; /* Ajustez cette largeur selon vos besoins */
-    margin-bottom: 20px;
+    background-color: white;
     border: 1px solid #ddd;
-    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
     padding: 20px;
-    border-radius: 10px;
-    overflow: hidden; /* Pour cacher toute partie de l'image qui dépasse */
-    text-align: center; /* Centrer le contenu à l'intérieur */
+    width: calc(33.333% - 40px);
+    box-sizing: border-box;
 }
 
 .animal-card img {
-    width: 100%; /* Assurez-vous que l'image ne dépasse pas du conteneur */
-    height: auto; /* Conserver les proportions */
-    max-width: 150px; /* Largeur maximale de l'image */
-    max-height: 150px; /* Hauteur maximale de l'image */
-    object-fit: cover; /* S'assurer que l'image couvre entièrement l'espace sans distorsion */
-    border-radius: 5px;
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.animal-card h3 {
+    margin-top: 0;
+}
+
+.animal-card button {
     display: block;
-    margin: 0 auto 10px; /* Centrer l'image horizontalement et ajouter une marge en bas */
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.animal-card button:hover {
+    background-color: #0056b3;
+}
+
+.animal-details {
+    display: none;
+    margin-top: 10px;
+}
+
+.animal-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.animal-form input,
+.animal-form textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.animal-form button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.animal-form button.delete-btn {
+    background-color: #dc3545;
+    margin-left: 10px;
+}
+
+.add-animal {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-animal-form {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.add-animal-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.add-animal-form input,
+.add-animal-form textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.add-animal-form button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-animal-form button[type="button"] {
+    background-color: #dc3545;
+    margin-left: 10px;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+    .animal-card {
+        width: calc(50% - 40px);
+    }
+}
+
+@media (max-width: 480px) {
+    .animal-card {
+        width: calc(100% - 40px);
+    }
 }

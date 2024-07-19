@@ -1,6 +1,7 @@
 <?php 
 require_once (__DIR__ . '/../includes/header.php');
 require '../config/db.php';
+require_once(__DIR__ . '/../includes/auth.php'); 
 
 $pdo = getDatabaseConnection();
 
@@ -90,7 +91,7 @@ $habitats = $habitatQuery->fetchAll(PDO::FETCH_ASSOC);
                         <input type="hidden" name="habitat_id" value="<?php echo htmlspecialchars($habitat['habitat_id']); ?>">
                         <label>Nom: <input type="text" name="nom" value="<?php echo htmlspecialchars($habitat['nom']); ?>" required></label>
                         <label>Description: <textarea name="description" required><?php echo htmlspecialchars($habitat['description']); ?></textarea></label>
-                        <label>Commentaire: <textarea name="commentaire_habitat"><?php echo htmlspecialchars($habitat['commentaire_habitat']); ?></textarea></label>
+                       
                         <label>Image: <input type="file" name="image" accept="image/*"></label>
                         <button type="submit" name="edit_habitat" class="edit-btn">Modifier</button>
                     </form>

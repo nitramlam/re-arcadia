@@ -1,5 +1,7 @@
-<?php require_once(__DIR__ . '/../includes/header.php'); ?>
-
+<?php 
+require_once(__DIR__ . '/../includes/auth.php'); 
+require_once(__DIR__ . '/../includes/header.php'); 
+?>
 <head>
     <link rel="stylesheet" href="dashboardAdmin.css">
 </head>

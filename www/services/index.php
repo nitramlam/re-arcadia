@@ -36,6 +36,7 @@ if ($pdo) {
             <?php foreach ($services as $service): ?>
                 <div class="service-item">
                     <h3 class="service-titre"><?= htmlspecialchars($service['nom']) ?></h3>
+                    <img src="<?= htmlspecialchars($service['icons_path'] ?? '/imageServices/default.jpg') ?>" alt="<?= htmlspecialchars($service['nom']) ?>" class="service-image">
                     <p class="service-description"><?= nl2br(htmlspecialchars($service['description'])) ?></p>
                 </div>
             <?php endforeach; ?>
@@ -43,4 +44,4 @@ if ($pdo) {
     </div>
 </main>
 
-<?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+<?php require_once (__DIR__ . '/../includes/footer.php'); ?> 

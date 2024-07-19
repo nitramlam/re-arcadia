@@ -1,20 +1,25 @@
 <?php 
 require_once(__DIR__ . '/../includes/header.php');
 require '../config/db.php';
+require_once(__DIR__ . '/../includes/auth.php'); 
 
 $pdo = getDatabaseConnection();
 
 // Fonction pour gérer l'upload d'image
 function uploadImage($file) {
     if (isset($file) && $file['error'] == 0) {
-        $uploadDir = __DIR__ . '/../images/';
+        $uploadDir = __DIR__ . '/../imageServices/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
         $uploadFile = $uploadDir . basename($file['name']);
         if (move_uploaded_file($file['tmp_name'], $uploadFile)) {
-            return '/images/' . basename($file['name']);
+            return '/imageServices/' . basename($file['name']);
+        } else {
+            error_log("Erreur lors du déplacement du fichier.");
         }
+    } else {
+        error_log("Erreur lors de l'upload du fichier : " . $file['error']);
     }
     return null;
 }
@@ -28,7 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Gestion du téléchargement de l'image
         $imagePath = uploadImage($_FILES['image']);
-        $stmt = $pdo->prepare("INSERT INTO service (nom, description, image_path) VALUES (?, ?, ?)");
+        if ($imagePath === null) {
+            $imagePath = '/imageServices/default.jpg'; // Chemin par défaut si le téléchargement échoue
+        }
+
+        $stmt = $pdo->prepare("INSERT INTO service (nom, description, icons_path) VALUES (?, ?, ?)");
         $stmt->execute([$nom, $description, $imagePath]);
 
     } elseif (isset($_POST['update_service'])) {
@@ -40,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Vérifier s'il y a une nouvelle image téléchargée
         $imagePath = uploadImage($_FILES['image']);
         if ($imagePath) {
-            $stmt = $pdo->prepare("UPDATE service SET nom = ?, description = ?, image_path = ? WHERE service_id = ?");
+            $stmt = $pdo->prepare("UPDATE service SET nom = ?, description = ?, icons_path = ? WHERE service_id = ?");
             $stmt->execute([$nom, $description, $imagePath, $service_id]);
         } else {
             $stmt = $pdo->prepare("UPDATE service SET nom = ?, description = ? WHERE service_id = ?");
@@ -99,14 +108,14 @@ $horaires = $horaireQuery->fetch(PDO::FETCH_ASSOC);
     <h2>Nos Services</h2>
     <?php foreach ($services as $service): ?>
         <div class="service">
-            <h3><?php echo htmlspecialchars(mb_convert_encoding($service['nom'], 'UTF-8', 'UTF-8'), ENT_QUOTES, 'UTF-8'); ?></h3>
-            <img src="<?php echo htmlspecialchars($service['image_path'] ?? '/images/default.jpg'); ?>" alt="<?php echo htmlspecialchars($service['nom'] ?? ''); ?>">
-            <p><?php echo nl2br(htmlspecialchars(mb_convert_encoding($service['description'], 'UTF-8', 'UTF-8'), ENT_QUOTES, 'UTF-8')); ?></p>
-            <button onclick="toggleForm('form-<?php echo $service['service_id']; ?>')">Modifier</button>
+            <h3><?php echo htmlspecialchars($service['nom'], ENT_QUOTES, 'UTF-8'); ?></h3>
+            <img src="<?php echo htmlspecialchars($service['icons_path'] ?? '/imageServices/default.jpg'); ?>" alt="<?php echo htmlspecialchars($service['nom'] ?? ''); ?>">
+            <p><?php echo nl2br(htmlspecialchars($service['description'], ENT_QUOTES, 'UTF-8')); ?></p>
+           
             <form id="form-<?php echo $service['service_id']; ?>" class="hidden" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="service_id" value="<?php echo htmlspecialchars($service['service_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="text" name="nom" value="<?php echo htmlspecialchars(mb_convert_encoding($service['nom'], 'UTF-8', 'UTF-8'), ENT_QUOTES, 'UTF-8'); ?>" required>
-                <textarea name="description" required><?php echo htmlspecialchars(mb_convert_encoding($service['description'], 'UTF-8', 'UTF-8'), ENT_QUOTES, 'UTF-8'); ?></textarea>
+                <input type="text" name="nom" value="<?php echo htmlspecialchars($service['nom'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                <textarea name="description" required><?php echo htmlspecialchars($service['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
                 <label>Image: <input type="file" name="image" accept="image/*"></label>
                 <button type="submit" name="update_service">Modifier</button>
                 <button type="submit" name="delete_service" class="delete">Supprimer</button>
@@ -127,9 +136,9 @@ $horaires = $horaireQuery->fetch(PDO::FETCH_ASSOC);
     <h2>Horaires d'ouverture</h2>
     <form method="POST">
         <label for="ouverture">Ouverture :</label>
-        <input type="time" id="ouverture" name="ouverture" value="<?php echo htmlspecialchars(mb_convert_encoding($horaires['ouverture'], 'UTF-8', 'UTF-8'), ENT_QUOTES, 'UTF-8'); ?>" required>
+        <input type="time" id="ouverture" name="ouverture" value="<?php echo htmlspecialchars($horaires['ouverture'], ENT_QUOTES, 'UTF-8'); ?>" required>
         <label for="fermeture">Fermeture :</label>
-        <input type="time" id="fermeture" name="fermeture" value="<?php echo htmlspecialchars(mb_convert_encoding($horaires['fermeture'], 'UTF-8', 'UTF-8'), ENT_QUOTES, 'UTF-8'); ?>" required>
+        <input type="time" id="fermeture" name="fermeture" value="<?php echo htmlspecialchars($horaires['fermeture'], ENT_QUOTES, 'UTF-8'); ?>" required>
         <button type="submit" name="update_horaire">Modifier les horaires</button>
     </form>
 </div>

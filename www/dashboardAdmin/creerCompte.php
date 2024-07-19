@@ -1,8 +1,8 @@
 <?php
 require_once(__DIR__ . '/../includes/header.php');
 require '../config/db.php'; // Inclure le fichier de configuration de la base de données
-require_once(__DIR__ . '/mailUser.php'); // Inclure le fichier d'envoi d'email
-
+require_once(__DIR__ . '/mailUser.php');
+require_once(__DIR__ . '/../includes/auth.php');  //
 $error_message = '';
 $success_message = '';
 
@@ -27,11 +27,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user_id = intval($_POST['user_id']);
         $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
         $role = isset($_POST['role']) ? $_POST['role'] : '';
-
+        $new_password = trim($_POST['new_password']);
+        $confirm_new_password = trim($_POST['confirm_new_password']);
+    
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error_message = "Adresse e-mail invalide.";
         } elseif (empty($role)) {
             $error_message = "Veuillez sélectionner un rôle.";
+        } elseif (!empty($new_password) || !empty($confirm_new_password)) {
+            $password_regex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/';
+            if (!preg_match($password_regex, $new_password)) {
+                $error_message = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.";
+            } elseif ($new_password !== $confirm_new_password) {
+                $error_message = "Les mots de passe ne correspondent pas.";
+            } else {
+                try {
+                    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+                    $sql = "UPDATE utilisateurs SET email = :email, role = :role, password = :password WHERE id = :id";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute(['email' => $email, 'role' => $role, 'password' => $hashed_password, 'id' => $user_id]);
+                    $success_message = "Utilisateur modifié avec succès.";
+                } catch (PDOException $e) {
+                    $error_message = "Erreur lors de la modification de l'utilisateur: " . $e->getMessage();
+                }
+            }
         } else {
             try {
                 $sql = "UPDATE utilisateurs SET email = :email, role = :role WHERE id = :id";
@@ -104,7 +123,7 @@ if ($pdo) {
     <title>Créer un compte utilisateur</title>
     <link rel="stylesheet" href="creerCompte.css">
     <script>
-                function validateForm() {
+        function validateForm() {
             var password = document.getElementById("password").value;
             var confirmPassword = document.getElementById("confirm-password").value;
             var passwordError = "";
@@ -151,7 +170,6 @@ if ($pdo) {
             <div class="role-options">
                 <label><input type="radio" name="role" value="veterinaire"> Vétérinaire</label>
                 <label><input type="radio" name="role" value="employe"> Employé</label>
-                
             </div>
         </div>
         <div class="form-group">
@@ -195,19 +213,21 @@ if ($pdo) {
                     <td>
                         <form method="post" action="" style="display:inline;">
                             <input type="hidden" name="user_id" value="<?= htmlspecialchars($user['id']) ?>">
-                            <input type="hidden" name="delete_user" value="1">
-                            <button type="submit" onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur?');">Supprimer</button>
-                        </form>
-                        <form method="post" action="" style="display:inline;">
-                            <input type="hidden" name="user_id" value="<?= htmlspecialchars($user['id']) ?>">
                             <input type="hidden" name="edit_user" value="1">
                             <input type="text" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
                             <select name="role" required>
                                 <option value="veterinaire" <?= $user['role'] == 'veterinaire' ? 'selected' : '' ?>>Vétérinaire</option>
                                 <option value="employe" <?= $user['role'] == 'employe' ? 'selected' : '' ?>>Employé</option>
-                                <option value="administateur" <?= $user['role'] == 'administateur' ? 'selected' : '' ?>>Administrateur</option>
+                                <option value="administrateur" <?= $user['role'] == 'administrateur' ? 'selected' : '' ?>>Administrateur</option>
                             </select>
+                            <input type="password" name="new_password" placeholder="Nouveau mot de passe">
+                            <input type="password" name="confirm_new_password" placeholder="Confirmer le nouveau mot de passe">
                             <button type="submit">Modifier</button>
+                        </form>
+                        <form method="post" action="" style="display:inline;">
+                            <input type="hidden" name="user_id" value="<?= htmlspecialchars($user['id']) ?>">
+                            <input type="hidden" name="delete_user" value="1">
+                            <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">Supprimer</button>
                         </form>
                     </td>
                 </tr>

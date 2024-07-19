@@ -1,5 +1,3 @@
-
-
 /* Main Container */
 main {
     width: 100%;
@@ -9,11 +7,9 @@ main {
 
 /* Services Section */
 .services {
-  
     margin: 0 auto;
     padding: 20px;
-    background-color: #F7EDD9
-
+    background-color: #F7EDD9;
 }
 
 /* Introduction Section */
@@ -89,6 +85,11 @@ main {
     flex: 1 1 calc(33% - 40px);
     box-sizing: border-box;
     transition: transform 0.2s;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .service-item:hover {
@@ -102,6 +103,17 @@ main {
 
 .service-description {
     font-size: 1rem;
+    margin-top: 10px;
+}
+
+.service-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Alternate Background Colors */

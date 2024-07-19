@@ -31,7 +31,7 @@
                     <h5 class="text-center">Contact</h5>
                     <br>
                     <ul class="list-unstyled text-center">
-                        <li><a href="#">se connecter</a></li>
+                        <li><a href="/connexion/connexion.php">se connecter</a></li>
                         <li><a href="/contact/index.php">nous contacter</a></li>
                     </ul>
                 </div>

@@ -2,6 +2,24 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
+
+$session_timeout = 1200 ; // 30 secondes
+
+// Vérifier si l'utilisateur est connecté et si l'activité de la session a été enregistrée
+if (isset($_SESSION['email']) && isset($_SESSION['LAST_ACTIVITY'])) {
+    // Vérifier si la session a expiré
+    if (time() - $_SESSION['LAST_ACTIVITY'] > $session_timeout) {
+        // Détruire la session si elle a expiré
+        session_unset();
+        session_destroy();
+        header("Location: /connexion/connexion.php");
+        exit();
+    }
+
+    // Mettre à jour l'heure de la dernière activité de la session
+    $_SESSION['LAST_ACTIVITY'] = time();
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -59,5 +77,21 @@ if (session_status() == PHP_SESSION_NONE) {
             </div>
         </div>
     </header>
+
+
+    <script>
+        let timeout;
+        function resetTimeout() {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                window.location.href = '/connexion/connexion.php';
+            }, 1200000); 
+        }
+
+      
+        window.onload = resetTimeout;
+        document.onmousemove = resetTimeout;
+        document.onkeypress = resetTimeout;
+    </script>
 </body>
 </html>

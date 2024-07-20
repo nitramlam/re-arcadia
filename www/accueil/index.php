@@ -23,7 +23,7 @@
         <h2 class="servicesTitre">LES SERVICES</h2>
         <p class="servicesLorem">Découvrez notre restaurant, notre petit train et bénéficiez d'un guide gratuit pour enrichir votre expérience au Zoo Écologique de la Forêt de Brocéliande.</p>
         <img  class="autruche"  src="assets/autruche-accueil.png" alt="autruche">
-        <img class="flecheServices" src="assets/fleches-accueil.png" alt="Fleche pour voir les animaux">
+       <a href="/services/index.php" class="flecheServices"> <img  src="assets/fleches-accueil.png" alt="Fleche pour voir les animaux"></a>
 
     </div>
     <!-- End of icons section -->
@@ -37,16 +37,16 @@
             <h3  class="titreHabitats" >LES HABITATS</h3>
             <p class="loremHabitats">Explorez notre variété d'animaux dans des habitats reconstitués : la jungle luxuriante, les marais préservés et la savane durablement aménagée.</p>
             <img class="toucan"  src="assets/toucan-accueil.png" alt="Image d'un toucan">
-            <img class="flecheHabitats" src="assets/fleches-accueil.png" alt="Fleche pour voir les habitats">
+            <a href="/habitats/index.php" class="flecheHabitats"><img src="assets/fleches-accueil.png" alt="Fleche pour voir les habitats"></a>
         </div>
         <div class="gridAnimaux">
             <h3 class="animauxTitre">LES ANIMAUX</h3>
             <p class="animauxLorem">Rencontrez nos résidents exceptionnels, élevés dans un environnement respectueux de leur bien-être et de la nature.</p>
             <img class="paresseux" src="assets/paresseux-accueil.png" alt="Image d'un paresseux">
-            <img class="flecheAnimaux" src="assets/fleches-accueil.png" alt="Fleche pour voir les animaux">
+            <a href="/animaux/index.php" class="flecheAnimaux"><img src="assets/fleches-accueil.png" alt="Fleche pour voir les animaux"></a>
         </div>
         <div class="gridImage">
-            <img src="assets/zoo-image.png" alt="Image du zoo">
+            <img src="assets/zoo.png" alt="Image du zoo">
         </div>
     </div>
     <!-- End of grid section -->

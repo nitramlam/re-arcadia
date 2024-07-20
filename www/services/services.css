@@ -1,7 +1,7 @@
 /* Main Container */
 main {
     width: 100%;
-    padding: 20px;
+
     box-sizing: border-box;
 }
 
@@ -9,7 +9,7 @@ main {
 .services {
     margin: 0 auto;
     padding: 20px;
-    background-color: #F7EDD9;
+    background-color: #B6BE64;
 }
 
 /* Introduction Section */
@@ -118,11 +118,11 @@ main {
 
 /* Alternate Background Colors */
 .service-item:nth-child(odd) {
-    background-color: #4169E1; /* Blue */
+    background-color: #5563D4; 
 }
 
 .service-item:nth-child(even) {
-    background-color: #9ACD32; /* Light Green */
+    background-color: #2B390D;
 }
 
 /* Responsive Styles */

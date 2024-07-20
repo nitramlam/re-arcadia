@@ -14,6 +14,8 @@
     grid-area: sousTitreAvis;
     justify-self: center;
     align-self: center;
+    color: #F7EDD9;
+
    
  }
  .avisCarousel{
@@ -103,7 +105,7 @@
 }
 @media (max-width: 768px) {
    .avis {
-      background-color: aquamarine;
+   
        display: flex;
        flex-direction: column;
        align-items: center;

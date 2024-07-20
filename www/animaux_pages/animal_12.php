@@ -3,13 +3,13 @@
 <html lang='fr'>
 <head>
     <meta charset='UTF-8'>
-    <title>Tichou - Page Personnalisée</title>
+    <title>Tichouu - Page Personnalisée</title>
     <link rel='stylesheet' href='animauxPage.css'>
 </head>
 <body>
     <div class="animal-main">
-        <h1 class="animal-title">Tichou</h1>
-        <img class="animal-photo" src="/animaux/jaguar1.png" alt="Tichou">
+        <h1 class="animal-title">Tichouu</h1>
+        <img class="animal-photo" src="/animaux/jaguar1.png" alt="Tichouu">
         <div class="info-section">
             <h2>Informations Générales</h2>
             <div class="general-info">

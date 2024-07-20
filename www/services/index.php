@@ -5,12 +5,18 @@ require '../config/db.php';
 // Obtenir une connexion à la base de données
 $pdo = getDatabaseConnection();
 $services = [];
+$horaires = [];
 
 if ($pdo) {
-    // Sélection et affichage des données
+    // Sélection et affichage des données des services
     $sql = "SELECT * FROM service";
     $stmt = $pdo->query($sql);
     $services = $stmt->fetchAll();
+
+    // Sélection et affichage des horaires d'ouverture
+    $sqlHoraires = "SELECT * FROM horaires LIMIT 1";
+    $stmtHoraires = $pdo->query($sqlHoraires);
+    $horaires = $stmtHoraires->fetch();
 }
 ?>
 
@@ -30,7 +36,11 @@ if ($pdo) {
         </div>
         <div class="opening-hours">
             <h2>HORAIRES D'OUVERTURE</h2>
-            <p>Ouvert tous les jours de 10h à 20h</p>
+            <?php if ($horaires): ?>
+                <p>Ouvert tous les jours de <?= htmlspecialchars($horaires['ouverture']) ?> à <?= htmlspecialchars($horaires['fermeture']) ?></p>
+            <?php else: ?>
+                <p>Horaires non disponibles</p>
+            <?php endif; ?>
         </div>
         <div class="services-list">
             <?php foreach ($services as $service): ?>

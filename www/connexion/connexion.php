@@ -1,6 +1,6 @@
 <?php
 ob_start();
-require_once(__DIR__ . '/../includes/header.php'); // Inclure le fichier de header pour démarrer la session
+require_once(__DIR__ . '/../includes/header.php'); // Inclure le fichier de header
 require '../config/db.php'; // Inclure le fichier de configuration de la base de données
 
 $error_message = '';
@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['email'] = $user['email'];
                     $_SESSION['role'] = $user['role'];
+                    $_SESSION['LAST_ACTIVITY'] = time(); // Initialiser LAST_ACTIVITY
 
                     error_log("Rôle de l'utilisateur : " . $user['role']); // Débogage
 

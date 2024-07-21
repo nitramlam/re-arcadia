@@ -32,7 +32,7 @@ if ($pdo) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nos Animaux</title>
-    <link rel="stylesheet" href="animaux.css"> <!-- Assurez-vous de remplacer par le chemin correct de votre fichier CSS -->
+    <link rel="stylesheet" href="animaux.css"> 
 </head>
 <body>
 

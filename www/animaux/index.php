@@ -1,5 +1,5 @@
-<?php require_once (__DIR__ . '/../includes/header.php'); ?>
-<?php
+<?php 
+require_once (__DIR__ . '/../includes/header.php');
 require '../config/db.php';
 
 // Obtenir une connexion à la base de données
@@ -7,64 +7,72 @@ $pdo = getDatabaseConnection();
 
 // Requête SQL pour sélectionner tous les animaux
 if ($pdo) {
-    // Sélection et affichage des données
     $sql = "SELECT * FROM animal";
     $stmt = $pdo->query($sql);
     $animaux = $stmt->fetchAll();
+    
+    // Requête SQL pour sélectionner tous les habitats
+    $sql = "SELECT * FROM habitat";
+    $stmt = $pdo->query($sql);
+    $habitats = $stmt->fetchAll();
+    
+    // Récupérer les animaux par habitat
+    $animalsByHabitat = [];
+    foreach ($habitats as $habitat) {
+        $stmt = $pdo->prepare("SELECT * FROM animal WHERE habitat = ?");
+        $stmt->execute([$habitat['nom']]);
+        $animalsByHabitat[$habitat['nom']] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
 
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-
-    <title>Liste des animaux</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Animaux</title>
+    <link rel="stylesheet" href="animaux.css"> 
 </head>
 <body>
 
 <main>
+    <div class="intro">
+        <h1>Nos Animaux</h1>
+        <p>Au Zoo Écologique de la Forêt de Brocéliande, nous créons des habitats fidèles aux milieux naturels de nos animaux, assurant ainsi leur bien-être et contribuant à la préservation des écosystèmes. Rencontrez nos majestueux lions, éléphants, alligators et bien d'autres résidents fascinants au cœur de notre zoo.</p>
+    </div>
     <div class="animaux">
-        <h1>Liste des animaux</h1>
-        <div class="row">
-            <?php foreach ($animaux as $animal): ?>
-                <div class="col-md-4">
-                    <div class="animal-card">
-                        <h3><?= htmlspecialchars($animal['nom']) ?></h3>
-                        <p><strong>Espèce:</strong> <?= htmlspecialchars($animal['espece']) ?></p>
-                        <p><strong>État général:</strong> <?= htmlspecialchars($animal['etat_general']) ?></p>
-                        <p><strong>Régime:</strong> <?= htmlspecialchars($animal['regime']) ?></p>
-                        <p><strong>Poids:</strong> <?= $animal['poids'] ?> kg</p>
-                        <p><strong>Sexe:</strong> <?= htmlspecialchars($animal['sexe']) ?></p>
-                        <p><strong>Dernière visite:</strong> <?= $animal['derniere_visite'] ?></p>
-                         <?php if (isset($animal['commentaire'])): ?>
-                <p><strong>Commentaire:</strong> <?= htmlspecialchars($animal['commentaire']) ?></p>
-            <?php else: ?>
-                <p><strong>Commentaire:</strong> Aucun commentaire disponible</p>
-            <?php endif; ?>
-                        <p><strong>Continent d'origine:</strong> <?= htmlspecialchars($animal['continent_origine']) ?></p>
-                        <p><strong>Âge:</strong> <?= $animal['age'] ?> ans</p>
-                        <p><strong>Habitat:</strong> <?= htmlspecialchars($animal['habitat']) ?></p>
-                        <p><strong>Grammage:</strong> <?= $animal['grammage'] ?> kg</p>
-                        <p><strong>Description:</strong> <?= htmlspecialchars($animal['description']) ?></p>
-                    </div>
+        <?php foreach ($animaux as $animal): ?>
+            <div class="animal">
+                <h3><?= htmlspecialchars($animal['nom']) ?></h3>
+                <p><?= htmlspecialchars($animal['espece']) ?></p>
+                <a href="<?= htmlspecialchars($animal['page_personnalisee_url']) ?>">
+                    <img src="<?= htmlspecialchars($animal['image_path'] ?? '/animaux/default.jpg') ?>" alt="<?= htmlspecialchars($animal['nom']) ?>" style="max-width: 200px;">
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    
+    <div class="habitats">
+        <h2>Habitats</h2>
+        <?php foreach ($habitats as $habitat): ?>
+            <div class="habitat">
+                <h3><?= htmlspecialchars($habitat['nom']) ?></h3>
+             
+                <div class="animals-in-habitat">
+                    <?php foreach ($animalsByHabitat[$habitat['nom']] as $animal): ?>
+                        <div class="animal-in-habitat">
+                            <a href="<?= htmlspecialchars($animal['page_personnalisee_url']) ?>">
+                                <img src="<?= htmlspecialchars($animal['image_path'] ?? '/animaux/default.jpg') ?>" alt="<?= htmlspecialchars($animal['nom']) ?>">
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
-        </div>
+            </div>
+        <?php endforeach; ?>
     </div>
 </main>
-<?php require_once (__DIR__ . '/../includes/footer.php'); ?>
 
+<?php require_once (__DIR__ . '/../includes/footer.php'); ?>
 </body>
 </html>

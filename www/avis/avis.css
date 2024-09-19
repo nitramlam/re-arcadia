@@ -14,6 +14,8 @@
     grid-area: sousTitreAvis;
     justify-self: center;
     align-self: center;
+    color: #F7EDD9;
+
    
  }
  .avisCarousel{
@@ -101,6 +103,67 @@
 .input:hover{
     background-color: rgba(165, 72, 53, 0.5);
 }
+@media (max-width: 768px) {
+   .avis {
+   
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       padding: 20px;
+       background-color: #5D6A41;
+   }
+   
+   .avisCarousel {
+       width: 100%;
+       margin-bottom: 20px;
+       background-color: #F7EDD9;
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+   }
 
+   .avisForm {
+       width: 100%;
+       padding: 10px;
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       background-color: #F7EDD9;
+   }
 
- 
+   .pseudoForm,
+   .commentairePseudo {
+       width: 100%;
+       margin-bottom: 10px;
+   }
+
+   .input {
+       width: 100%;
+       margin-top: 10px;
+       background-color: #A54835;
+       color: #F7EDD9;
+   }
+
+   .input:hover {
+       background-color: rgba(165, 72, 53, 0.5);
+   }
+
+   .avisSlide {
+       width: 100%;
+       margin-bottom: 20px;
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+   }
+
+   .avisTitre,
+   .avisDescription {
+       width: 100%;
+       text-align: center;
+       margin: 5% 0;
+   }
+
+   .avisDescription {
+       margin-left: 50px; /* Ajoute de l'espace entre le pseudo et le commentaire */
+   }
+}

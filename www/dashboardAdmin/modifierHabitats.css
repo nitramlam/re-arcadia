@@ -1,52 +1,60 @@
+/* modifierHabitats.css */
+
+/* Styles de base */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    color: #333;
     margin: 0;
     padding: 0;
 }
 
-.habitats {
-    margin: 20px;
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* En-tête de la section */
 .introHabitats {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .titreHabitats {
-    font-size: 2.5em;
-    color: #fff;
-    background-color: #8b0000;
-    padding: 20px;
-    margin-bottom: 20px;
+    color: #333;
 }
 
-.row {
+.introHabitats p {
+    color: #666;
+    font-size: 1.1em;
+}
+
+/* Liste des habitats */
+.habitat-list {
     display: flex;
     flex-wrap: wrap;
+    gap: 20px;
 }
 
-.col-md-12 {
-    flex: 1 1 100%;
-    margin-bottom: 20px;
+.habitat-card {
+    flex: 1 1 calc(33.333% - 40px);
+    background-color: #fff;
     border: 1px solid #ddd;
-    background-color: #ffffff;
+    border-radius: 8px;
     padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: relative;
-    border-radius: 10px;
 }
 
 .habitat-card h2 {
-    font-size: 1.5em;
-    color: #2f4f4f;
-    margin-bottom: 10px;
+    margin-top: 0;
+    color: #333;
 }
 
 .habitat-card p {
-    margin: 10px 0;
-    line-height: 1.6;
+    color: #555;
 }
 
 .habitat-card ul {
@@ -54,64 +62,107 @@ body {
 }
 
 .habitat-card ul li {
-    list-style-type: disc;
     margin-bottom: 5px;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #008CBA;
-    color: white;
+.habitat-card .view-comment-btn {
+    background-color: #007bff;
+    color: #fff;
     border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
     cursor: pointer;
     margin-top: 10px;
-    border-radius: 5px;
 }
 
-button:hover {
-    background-color: #005f6b;
+.habitat-card .view-comment-btn:hover {
+    background-color: #0056b3;
 }
 
-.edit-form-container, .add-form {
-    background-color: white;
+.habitat-card .commentaire-habitat {
+    margin-top: 10px;
+    background-color: #f9f9f9;
     border: 1px solid #ddd;
-    padding: 20px;
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -20%);
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-.edit-form-container {
-    display: none;
-}
-
-.edit-form textarea, .add-form textarea, .edit-form input, .add-form input {
-    width: 100%;
-    margin-bottom: 10px;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
-.edit-btn {
-    margin-right: 10px;
-    background-color: #4CAF50;
+/* Formulaires */
+.add-habitat,
+.edit-form-container {
+    margin-top: 20px;
+}
+
+.add-form,
+.edit-form {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.add-form label,
+.edit-form label {
+    display: block;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.add-form input[type="text"],
+.edit-form input[type="text"],
+.add-form textarea,
+.edit-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.add-form textarea,
+.edit-form textarea {
+    height: 80px;
+}
+
+.add-form button,
+.edit-form button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.add-form button:hover,
+.edit-form button:hover {
+    background-color: #218838;
+}
+
+/* Boutons */
+.edit-btn,
+.delete-form button {
+    background-color: #ffc107;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
 .edit-btn:hover {
-    background-color: #45a049;
+    background-color: #e0a800;
 }
 
 .delete-form button {
-    background-color: #f44336;
+    background-color: #dc3545;
 }
 
 .delete-form button:hover {
-    background-color: #da190b;
+    background-color: #c82333;
 }
 
 .add-btn {
@@ -171,4 +222,24 @@ form label {
 
 form button {
     align-self: flex-start;
+}
+
+.animal-card {
+    max-width: 300px; /* Ajustez cette largeur selon vos besoins */
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    overflow: hidden; /* Pour cacher toute partie de l'image qui dépasse */
+    text-align: center; /* Centrer le contenu à l'intérieur */
+}
+
+.animal-card img {
+    width: 100px; /* Définir une largeur fixe pour l'image */
+    height: 100px; /* Définir une hauteur fixe pour l'image */
+    object-fit: cover; /* S'assurer que l'image couvre entièrement l'espace sans distorsion */
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto 10px; /* Centrer l'image horizontalement et ajouter une marge en bas */
 }

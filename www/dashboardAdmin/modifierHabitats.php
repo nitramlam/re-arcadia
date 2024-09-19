@@ -1,151 +1,146 @@
-<?php require_once (__DIR__ . '/../includes/header.php'); ?>
-<?php
+<?php 
+require_once(__DIR__ . '/../includes/auth.php'); 
+require_once(__DIR__ . '/../includes/header.php'); 
 require '../config/db.php';
+
 
 $pdo = getDatabaseConnection();
 
-// Suppression d'un habitat
-if (isset($_POST['delete_habitat'])) {
-    $habitat_id = $_POST['habitat_id'];
-    $stmt = $pdo->prepare("DELETE FROM HABITAT WHERE habitat_id = :habitat_id");
-    $stmt->execute([':habitat_id' => $habitat_id]);
+// Fonction pour gérer l'upload d'image
+function uploadImage($file) {
+    if (isset($file) && $file['error'] == 0) {
+        $uploadDir = __DIR__ . '/../images/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        $uploadFile = $uploadDir . basename($file['name']);
+        if (move_uploaded_file($file['tmp_name'], $uploadFile)) {
+            return '/images/' . basename($file['name']);
+        }
+    }
+    return null;
 }
 
-// Ajout d'un nouvel habitat
-if (isset($_POST['add_habitat'])) {
-    $nom = $_POST['nom'];
-    $description = $_POST['description'];
-    $commentaire_habitat = $_POST['commentaire_habitat'];
-    $stmt = $pdo->prepare("INSERT INTO HABITAT (nom, description, commentaire_habitat) VALUES (:nom, :description, :commentaire_habitat)");
-    $stmt->execute([':nom' => $nom, ':description' => $description, ':commentaire_habitat' => $commentaire_habitat]);
+// Gestion des soumissions des formulaires
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['add_habitat'])) {
+        // Ajouter un nouvel habitat
+        $nom = $_POST['nom'];
+        $description = $_POST['description'];
+        $commentaire_habitat = $_POST['commentaire_habitat'];
+
+        // Gestion du téléchargement de l'image
+        $imagePath = uploadImage($_FILES['image']);
+        $stmt = $pdo->prepare("INSERT INTO habitat (nom, description, commentaire_habitat, image_path) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$nom, $description, $commentaire_habitat, $imagePath]);
+
+    } elseif (isset($_POST['edit_habitat'])) {
+        // Modifier un habitat
+        $habitat_id = $_POST['habitat_id'];
+        $nom = $_POST['nom'];
+        $description = $_POST['description'];
+        $commentaire_habitat = $_POST['commentaire_habitat'];
+
+        // Vérifier s'il y a une nouvelle image téléchargée
+        $imagePath = uploadImage($_FILES['image']);
+        if ($imagePath) {
+            $stmt = $pdo->prepare("UPDATE habitat SET nom = ?, description = ?, commentaire_habitat = ?, image_path = ? WHERE habitat_id = ?");
+            $stmt->execute([$nom, $description, $commentaire_habitat, $imagePath, $habitat_id]);
+        } else {
+            $stmt = $pdo->prepare("UPDATE habitat SET nom = ?, description = ?, commentaire_habitat = ? WHERE habitat_id = ?");
+            $stmt->execute([$nom, $description, $commentaire_habitat, $habitat_id]);
+        }
+    } elseif (isset($_POST['delete_habitat'])) {
+        // Supprimer un habitat
+        $habitat_id = $_POST['habitat_id'];
+        $stmt = $pdo->prepare("DELETE FROM habitat WHERE habitat_id = ?");
+        $stmt->execute([$habitat_id]);
+    }
 }
 
-// Modification d'un habitat
-if (isset($_POST['edit_habitat'])) {
-    $habitat_id = $_POST['habitat_id'];
-    $nom = $_POST['nom'];
-    $description = $_POST['description'];
-    $commentaire_habitat = $_POST['commentaire_habitat'];
-    $stmt = $pdo->prepare("UPDATE HABITAT SET nom = :nom, description = :description, commentaire_habitat = :commentaire_habitat WHERE habitat_id = :habitat_id");
-    $stmt->execute([':nom' => $nom, ':description' => $description, ':commentaire_habitat' => $commentaire_habitat, ':habitat_id' => $habitat_id]);
-}
-
-// Sélection et affichage des données des habitats
-$sql = "SELECT * FROM HABITAT";
-$stmt = $pdo->query($sql);
-$habitats = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Sélection et affichage des données des animaux
-$sql_animals = "SELECT * FROM animal";
-$stmt_animals = $pdo->query($sql_animals);
-$animals = $stmt_animals->fetchAll(PDO::FETCH_ASSOC);
+// Récupérer les données des habitats
+$habitatQuery = $pdo->query("SELECT * FROM habitat");
+$habitats = $habitatQuery->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<link rel="stylesheet" href="modifierHabitats.css">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion des Habitats</title>
+    <link rel="stylesheet" href="modifierHabitats.css">
+</head>
+<body>
+    <main>
+        <section class="intro">
+            <h2>Nos Habitats</h2>
+            <p>Explorez les différents habitats soigneusement recréés pour offrir un environnement sûr et confortable à nos animaux.</p>
+        </section>
+        <section class="habitat-list">
+            <?php foreach ($habitats as $habitat): ?>
+                <div class="habitat-card">
+                    <h3><?php echo htmlspecialchars($habitat['nom'] ?? ''); ?></h3>
+                    <img src="<?php echo htmlspecialchars($habitat['image_path'] ?? '/images/default.jpg'); ?>" alt="<?php echo htmlspecialchars($habitat['nom'] ?? ''); ?>">
+                    <p><?php echo htmlspecialchars($habitat['description'] ?? ''); ?></p>
+                    <button class="view-comment-btn" data-id="<?php echo htmlspecialchars($habitat['habitat_id']); ?>">Afficher le commentaire</button>
+                    <div class="commentaire-habitat" id="commentaire-<?php echo htmlspecialchars($habitat['habitat_id']); ?>" style="display: none;">
+                        <p><em><?php echo htmlspecialchars($habitat['commentaire_habitat'] ?? ''); ?></em></p>
+                    </div>
 
-<main>
-    <div class="habitats">
-        <div class="introHabitats">
-            <h1 class="titreHabitats">MODIFIER LES HABITATS</h1>
-        </div>
+                    <button class="edit-toggle" data-id="<?php echo htmlspecialchars($habitat['habitat_id']); ?>">✏️ Modifier</button>
+                    <form method="POST" class="habitat-form" id="edit-form-<?php echo htmlspecialchars($habitat['habitat_id']); ?>" style="display: none;" enctype="multipart/form-data">
+                        <input type="hidden" name="habitat_id" value="<?php echo htmlspecialchars($habitat['habitat_id']); ?>">
+                        <label>Nom: <input type="text" name="nom" value="<?php echo htmlspecialchars($habitat['nom']); ?>" required></label>
+                        <label>Description: <textarea name="description" required><?php echo htmlspecialchars($habitat['description']); ?></textarea></label>
+                       
+                        <label>Image: <input type="file" name="image" accept="image/*"></label>
+                        <button type="submit" name="edit_habitat" class="edit-btn">Modifier</button>
+                    </form>
+                    <form method="POST" class="delete-form" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet habitat ?');">
+                        <input type="hidden" name="habitat_id" value="<?php echo htmlspecialchars($habitat['habitat_id']); ?>">
+                        <button type="submit" name="delete_habitat" class="delete-btn">Supprimer</button>
+                    </form>
+                </div>
+            <?php endforeach; ?>
+        </section>
 
-        <div class="row m-0">
-            <?php
-            // Affichage des habitats et des animaux
-            if (!empty($habitats)) {
-                foreach ($habitats as $habitat) {
-                    echo '<div class="col-md-12 p-0 habitat-card">';
-                    echo '<h2>' . htmlspecialchars($habitat['nom']) . '</h2>';
-                    echo '<p>' . htmlspecialchars($habitat['description']) . '</p>';
-                    echo '<p><em>' . htmlspecialchars($habitat['commentaire_habitat']) . '</em></p>';
-
-                    // Affichage des animaux pour chaque habitat
-                    $hasAnimals = false;
-                    echo '<ul>';
-                    foreach ($animals as $animal) {
-                        if ($animal['habitat'] === $habitat['nom']) {
-                            $hasAnimals = true;
-                            echo '<li>';
-                            echo '<strong>' . htmlspecialchars($animal['nom']) . '</strong> (' . htmlspecialchars($animal['espece']) . ')';
-                            echo '<p><em>' . htmlspecialchars($animal['etat_general']) . '</em></p>';
-                            echo '</li>';
-                        }
-                    }
-                    echo '</ul>';
-                    if (!$hasAnimals) {
-                        echo '<p>Aucun animal dans cet habitat.</p>';
-                    }
-
-                    // Boutons de modification et de suppression
-                    echo '<button class="edit-btn" onclick="openEditForm(' . htmlspecialchars($habitat['habitat_id']) . ')">Modifier</button>';
-                    echo '<form method="post" class="delete-form">';
-                    echo '<input type="hidden" name="habitat_id" value="' . htmlspecialchars($habitat['habitat_id']) . '">';
-                    echo '<button type="submit" name="delete_habitat">Supprimer</button>';
-                    echo '</form>';
-
-                    echo "</div>";
-                }
-            } else {
-                echo '<p>Aucun habitat disponible.</p>';
-            }
-            ?>
-
-            <!-- Formulaire d'ajout d'un nouvel habitat -->
-            <div class="col-md-12 p-0 add-habitat">
-                <h2>Ajouter un nouvel habitat</h2>
-                <button class="add-btn" onclick="openAddForm()">Ajouter un habitat</button>
-                <form method="post" class="add-form" id="add-form" style="display: none;">
-                    <label for="nom">Nom:</label>
-                    <input type="text" name="nom" required>
-                    <label for="description">Description:</label>
-                    <textarea name="description" required></textarea>
-                    <label for="commentaire_habitat">Commentaire:</label>
-                    <textarea name="commentaire_habitat"></textarea>
-                    <button type="submit" name="add_habitat">Ajouter</button>
-                    <button type="button" onclick="closeAddForm()">Annuler</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Formulaire de modification caché -->
-    <div class="edit-form-container" id="edit-form-container" style="display: none;">
-        <form method="post" class="edit-form">
-            <input type="hidden" name="habitat_id" id="edit-habitat-id">
-            <label for="nom">Nom:</label>
-            <input type="text" name="nom" id="edit-nom" required>
-            <label for="description">Description:</label>
-            <textarea name="description" id="edit-description" required></textarea>
-            <label for="commentaire_habitat">Commentaire:</label>
-            <textarea name="commentaire_habitat" id="edit-commentaire_habitat"></textarea>
-            <button type="submit" name="edit_habitat">Modifier</button>
-            <button type="button" onclick="closeEditForm()">Annuler</button>
+        <!-- Formulaire d'ajout d'un nouvel habitat -->
+        <button class="add-habitat" onclick="openAddForm()">Ajouter un habitat</button>
+        <form method="POST" class="add-habitat-form" id="add-habitat-form" style="display: none;" enctype="multipart/form-data">
+            <label>Nom: <input type="text" name="nom" required></label>
+            <label>Description: <textarea name="description" required></textarea></label>
+            <label>Image: <input type="file" name="image" accept="image/*"></label>
+            <button type="submit" name="add_habitat">Ajouter</button>
+            <button type="button" onclick="closeAddForm()">Annuler</button>
         </form>
-    </div>
-</main>
+    </main>
+    <?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.view-comment-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const habitatId = button.getAttribute('data-id');
+                    const commentDiv = document.getElementById('commentaire-' + habitatId);
+                    commentDiv.style.display = commentDiv.style.display === 'block' ? 'none' : 'block';
+                });
+            });
 
-<script>
-function openEditForm(habitatId) {
-    document.getElementById('edit-form-container').style.display = 'block';
-    // Fetch habitat data and fill the form
-    var habitat = <?php echo json_encode($habitats); ?>.find(h => h.habitat_id == habitatId);
-    document.getElementById('edit-habitat-id').value = habitat.habitat_id;
-    document.getElementById('edit-nom').value = habitat.nom;
-    document.getElementById('edit-description').value = habitat.description;
-    document.getElementById('edit-commentaire_habitat').value = habitat.commentaire_habitat;
-}
+            document.querySelectorAll('.edit-toggle').forEach(button => {
+                button.addEventListener('click', () => {
+                    const habitatId = button.getAttribute('data-id');
+                    const form = document.getElementById('edit-form-' + habitatId);
+                    form.style.display = form.style.display === 'block' ? 'none' : 'block';
+                });
+            });
 
-function closeEditForm() {
-    document.getElementById('edit-form-container').style.display = 'none';
-}
+            document.querySelector('.add-habitat').addEventListener('click', () => {
+                document.getElementById('add-habitat-form').style.display = 'block';
+            });
+        });
 
-function openAddForm() {
-    document.getElementById('add-form').style.display = 'block';
-}
-
-function closeAddForm() {
-    document.getElementById('add-form').style.display = 'none';
-}
-</script>
-
-<?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+        function closeAddForm() {
+            document.getElementById('add-habitat-form').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

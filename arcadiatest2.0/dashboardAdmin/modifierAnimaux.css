@@ -1,0 +1,180 @@
+/* Style global pour le body */
+body {
+    background-color: #8B4513; 
+    margin: 0;
+}
+
+/* Conteneur principal */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Section d'introduction */
+.intro {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #F7EED9;
+}
+
+/* Liste des animaux */
+.animal-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+/* Cartes des animaux */
+.animal-card {
+    background-color: #F7EDD9;
+    color: #2B390D;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    width: calc(33.333% - 40px);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Images des animaux avec taille fixe et centrage */
+.animal-card img {
+    width: 100%;
+    height: 200px; 
+    object-fit: cover; 
+    border-radius: 8px;
+}
+
+/* Titre de la carte animal */
+.animal-card h3 {
+    margin-top: 10px;
+    text-align: center;
+    color: #2F3E19;
+}
+
+/* Boutons d'action */
+.animal-card button {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #007BFF;
+    color: #F7EED9;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.animal-card button:hover {
+    background-color: #0056b3;
+}
+
+/* Détails de l'animal */
+.animal-details {
+    display: none;
+    margin-top: 10px;
+}
+
+/* Formulaire de modification d'animal */
+.animal-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.animal-form input,
+.animal-form textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.animal-form button {
+    padding: 10px 20px;
+    background-color: #2B390D;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.animal-form button.delete-btn {
+    background-color: #dc3545;
+    margin-left: 10px;
+}
+
+/* Bouton pour ajouter un nouvel animal */
+.add-animal {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #2B390D;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* Formulaire d'ajout d'animal */
+.add-animal-form {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #F7EDD9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.add-animal-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.add-animal-form input,
+.add-animal-form textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.add-animal-form button {
+    padding: 10px 20px;
+    background-color: #2B390D;
+    color: #F7EDD9;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.add-animal-form button[type="button"] {
+    background-color: #8B4513;
+    margin-left: 10px;
+}
+
+/* Media Queries pour rendre responsive */
+@media (max-width: 768px) {
+    .animal-card {
+        width: calc(50% - 40px);
+    }
+}
+
+@media (max-width: 480px) {
+    .animal-card {
+        width: calc(100% - 40px);
+    }
+}

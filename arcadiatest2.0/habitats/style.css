@@ -1,0 +1,258 @@
+body{
+  background-color: #F7EED9;
+}
+
+
+.habitats {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  gap: 0; /* Suppression de l'espace entre les sections */
+  grid-template-areas:
+    "introHabitats"
+    "hoverHabitats";
+}
+
+.introHabitats {
+  color: #f7edd9;
+  background-color: #5d6a41;
+  grid-area: introHabitats;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  margin-bottom: 0;
+}
+
+.titreHabitats {
+  justify-self: center;
+  text-align: center;
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.paragrapheHabitats {
+  justify-self: center;
+  text-align: center;
+  font-size: 1.2em;
+  margin-bottom: 20px;
+  width: 70%;
+}
+
+.panthere {
+  width: 100%;
+  max-width: 300px;
+  justify-self: end;
+  align-self: end;
+}
+
+.habitats-list {
+  display: grid;
+  align-self: center;
+  justify-self: center;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 20px;
+  grid-area: hoverHabitats;
+  width: 90%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.habitat {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #F7EED9;
+  transition: transform 0.3s ease;
+}
+
+.habitat:hover {
+  transform: scale(1.05);
+}
+
+.habitat.expanded:hover {
+  transform: none;
+}
+
+.habitat-header {
+  cursor: pointer;
+}
+
+.habitat-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.habitat-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.habitat-header:hover .habitat-overlay {
+  opacity: 1;
+}
+
+.habitat.expanded .habitat-overlay {
+  opacity: 0;
+}
+
+.habitat-link {
+  color: #f7edd9;
+  background-color: #b6be64;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  border-radius: 5px;
+}
+
+.habitat-details {
+  padding: 20px;
+  background-color: #2B390D;
+  border: 2px solid #6B8E23;
+  border-radius: 10px;
+  margin-top: 10px;
+  display: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.habitat-details h2 {
+  margin-top: 0;
+  text-align: center;
+  font-size: 2em;
+  color: #F7EED9;
+  border-bottom: 2px solid #b6be64;
+  padding-bottom: 10px;
+}
+
+.habitat-details p {
+  text-align: center;
+  color: #F7EED9;
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+/* Container pour les animaux */
+.animal-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Deux images par ligne */
+  gap: 15px;
+  justify-content: center;
+}
+
+/* Item pour chaque animal */
+.animal-item {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #F7EED9;
+  transition: transform 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.animal-item:hover {
+  transform: scale(1.1);
+}
+
+/* Image de l'animal */
+.animal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Style pour la phrase "Animaux dans cet habitat" */
+.animal-list-header {
+  text-align: center;
+  font-size: 1.2em;
+  margin-bottom: 15px; /* Espace sous le titre */
+  font-weight: bold;
+  color: #F7EED9;
+}
+
+/* Responsive styles pour les téléphones */
+@media (max-width: 768px) {
+  .introHabitats {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+
+  .titreHabitats {
+    font-size: 1.5em;
+  }
+
+  .paragrapheHabitats {
+    width: 100%;
+    margin: 0;
+    padding: 0 10px;
+    font-size: 1em;
+  }
+
+  .panthere {
+    width: 100%;
+    max-width: 200px;
+    margin: 10px auto;
+  }
+
+  .habitats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 0;
+  }
+
+  .habitat {
+    width: 100%;
+  }
+
+  .habitat-image {
+    height: 150px;
+  }
+
+  .habitat-link {
+    font-size: 1em;
+    padding: 5px 10px;
+  }
+
+  .habitat-details {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .habitat-details h2 {
+    font-size: 1.2em;
+  }
+
+  .animal-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 5px;
+  }
+
+  .animal-item {
+    width: 80px;
+    height: 80px;
+  }
+
+  .close-btn {
+    font-size: 1.2em;
+  }
+}

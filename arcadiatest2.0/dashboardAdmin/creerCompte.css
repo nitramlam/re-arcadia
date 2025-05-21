@@ -1,0 +1,235 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #5D6A41; 
+}
+
+.content-container {
+    max-width: 90%; 
+    margin: 50px auto; 
+    padding: 20px;
+    background-color: #F7EDD9;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #2B390D;
+    margin-bottom: 30px;
+    font-size: 36px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 30px;
+    color: #2B390D;
+}
+
+.form-group label {
+    display: block;
+    color: #2B390D;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #F5F5F5;
+    font-size: 16px;
+    color: #2B390D;
+}
+
+.role-options {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.role-options label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #2B390D;
+}
+
+.role-options input[type="radio"] {
+    margin-right: 10px;
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-container input {
+    width: calc(100% - 40px);
+    padding-right: 40px;
+    color: #2B390D;
+}
+
+.password-container .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 20px;
+    color: #8B4513;
+}
+
+.btn-submit {
+    background-color: #8B4513;
+    color: #F7EDD9;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    width: 30%;
+    transition: background-color 0.3s;
+    margin-bottom: 30px;
+}
+
+.btn-submit:hover {
+    background-color: #A0522D;
+}
+
+.error-message {
+    color: red;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.success-message {
+    color: green;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    background-color: #FFFFFF;
+}
+
+table th, table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 2px solid #8B4513;
+    color: #333;
+}
+
+table th {
+    background-color: #167BFF;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #F7EDD9;
+}
+
+table tr:hover {
+    background-color: #B6BE64;
+}
+
+.supp {
+    background-color: #8B4513;
+    color: #F7EED9;
+    margin-top: 2%;
+}
+
+.mod {
+    background-color: #167BFF;
+    color: #F7EED9;
+}
+
+@media (max-width: 768px) {
+    table thead {
+        display: none;
+    }
+
+    .content-container {
+        max-width: 95%; 
+        margin: 20px auto; 
+        padding: 10px;
+    }
+
+    table td input[type="text"],
+    table td input[type="password"],
+    table td select {
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+    }
+
+    table td {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    table td button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    table td {
+        word-wrap: break-word;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    table td input,
+    table td select {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    table th, table td {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    table td input[type="text"],
+    table td input[type="password"],
+    table td select {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    table td button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    table td {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    table td input[type="text"],
+    table td input[type="password"],
+    table td select {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    table td button {
+        padding: 8px;
+        font-size: 12px;
+    }
+}

@@ -1,0 +1,179 @@
+/* Styles de base */
+body {
+    background-color: #F7EED9;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #2B390D;
+    color: #F7EED9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Liste des habitats */
+.habitat-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.habitat-card {
+    flex: 1 1 calc(33.333% - 40px);
+    background-color: #F7EED9;
+    color: #2B390D;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.habitat-card h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.habitat-card p {
+    color: #2B390D;
+}
+
+.habitat-card .view-comment-btn {
+    background-color: #167BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.habitat-card .view-comment-btn:hover {
+    background-color: #167bff9c;
+}
+
+.habitat-card .commentaire-habitat {
+    margin-top: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+/* Formulaires */
+.add-habitat,
+.edit-form-container {
+    margin-top: 20px;
+}
+
+.add-form,
+.edit-form {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.add-form label,
+.edit-form label {
+    display: block;
+    margin-bottom: 10px;
+    color: #2B390D;
+}
+
+.add-form input[type="text"],
+.edit-form input[type="text"],
+.add-form textarea,
+.edit-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+
+
+.add-form button:hover,
+.edit-form button:hover {
+    background-color: #218838;
+}
+
+.delete-form button {
+    background-color: #8B4513;
+    color: #F7EED9;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 2px;
+}
+
+.delete-form button:hover {
+    background-color: #8b451399;
+}
+
+/* Boutons d'ajout */
+.add-habitat {
+    background-color: #F7EED9;
+    margin-top: 40px;
+    text-align: center;
+}
+.add-habitat-form{
+    background-color: #6B8E23;
+}
+
+.add-habitat button {
+    font-size: 1.5em;
+    border-radius: 50%;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: white;
+}
+
+.add-habitat button:hover {
+    background-color: #45a049;
+}
+/* Media Queries pour les très petits écrans */
+@media (max-width: 480px) {
+    .habitat-list {
+        flex-direction: column;
+    }
+
+    .habitat-card {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    /* Formulaires */
+    form label {
+        font-size: 0.8em; /* Réduction de la taille du texte pour les formulaires */
+    }
+
+    form input[type="text"],
+    form textarea {
+        font-size: 0.8em;
+        padding: 6px; /* Réduction de la taille des champs de texte */
+    }
+
+    form button {
+        font-size: 0.8em;
+        padding: 6px 12px; /* Réduction de la taille des boutons */
+    }
+
+    /* Bouton "Ajouter un habitat" */
+    .add-habitat button {
+        font-size: 1.2em; /* Réduction de la taille du bouton */
+        padding: 10px 15px;
+    }
+
+    /* Bouton "Valider" */
+    .validate-btn {
+        font-size: 0.9em;
+        padding: 10px 15px;
+    }
+
+    /* Ajuster la taille des images pour très petits écrans */
+    .habitat-card img {
+        width: 80px;
+        height: 80px;
+    }
+}

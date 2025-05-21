@@ -1,0 +1,81 @@
+/* Section principale */
+main {
+    width: 100%;
+    padding: 20px;
+    background-color: #B6BE64;
+    text-align: center;
+}
+
+h1, h2 {
+    font-size: 2.5rem;
+    color: #2B390D;
+    margin-bottom: 20px;
+}
+
+.intro p {
+    font-size: 1.125rem;
+    color: #2B390D;
+    margin-bottom: 30px;
+}
+
+/* Conteneur pour la liste des animaux */
+.animal-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Ajuste le nombre de colonnes selon la taille de l'écran */
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Style pour chaque animal */
+.animal-card {
+    background-color: #F7EDD9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    text-align: center;
+}
+
+/* Style pour le nom de l'animal */
+.animal-card h3 {
+    font-size: 1.75rem;
+    color: #2B390D;
+    margin-bottom: 10px;
+}
+
+/* Style pour les détails de l'animal */
+.animal-details p {
+    font-size: 1.125rem;
+    color: #4A5A25;
+    margin: 5px 0;
+}
+
+/* Effet de hover pour les cartes d'animaux */
+.animal-card:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive styles pour les petits écrans */
+@media (max-width: 768px) {
+    h1, h2 {
+        font-size: 2rem;
+    }
+
+    .animal-list {
+        grid-template-columns: 1fr; /* Une colonne sur les petits écrans */
+    }
+
+    .animal-card {
+        padding: 15px;
+    }
+
+    .animal-card h3 {
+        font-size: 1.5rem;
+    }
+
+    .animal-details p {
+        font-size: 1rem;
+    }
+}

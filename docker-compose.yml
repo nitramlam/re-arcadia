@@ -17,7 +17,7 @@ services:
     image: mysql:8
     container_name: arcadia-db
     environment:
-      MYSQL_ROOT_PASSWORD: ArcadiaZoo33! 
+      MYSQL_ROOT_PASSWORD: WildLifeSecure33!       # Obligatoire pour phpMyAdmin
       MYSQL_USER: KeeperAdmin
       MYSQL_PASSWORD: WildLifeSecure33!
       MYSQL_DATABASE: arcadia
@@ -32,7 +32,7 @@ services:
     container_name: arcadia-phpmyadmin
     environment:
       PMA_HOST: arcadia-db
-      MYSQL_ROOT_PASSWORD: arcadia
+      MYSQL_ROOT_PASSWORD: WildLifeSecure33!
     ports:
       - "9080:80"
     networks:

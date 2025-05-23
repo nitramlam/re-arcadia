@@ -1,6 +1,6 @@
 <?php
 // Paramètres de connexion
-$servername = "arcadia-db"; 
+$servername = "arcadia-db";
 $username = "KeeperAdmin";
 $password = "WildLifeSecure33!";
 $dbname = "arcadia";

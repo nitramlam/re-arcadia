@@ -1,9 +1,10 @@
-<?php 
+<?php
 session_start();
 require_once '/var/www/classes/SessionManager.php';
 SessionManager::requireAuth();
-require_once(__DIR__ . '/../includes/header.php'); 
-require_once(__DIR__ . '/../db.php'); // Connexion à la base de données
+require_once(__DIR__ . '/../includes/header.php');
+require_once '/var/www/classes/Database.php';
+$conn = Database::getConnection(); // Connexion à la base de données
 
 // Vérification du rôle de l'utilisateur
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'employe') {
@@ -41,16 +42,18 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Page Employé</title>
     <link rel="stylesheet" href="alim.css">
 </head>
+
 <body>
     <main>
         <section class="intro">
             <h2>Gestion des Passages des Employés</h2>
-          
+
         </section>
         <section class="animal-list">
             <?php foreach ($animals as $animal): ?>
@@ -59,18 +62,25 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
                     <button class="edit-toggle">✏️</button>
                     <form method="POST" class="animal-form" style="display: none;">
                         <!-- Ajout du token CSRF -->
-                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="animal_id" value="<?php echo htmlspecialchars($animal['animal_id'] ?? ''); ?>">
-                        <label>Date et Heure de Passage: <input type="datetime-local" name="date_heure_passage_employe" value="<?php echo htmlspecialchars($animal['date_heure_passage_employe'] ?? ''); ?>" required></label>
-                        <label>Grammage Donné: <input type="number" step="0.01" name="grammage_donne" value="<?php echo htmlspecialchars($animal['grammage_donne'] ?? ''); ?>" required></label>
-                        <label>Nourriture Donnée: <input type="text" name="nourriture_donnee" value="<?php echo htmlspecialchars($animal['nourriture_donnee'] ?? ''); ?>" required></label>
+                        <input type="hidden" name="csrf_token"
+                            value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="animal_id"
+                            value="<?php echo htmlspecialchars($animal['animal_id'] ?? ''); ?>">
+                        <label>Date et Heure de Passage: <input type="datetime-local" name="date_heure_passage_employe"
+                                value="<?php echo htmlspecialchars($animal['date_heure_passage_employe'] ?? ''); ?>"
+                                required></label>
+                        <label>Grammage Donné: <input type="number" step="0.01" name="grammage_donne"
+                                value="<?php echo htmlspecialchars($animal['grammage_donne'] ?? ''); ?>" required></label>
+                        <label>Nourriture Donnée: <input type="text" name="nourriture_donnee"
+                                value="<?php echo htmlspecialchars($animal['nourriture_donnee'] ?? ''); ?>"
+                                required></label>
                         <button type="submit" name="update_animal" class="edit-btn">Mettre à jour</button>
                     </form>
                 </div>
             <?php endforeach; ?>
         </section>
     </main>
-    <?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+    <?php require_once(__DIR__ . '/../includes/footer.php'); ?>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const editToggles = document.querySelectorAll('.edit-toggle');
@@ -83,4 +93,5 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
         });
     </script>
 </body>
+
 </html>

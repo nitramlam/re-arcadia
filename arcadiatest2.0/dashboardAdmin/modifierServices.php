@@ -1,12 +1,14 @@
-<?php 
+<?php
 session_start();
 require_once '/var/www/classes/SessionManager.php';
 SessionManager::requireAuth();
-require_once(__DIR__ . '/../includes/header.php'); 
-require_once(__DIR__ . '/../db.php'); // Connexion à la base de données
+require_once(__DIR__ . '/../includes/header.php');
+require_once '/var/www/classes/Database.php';
+$conn = Database::getConnection(); // Connexion à la base de données
 
 // Définir la fonction uploadImage pour gérer le téléchargement d'images
-function uploadImage($image) {
+function uploadImage($image)
+{
     // Vérifie si une image a été téléchargée sans erreur
     if ($image['error'] === UPLOAD_ERR_OK) {
         $targetDir = __DIR__ . "/../imageServices/"; // Répertoire de destination
@@ -97,6 +99,7 @@ $horaires = $horaireQuery->fetch_assoc();
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,49 +117,60 @@ $horaires = $horaireQuery->fetch_assoc();
         }
     </script>
 </head>
+
 <body>
-<div class="services">
-    <h2>Nos Services</h2>
-    <?php foreach ($services as $service): ?>
-        <div class="service">
-            <h3><?= htmlspecialchars($service['nom'], ENT_QUOTES, 'UTF-8'); ?></h3>
-            <img src="<?= htmlspecialchars($service['icons_path'] ?? '/imageServices/default.jpg'); ?>" alt="<?= htmlspecialchars($service['nom'] ?? ''); ?>">
-            <p><?= nl2br(htmlspecialchars($service['description'], ENT_QUOTES, 'UTF-8')); ?></p>
+    <div class="services">
+        <h2>Nos Services</h2>
+        <?php foreach ($services as $service): ?>
+            <div class="service">
+                <h3><?= htmlspecialchars($service['nom'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                <img src="<?= htmlspecialchars($service['icons_path'] ?? '/imageServices/default.jpg'); ?>"
+                    alt="<?= htmlspecialchars($service['nom'] ?? ''); ?>">
+                <p><?= nl2br(htmlspecialchars($service['description'], ENT_QUOTES, 'UTF-8')); ?></p>
 
-            <form id="form-<?= $service['service_id']; ?>" class="hidden" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" name="service_id" value="<?= htmlspecialchars($service['service_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="text" name="nom" value="<?= htmlspecialchars($service['nom'], ENT_QUOTES, 'UTF-8'); ?>" required>
-                <textarea name="description" required><?= htmlspecialchars($service['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                <label>Image: <input type="file" name="image" accept="image/*"></label>
-                <button type="submit" name="update_service">Modifier</button>
-                <button type="submit" name="delete_service" class="delete">Supprimer</button>
-            </form>
-        </div>
-    <?php endforeach; ?>
+                <form id="form-<?= $service['service_id']; ?>" class="hidden" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token"
+                        value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="service_id"
+                        value="<?= htmlspecialchars($service['service_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="text" name="nom" value="<?= htmlspecialchars($service['nom'], ENT_QUOTES, 'UTF-8'); ?>"
+                        required>
+                    <textarea name="description"
+                        required><?= htmlspecialchars($service['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    <label>Image: <input type="file" name="image" accept="image/*"></label>
+                    <button type="submit" name="update_service">Modifier</button>
+                    <button type="submit" name="delete_service" class="delete">Supprimer</button>
+                </form>
+            </div>
+        <?php endforeach; ?>
 
-    <h2>Ajouter un Service</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
-        <input type="text" name="nom" placeholder="Nom" required>
-        <textarea name="description" placeholder="Description" required></textarea>
-        <label>Image: <input type="file" name="image" accept="image/*"></label>
-        <button type="submit" name="add_service">Ajouter</button>
-    </form>
-</div>
+        <h2>Ajouter un Service</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token"
+                value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="text" name="nom" placeholder="Nom" required>
+            <textarea name="description" placeholder="Description" required></textarea>
+            <label>Image: <input type="file" name="image" accept="image/*"></label>
+            <button type="submit" name="add_service">Ajouter</button>
+        </form>
+    </div>
 
-<div class="horaires">
-    <h2>Horaires d'ouverture</h2>
-    <form method="POST">
-        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
-        <label for="ouverture">Ouverture :</label>
-        <input type="time" id="ouverture" name="ouverture" value="<?= htmlspecialchars($horaires['ouverture'], ENT_QUOTES, 'UTF-8'); ?>" required>
-        <label for="fermeture">Fermeture :</label>
-        <input type="time" id="fermeture" name="fermeture" value="<?= htmlspecialchars($horaires['fermeture'], ENT_QUOTES, 'UTF-8'); ?>" required>
-        <button type="submit" name="update_horaire">Modifier les horaires</button>
-    </form>
-</div>
+    <div class="horaires">
+        <h2>Horaires d'ouverture</h2>
+        <form method="POST">
+            <input type="hidden" name="csrf_token"
+                value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+            <label for="ouverture">Ouverture :</label>
+            <input type="time" id="ouverture" name="ouverture"
+                value="<?= htmlspecialchars($horaires['ouverture'], ENT_QUOTES, 'UTF-8'); ?>" required>
+            <label for="fermeture">Fermeture :</label>
+            <input type="time" id="fermeture" name="fermeture"
+                value="<?= htmlspecialchars($horaires['fermeture'], ENT_QUOTES, 'UTF-8'); ?>" required>
+            <button type="submit" name="update_horaire">Modifier les horaires</button>
+        </form>
+    </div>
 
-<?php require_once(__DIR__ . '/../includes/footer.php'); ?>
+    <?php require_once(__DIR__ . '/../includes/footer.php'); ?>
 </body>
+
 </html>

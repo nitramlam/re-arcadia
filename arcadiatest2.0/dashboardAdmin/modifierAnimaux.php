@@ -2,7 +2,8 @@
 session_start();
 require_once(__DIR__ . '/../includes/auth.php');
 require_once(__DIR__ . '/../includes/header.php');
-require_once(__DIR__ . '/../db.php'); // Connexion à MySQL
+require_once '/var/www/classes/Database.php';
+$conn = Database::getConnection(); // Connexion à MySQL
 
 // Connexion à MongoDB
 $manager = new MongoDB\Driver\Manager("mongodb+srv://martinlamalle:456123Fx37!@arcadia.t7ei6.mongodb.net/?retryWrites=true&w=majority&appName=arcadia");
@@ -19,7 +20,8 @@ if (!isset($_SESSION['csrf_token'])) {
 }
 
 // Fonction pour gérer l'upload d'image
-function uploadImage($file) {
+function uploadImage($file)
+{
     if (isset($file) && $file['error'] == 0) {
         $uploadDir = __DIR__ . '/../animaux/';
         if (!is_dir($uploadDir)) {
@@ -34,34 +36,37 @@ function uploadImage($file) {
 }
 
 
-function syncAnimalToMongoDB($animalId, $nom) {
+function syncAnimalToMongoDB($animalId, $nom)
+{
     global $manager;
 
     $bulk = new MongoDB\Driver\BulkWrite;
-    $filter = ['animal_id' => (string)$animalId];
+    $filter = ['animal_id' => (string) $animalId];
     $update = [
         '$set' => [
-            'animal_id' => (string)$animalId,
+            'animal_id' => (string) $animalId,
             'animal_name' => $nom,
-            'view_count' => 0  
+            'view_count' => 0
         ]
     ];
-    $bulk->update($filter, $update, ['upsert' => true]); 
+    $bulk->update($filter, $update, ['upsert' => true]);
     $manager->executeBulkWrite('arcadia.animal_views', $bulk);
 }
 
 // Fonction pour supprimer l'animal de MongoDB
-function deleteAnimalFromMongoDB($animalId) {
+function deleteAnimalFromMongoDB($animalId)
+{
     global $manager;
 
     $bulk = new MongoDB\Driver\BulkWrite;
-    $filter = ['animal_id' => (string)$animalId];
+    $filter = ['animal_id' => (string) $animalId];
     $bulk->delete($filter);
     $manager->executeBulkWrite('arcadia.animal_views', $bulk);
 }
 
 // Fonction pour créer une page personnalisée pour chaque animal
-function createAnimalPage($animalId) {
+function createAnimalPage($animalId)
+{
     global $conn;
 
     $stmt = $conn->prepare("SELECT * FROM animal WHERE animal_id = ?");
@@ -167,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $animalId = $conn->insert_id;
         createAnimalPage($animalId);
-        
+
         // Synchronisation avec MongoDB
         syncAnimalToMongoDB($animalId, $nom);
 
@@ -223,43 +228,63 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Gestion des Animaux</title>
     <link rel="stylesheet" href="modifierAnimaux.css">
 </head>
+
 <body>
     <main>
         <section class="intro">
             <h2>Nos Animaux</h2>
-            <p>Au Zoo Écologique de la Forêt de Brocéliande, nous créons des habitats fidèles aux milieux naturels de nos animaux, assurant ainsi leur bien-être et contribuant à la préservation de l'écosystème. Rencontrez nos majestueux lions, éléphants, alligators et bien d'autres résidents fascinants au cœur de notre zoo.</p>
+            <p>Au Zoo Écologique de la Forêt de Brocéliande, nous créons des habitats fidèles aux milieux naturels de
+                nos animaux, assurant ainsi leur bien-être et contribuant à la préservation de l'écosystème. Rencontrez
+                nos majestueux lions, éléphants, alligators et bien d'autres résidents fascinants au cœur de notre zoo.
+            </p>
         </section>
         <section class="animal-list">
             <?php foreach ($animals as $animal): ?>
                 <div class="animal-card">
                     <h3><?php echo htmlspecialchars($animal['nom'] ?? ''); ?></h3>
-                    <img src="<?php echo htmlspecialchars($animal['image_path'] ?? '/animaux/default.jpg'); ?>" alt="<?php echo htmlspecialchars($animal['nom'] ?? ''); ?>">
+                    <img src="<?php echo htmlspecialchars($animal['image_path'] ?? '/animaux/default.jpg'); ?>"
+                        alt="<?php echo htmlspecialchars($animal['nom'] ?? ''); ?>">
                     <button class="view-report">Afficher le compte rendu</button>
                     <div class="animal-details" style="display: none;">
                         <p><strong>État général:</strong> <?php echo htmlspecialchars($animal['etat_general'] ?? ''); ?></p>
-                        <p><strong>Nourriture proposée:</strong> <?php echo htmlspecialchars($animal['regime'] ?? ''); ?></p>
-                        <p><strong>Grammage proposé:</strong> <?php echo htmlspecialchars($animal['grammage'] ?? ''); ?> kg</p>
-                        <p><strong>Dernière visite:</strong> <?php echo htmlspecialchars($animal['derniere_visite'] ?? ''); ?></p>
+                        <p><strong>Nourriture proposée:</strong> <?php echo htmlspecialchars($animal['regime'] ?? ''); ?>
+                        </p>
+                        <p><strong>Grammage proposé:</strong> <?php echo htmlspecialchars($animal['grammage'] ?? ''); ?> kg
+                        </p>
+                        <p><strong>Dernière visite:</strong>
+                            <?php echo htmlspecialchars($animal['derniere_visite'] ?? ''); ?></p>
                         <p><strong>Commentaire:</strong> <?php echo htmlspecialchars($animal['commentaire'] ?? ''); ?></p>
                     </div>
                     <button class="edit-toggle">✏️</button>
                     <form method="POST" class="animal-form" style="display: none;" enctype="multipart/form-data">
                         <!-- Ajout du token CSRF -->
-                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="animal_id" value="<?php echo htmlspecialchars($animal['animal_id'] ?? ''); ?>">
-                        <label>Nom: <input type="text" name="nom" value="<?php echo htmlspecialchars($animal['nom'] ?? ''); ?>" required></label>
-                        <label>Description: <textarea name="description" required><?php echo htmlspecialchars($animal['description'] ?? ''); ?></textarea></label>
-                        <label>Poids: <input type="number" step="0.01" name="poids" value="<?php echo htmlspecialchars($animal['poids'] ?? ''); ?>" required></label>
-                        <label>Sexe: <input type="text" name="sexe" value="<?php echo htmlspecialchars($animal['sexe'] ?? ''); ?>" required></label>
-                        <label>Continent d'origine: <input type="text" name="continent_origine" value="<?php echo htmlspecialchars($animal['continent_origine'] ?? ''); ?>" required></label>
-                        <label>Âge: <input type="number" name="age" value="<?php echo htmlspecialchars($animal['age'] ?? ''); ?>" required></label>
-                        <label>Habitat: <input type="text" name="habitat" value="<?php echo htmlspecialchars($animal['habitat'] ?? ''); ?>" required></label>
-                        <label>Espèce: <input type="text" name="espece" value="<?php echo htmlspecialchars($animal['espece'] ?? ''); ?>" required></label>
+                        <input type="hidden" name="csrf_token"
+                            value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="animal_id"
+                            value="<?php echo htmlspecialchars($animal['animal_id'] ?? ''); ?>">
+                        <label>Nom: <input type="text" name="nom"
+                                value="<?php echo htmlspecialchars($animal['nom'] ?? ''); ?>" required></label>
+                        <label>Description: <textarea name="description"
+                                required><?php echo htmlspecialchars($animal['description'] ?? ''); ?></textarea></label>
+                        <label>Poids: <input type="number" step="0.01" name="poids"
+                                value="<?php echo htmlspecialchars($animal['poids'] ?? ''); ?>" required></label>
+                        <label>Sexe: <input type="text" name="sexe"
+                                value="<?php echo htmlspecialchars($animal['sexe'] ?? ''); ?>" required></label>
+                        <label>Continent d'origine: <input type="text" name="continent_origine"
+                                value="<?php echo htmlspecialchars($animal['continent_origine'] ?? ''); ?>"
+                                required></label>
+                        <label>Âge: <input type="number" name="age"
+                                value="<?php echo htmlspecialchars($animal['age'] ?? ''); ?>" required></label>
+                        <label>Habitat: <input type="text" name="habitat"
+                                value="<?php echo htmlspecialchars($animal['habitat'] ?? ''); ?>" required></label>
+                        <label>Espèce: <input type="text" name="espece"
+                                value="<?php echo htmlspecialchars($animal['espece'] ?? ''); ?>" required></label>
                         <label>Image: <input type="file" name="image" accept="image/*"></label>
                         <button type="submit" name="update_animal" class="edit-btn">Modifier</button>
                         <button type="submit" name="delete_animal" class="delete-btn">Supprimer</button>
@@ -270,9 +295,11 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
 
         <!-- Formulaire d'ajout d'un nouvel animal -->
         <button class="add-animal" onclick="openAddForm()">Ajouter un animal</button>
-        <form method="POST" class="add-animal-form" id="add-animal-form" style="display: none;" enctype="multipart/form-data">
+        <form method="POST" class="add-animal-form" id="add-animal-form" style="display: none;"
+            enctype="multipart/form-data">
             <!-- Ajout du token CSRF -->
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="csrf_token"
+                value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
             <label>Nom: <input type="text" name="nom" required></label>
             <label>Description: <textarea name="description" required></textarea></label>
             <label>Poids: <input type="number" step="0.01" name="poids" required></label>
@@ -286,7 +313,7 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
             <button type="button" onclick="closeAddForm()">Annuler</button>
         </form>
     </main>
-    <?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+    <?php require_once(__DIR__ . '/../includes/footer.php'); ?>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const viewReportButtons = document.querySelectorAll('.view-report');
@@ -316,5 +343,5 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
         }
     </script>
 </body>
-</html>
 
+</html>

@@ -1,12 +1,14 @@
 <?php
 ob_start();
-require_once(__DIR__ . '/../includes/header.php'); 
-require_once(__DIR__ . '/../db.php'); 
+require_once(__DIR__ . '/../includes/header.php');
+require_once '/var/www/classes/Database.php';
+$conn = Database::getConnection();
 
 $error_message = '';
 
 // Fonction pour générer un token unique
-function generateToken() {
+function generateToken()
+{
     return bin2hex(random_bytes(32)); // Token de 64 caractères
 }
 
@@ -75,12 +77,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
-    <link rel="stylesheet" href="connexion.css"> 
+    <link rel="stylesheet" href="connexion.css">
 </head>
+
 <body>
     <h1>Connexion</h1>
     <?php if ($error_message): ?>
@@ -114,6 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
     <?php require_once(__DIR__ . '/../includes/footer.php'); ?>
 </body>
+
 </html>
 
 <?php

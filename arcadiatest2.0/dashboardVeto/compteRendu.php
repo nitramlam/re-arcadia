@@ -1,9 +1,10 @@
-<?php 
+<?php
 session_start();
 require_once '/var/www/classes/SessionManager.php';
 SessionManager::requireAuth();
-require_once(__DIR__ . '/../includes/header.php'); 
-require_once(__DIR__ . '/../db.php'); // Connexion à la base de données
+require_once(__DIR__ . '/../includes/header.php');
+require_once '/var/www/classes/Database.php';
+$conn = Database::getConnection(); // Connexion à la base de données
 
 // Vérification du rôle de l'utilisateur
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'veterinaire') {
@@ -41,9 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fonction pour créer une page personnalisée pour chaque animal
-function createAnimalPage($animalId) {
+function createAnimalPage($animalId)
+{
     global $conn;
-    
+
     $stmt = $conn->prepare("SELECT * FROM animal WHERE animal_id = ?");
     $stmt->bind_param("i", $animalId);
     $stmt->execute();
@@ -113,16 +115,19 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Page Vétérinaire</title>
     <link rel="stylesheet" href="compteRendu.css">
 </head>
+
 <body>
     <main>
         <section class="intro">
             <h2>Suivi Vétérinaire des Animaux</h2>
-            <p>Sur cette page, les vétérinaires peuvent mettre à jour l'état général des animaux, leur régime alimentaire, le grammage de nourriture, la date de visite et ajouter des commentaires.</p>
+            <p>Sur cette page, les vétérinaires peuvent mettre à jour l'état général des animaux, leur régime
+                alimentaire, le grammage de nourriture, la date de visite et ajouter des commentaires.</p>
         </section>
         <section class="animal-list">
             <?php foreach ($animals as $animal): ?>
@@ -131,20 +136,26 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
                     <button class="edit-toggle">✏️</button>
                     <form method="POST" class="animal-form" style="display: none;">
                         <!-- Ajout du token CSRF -->
-                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="csrf_token"
+                            value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="animal_id" value="<?= htmlspecialchars($animal['animal_id'] ?? ''); ?>">
-                        <label>État général: <input type="text" name="etat_general" value="<?= htmlspecialchars($animal['etat_general'] ?? ''); ?>" required></label>
-                        <label>Nourriture proposée: <input type="text" name="regime" value="<?= htmlspecialchars($animal['regime'] ?? ''); ?>" required></label>
-                        <label>Grammage proposé: <input type="number" step="0.01" name="grammage" value="<?= htmlspecialchars($animal['grammage'] ?? ''); ?>" required></label>
-                        <label>Date de visite: <input type="date" name="derniere_visite" value="<?= htmlspecialchars($animal['derniere_visite'] ?? ''); ?>" required></label>
-                        <label>Commentaire: <textarea name="commentaire"><?= htmlspecialchars($animal['commentaire'] ?? ''); ?></textarea></label>
+                        <label>État général: <input type="text" name="etat_general"
+                                value="<?= htmlspecialchars($animal['etat_general'] ?? ''); ?>" required></label>
+                        <label>Nourriture proposée: <input type="text" name="regime"
+                                value="<?= htmlspecialchars($animal['regime'] ?? ''); ?>" required></label>
+                        <label>Grammage proposé: <input type="number" step="0.01" name="grammage"
+                                value="<?= htmlspecialchars($animal['grammage'] ?? ''); ?>" required></label>
+                        <label>Date de visite: <input type="date" name="derniere_visite"
+                                value="<?= htmlspecialchars($animal['derniere_visite'] ?? ''); ?>" required></label>
+                        <label>Commentaire: <textarea
+                                name="commentaire"><?= htmlspecialchars($animal['commentaire'] ?? ''); ?></textarea></label>
                         <button type="submit" name="update_animal" class="edit-btn">Mettre à jour</button>
                     </form>
                 </div>
             <?php endforeach; ?>
         </section>
     </main>
-    <?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+    <?php require_once(__DIR__ . '/../includes/footer.php'); ?>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const editToggles = document.querySelectorAll('.edit-toggle');
@@ -157,4 +168,5 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
         });
     </script>
 </body>
+
 </html>

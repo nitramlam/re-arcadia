@@ -1,34 +1,21 @@
 <?php 
 require_once (__DIR__ . '/../includes/header.php');
 require_once '/var/www/classes/Database.php';
-$conn = Database::getConnection(); 
+require_once '/var/www/classes/Animal.php';
 
-// Vérifier si la connexion à la base de données est établie
-if (!$conn) {
-    die("Erreur de connexion à la base de données");
-}
+$animalManager = new Animal();
+$conn = Database::getConnection();
 
-// Requête SQL pour sélectionner tous les animaux
-$sql = "SELECT * FROM animal";
-$result = $conn->query($sql);
-$animaux = $result->fetch_all(MYSQLI_ASSOC);
+$animaux = $animalManager->getAll();
 
-// Requête SQL pour sélectionner tous les habitats
-$sql = "SELECT * FROM habitat";
-$result = $conn->query($sql);
+$result = $conn->query("SELECT * FROM habitat");
 $habitats = $result->fetch_all(MYSQLI_ASSOC);
 
-// Récupérer les animaux par habitat
 $animalsByHabitat = [];
 foreach ($habitats as $habitat) {
-    $stmt = $conn->prepare("SELECT * FROM animal WHERE habitat = ?");
-    $stmt->bind_param("s", $habitat['nom']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $animalsByHabitat[$habitat['nom']] = $result->fetch_all(MYSQLI_ASSOC);
+    $animalsByHabitat[$habitat['nom']] = $animalManager->getByHabitat($habitat['nom']);
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -62,7 +49,6 @@ foreach ($habitats as $habitat) {
         <?php foreach ($habitats as $habitat): ?>
             <div class="habitat">
                 <h3><?= htmlspecialchars($habitat['nom']) ?></h3>
-             
                 <div class="animals-in-habitat">
                     <?php foreach ($animalsByHabitat[$habitat['nom']] as $animal): ?>
                         <div class="animal-in-habitat">

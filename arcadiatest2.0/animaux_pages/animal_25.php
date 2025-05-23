@@ -18,22 +18,22 @@ $manager->executeBulkWrite('arcadia.animal_views', $bulk);
 <html lang='fr'>
 <head>
     <meta charset='UTF-8'>
-    <title>test - Page Personnalisée</title>
+    <title>ergt - Page Personnalisée</title>
     <link rel='stylesheet' href='animauxPage.css'>
 </head>
 <body>
     <div class="animal-main">
-        <h1 class="animal-title">test</h1>
-        <img class="animal-photo" src="" alt="test">
+        <h1 class="animal-title">ergt</h1>
+        <img class="animal-photo" src="/animaux/Capture d’écran 2025-05-21 à 15.15.33.png" alt="ergt">
         <div class="info-section">
             <h2>Informations Générales</h2>
             <div class="general-info">
-                <p class="species-info"><strong>Espèce:</strong> rat</p>
-                <p class="description-info"><strong>Description:</strong> test</p>
+                <p class="species-info"><strong>Espèce:</strong> erze</p>
+                <p class="description-info"><strong>Description:</strong> getrger</p>
                 <p class="weight-info"><strong>Poids:</strong> 45.00 kg</p>
                 <p class="sex-info"><strong>Sexe:</strong> F</p>
                 <p class="origin-continent-info"><strong>Continent d'origine:</strong> 0</p>
-                <p class="habitat-info"><strong>Habitat:</strong> jungle</p>
+                <p class="habitat-info"><strong>Habitat:</strong> REGERger</p>
             </div>
         </div>
 

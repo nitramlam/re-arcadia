@@ -1,6 +1,6 @@
 <?php
 require_once '../mongo_connect.php';
-require '../config/db.php'; // Assurez-vous que le chemin est correct selon votre structure de fichiers
+
 
 // Récupérer l'ID de l'animal depuis l'URL
 if (isset($_GET['id'])) {

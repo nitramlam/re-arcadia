@@ -1,6 +1,8 @@
 <?php
 require_once (__DIR__ . '/../includes/header.php');
-require_once (__DIR__ . '/../db.php'); // Connexion à la base de données
+require_once '/var/www/classes/Database.php';
+
+$conn = Database::getConnection();// Connexion à la base de données
 
 // Vérifier si la connexion à la base de données est établie
 if (!$conn) {

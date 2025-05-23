@@ -1,6 +1,7 @@
 <?php 
 require_once (__DIR__ . '/../includes/header.php'); // Inclure le fichier de header
-require_once (__DIR__ . '/../db.php'); // Inclure le fichier de configuration de la base de données
+require_once '/var/www/classes/Database.php';
+$conn = Database::getConnection();// Inclure le fichier de configuration de la base de données
 
 $pseudo = "";
 $commentaire = "";

@@ -7,7 +7,9 @@ services:
       dockerfile: Dockerfile
     container_name: arcadia-web
     volumes:
-      - ./arcadiatest2.0:/var/www/html
+      - ./arcadiatest2.0:/var/www/html         # site actuel
+      - ./classes:/var/www/classes             # dossier des classes PHP
+      - ./public:/var/www/public               # nouveau dossier POO (facultatif pour l’instant)
     ports:
       - "8031:80"
     networks:
@@ -17,7 +19,7 @@ services:
     image: mysql:8
     container_name: arcadia-db
     environment:
-      MYSQL_ROOT_PASSWORD: WildLifeSecure33!       # Obligatoire pour phpMyAdmin
+      MYSQL_ROOT_PASSWORD: WildLifeSecure33!
       MYSQL_USER: KeeperAdmin
       MYSQL_PASSWORD: WildLifeSecure33!
       MYSQL_DATABASE: arcadia

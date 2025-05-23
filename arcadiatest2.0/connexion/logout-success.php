@@ -1,4 +1,5 @@
-<?php require_once(__DIR__ . '/../includes/auth.php');  ?>
+<?php require_once '/var/www/classes/SessionManager.php';
+SessionManager::requireAuth(); ?>
 
 <!DOCTYPE html>
 <html lang="fr">

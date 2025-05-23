@@ -12,7 +12,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'veterinaire') {
     exit();
 }
 
-// Connexion à la base de données établie via db.php
+
 // Récupérer les données des animaux
 $animalQuery = $conn->query("SELECT * FROM animal");
 $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);

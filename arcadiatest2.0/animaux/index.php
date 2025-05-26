@@ -2,14 +2,14 @@
 require_once (__DIR__ . '/../includes/header.php');
 require_once '/var/www/classes/Database.php';
 require_once '/var/www/classes/Animal.php';
+require_once '/var/www/classes/Habitat.php';
 
-$animalManager = new Animal();
 $conn = Database::getConnection();
+$animalManager = new Animal();
+$habitatManager = new Habitat($conn);
 
 $animaux = $animalManager->getAll();
-
-$result = $conn->query("SELECT * FROM habitat");
-$habitats = $result->fetch_all(MYSQLI_ASSOC);
+$habitats = $habitatManager->getAll();
 
 $animalsByHabitat = [];
 foreach ($habitats as $habitat) {
@@ -43,7 +43,7 @@ foreach ($habitats as $habitat) {
             </div>
         <?php endforeach; ?>
     </div>
-    
+
     <div class="habitats">
         <h2>Habitats</h2>
         <?php foreach ($habitats as $habitat): ?>

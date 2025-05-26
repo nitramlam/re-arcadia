@@ -1,26 +1,19 @@
 <?php
-require_once (__DIR__ . '/../includes/header.php');
-require_once '/var/www/classes/Database.php';
-$conn = Database::getConnection();// Connexion à la base de données
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../../classes/Database.php';
+require_once __DIR__ . '/../../classes/Habitat.php';
 
-// Vérifier si la connexion à la base de données est établie
+$conn = Database::getConnection();
 if (!$conn) {
     die("Erreur de connexion à la base de données");
 }
 
-// Sélection et affichage des données des habitats
-$sql = "SELECT * FROM habitat";
-$result = $conn->query($sql);
-$habitats = $result->fetch_all(MYSQLI_ASSOC);
+$habitatManager = new Habitat($conn);
+$habitats = $habitatManager->getAll();
 
-// Récupérer les animaux par habitat
 $animalsByHabitat = [];
 foreach ($habitats as $habitat) {
-    $stmt = $conn->prepare("SELECT * FROM animal WHERE habitat = ?");
-    $stmt->bind_param("s", $habitat['nom']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $animalsByHabitat[$habitat['nom']] = $result->fetch_all(MYSQLI_ASSOC);
+    $animalsByHabitat[$habitat['nom']] = $habitatManager->getAnimalsByHabitat($habitat['nom']);
 }
 ?>
 
@@ -40,49 +33,46 @@ foreach ($habitats as $habitat) {
         </div>
 
         <div class="habitats-list">
-            <?php
-            // Affichage des habitats dans une liste
-            foreach ($habitats as $index => $habitat) {
-                echo '<div class="habitat" id="habitat-' . $index . '">';
-                echo '<div class="habitat-header" onclick="toggleHabitatDetails(' . $index . ')">';
-                echo '<img class="habitat-image" src="' . $habitat['image_path'] . '" alt="' . htmlspecialchars($habitat['nom']) . '"/>';
-                echo '<div class="habitat-overlay">';
-                echo '<span class="habitat-link">' . htmlspecialchars($habitat['nom']) . "</span>";
-                echo '</div>';
-                echo '</div>';
-                echo '<div id="habitat-details-' . $index . '" class="habitat-details" style="display:none;">';
-                echo '<h2>' . htmlspecialchars($habitat['nom']) . '</h2>';
-                echo '<p>' . htmlspecialchars($habitat['description']) . '</p>';
-                echo '<div class="animal-list-header">Animaux dans cet habitat :</div>';
-                echo '<div class="animal-list">';
-                foreach ($animalsByHabitat[$habitat['nom']] as $animal) {
-                    echo '<div class="animal-item">';
-                    echo '<img src="' . ($animal['image_path'] ?: 'default-animal.jpg') . '" alt="' . htmlspecialchars($animal['nom']) . '" class="animal-image"/>';
-                    echo '</div>';
-                }
-                echo '</div>';
-                echo '</div>';
-                echo '</div>';
-            }
-            ?>
+            <?php foreach ($habitats as $index => $habitat): ?>
+                <div class="habitat" id="habitat-<?= $index ?>">
+                    <div class="habitat-header" onclick="toggleHabitatDetails(<?= $index ?>)">
+                        <img class="habitat-image" src="<?= htmlspecialchars($habitat['image_path']) ?>"
+                             alt="<?= htmlspecialchars($habitat['nom']) ?>"/>
+                        <div class="habitat-overlay">
+                            <span class="habitat-link"><?= htmlspecialchars($habitat['nom']) ?></span>
+                        </div>
+                    </div>
+                    <div id="habitat-details-<?= $index ?>" class="habitat-details" style="display:none;">
+                        <h2><?= htmlspecialchars($habitat['nom']) ?></h2>
+                        <p><?= htmlspecialchars($habitat['description']) ?></p>
+                        <div class="animal-list-header">Animaux dans cet habitat :</div>
+                        <div class="animal-list">
+                            <?php foreach ($animalsByHabitat[$habitat['nom']] as $animal): ?>
+                                <div class="animal-item">
+                                    <img src="<?= htmlspecialchars($animal['image_path'] ?: 'default-animal.jpg') ?>"
+                                         alt="<?= htmlspecialchars($animal['nom']) ?>" class="animal-image"/>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </main>
 
 <script>
-// Fonction pour basculer les détails des habitats
 function toggleHabitatDetails(index) {
     const habitat = document.getElementById(`habitat-${index}`);
     const details = document.getElementById(`habitat-details-${index}`);
-    
     if (details.style.display === 'none') {
         details.style.display = 'block';
-        habitat.classList.add('expanded');  // Ajouter la classe expanded
+        habitat.classList.add('expanded');
     } else {
         details.style.display = 'none';
-        habitat.classList.remove('expanded');  // Supprimer la classe expanded
+        habitat.classList.remove('expanded');
     }
 }
 </script>
 
-<?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>

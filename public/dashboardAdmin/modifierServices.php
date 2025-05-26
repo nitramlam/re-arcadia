@@ -2,18 +2,18 @@
 session_start();
 require_once '/var/www/classes/SessionManager.php';
 SessionManager::requireAuth();
-require_once(__DIR__ . '/../includes/header.php');
+
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['administrateur', 'employe'])) {
+    header("Location: /connexion/connexion.php");
+    exit();
+}
 require_once '/var/www/classes/Database.php';
 require_once __DIR__ . '/../../classes/Service.php';
+require_once(__DIR__ . '/../includes/header.php');
 
 $conn = Database::getConnection();
 if (!$conn) {
     die("Erreur de connexion à la base de données");
-}
-
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'administrateur') {
-    header("Location: /connexion/connexion.php");
-    exit();
 }
 
 if (!isset($_SESSION['csrf_token'])) {
@@ -84,7 +84,7 @@ $horaires = $serviceManager->getHoraires();
     </style>
     <script>
         function toggleForm(id) {
-            var form = document.getElementById(id);
+            const form = document.getElementById(id);
             form.classList.toggle('hidden');
         }
     </script>
@@ -95,20 +95,16 @@ $horaires = $serviceManager->getHoraires();
         <h2>Nos Services</h2>
         <?php foreach ($services as $service): ?>
             <div class="service">
-                <h3><?= htmlspecialchars($service['nom'], ENT_QUOTES, 'UTF-8'); ?></h3>
-                <img src="<?= htmlspecialchars($service['icons_path'] ?? '/imageServices/default.jpg'); ?>"
-                    alt="<?= htmlspecialchars($service['nom'] ?? ''); ?>">
-                <p><?= nl2br(htmlspecialchars($service['description'], ENT_QUOTES, 'UTF-8')); ?></p>
+                <h3><?= htmlspecialchars($service['nom']) ?></h3>
+                <img src="<?= htmlspecialchars($service['icons_path'] ?? '/imageServices/default.jpg') ?>"
+                     alt="<?= htmlspecialchars($service['nom']) ?>">
+                <p><?= nl2br(htmlspecialchars($service['description'])) ?></p>
 
-                <form id="form-<?= $service['service_id']; ?>" class="hidden" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="csrf_token"
-                        value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="hidden" name="service_id"
-                        value="<?= htmlspecialchars($service['service_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <input type="text" name="nom" value="<?= htmlspecialchars($service['nom'], ENT_QUOTES, 'UTF-8'); ?>"
-                        required>
-                    <textarea name="description"
-                        required><?= htmlspecialchars($service['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                <form id="form-<?= $service['service_id'] ?>" class="hidden" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                    <input type="hidden" name="service_id" value="<?= $service['service_id'] ?>">
+                    <input type="text" name="nom" value="<?= htmlspecialchars($service['nom']) ?>" required>
+                    <textarea name="description" required><?= htmlspecialchars($service['description']) ?></textarea>
                     <label>Image: <input type="file" name="image" accept="image/*"></label>
                     <button type="submit" name="update_service">Modifier</button>
                     <button type="submit" name="delete_service" class="delete">Supprimer</button>
@@ -118,8 +114,7 @@ $horaires = $serviceManager->getHoraires();
 
         <h2>Ajouter un Service</h2>
         <form method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="csrf_token"
-                value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <input type="text" name="nom" placeholder="Nom" required>
             <textarea name="description" placeholder="Description" required></textarea>
             <label>Image: <input type="file" name="image" accept="image/*"></label>
@@ -130,14 +125,13 @@ $horaires = $serviceManager->getHoraires();
     <div class="horaires">
         <h2>Horaires d'ouverture</h2>
         <form method="POST">
-            <input type="hidden" name="csrf_token"
-                value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <label for="ouverture">Ouverture :</label>
             <input type="time" id="ouverture" name="ouverture"
-                value="<?= htmlspecialchars($horaires['ouverture'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                   value="<?= htmlspecialchars($horaires['ouverture']) ?>" required>
             <label for="fermeture">Fermeture :</label>
             <input type="time" id="fermeture" name="fermeture"
-                value="<?= htmlspecialchars($horaires['fermeture'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                   value="<?= htmlspecialchars($horaires['fermeture']) ?>" required>
             <button type="submit" name="update_horaire">Modifier les horaires</button>
         </form>
     </div>

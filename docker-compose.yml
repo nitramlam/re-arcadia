@@ -7,9 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: arcadia-web
     volumes:
-      - ./arcadiatest2.0:/var/www/html         # site actuel
-      - ./classes:/var/www/classes             # dossier des classes PHP
-      - ./public:/var/www/public               # nouveau dossier POO (facultatif pour l’instant)
+      - ./public:/var/www/html           # le site est dans public/
+      - ./classes:/var/www/classes       # classes PHP POO
     ports:
       - "8031:80"
     networks:

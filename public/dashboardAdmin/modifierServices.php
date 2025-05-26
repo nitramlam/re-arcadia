@@ -7,7 +7,7 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['administrateur',
     header("Location: /connexion/connexion.php");
     exit();
 }
-require_once '/var/www/classes/Database.php';
+require_once __DIR__ . '/../../classes/Database.php';
 require_once __DIR__ . '/../../classes/Service.php';
 require_once(__DIR__ . '/../includes/header.php');
 
@@ -20,7 +20,8 @@ if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-function uploadImage($image): ?string {
+function uploadImage($image): ?string
+{
     if ($image['error'] === UPLOAD_ERR_OK) {
         $targetDir = __DIR__ . "/../imageServices/";
         if (!is_dir($targetDir)) {
@@ -29,7 +30,8 @@ function uploadImage($image): ?string {
         $targetFile = $targetDir . basename($image["name"]);
         $validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
         $ext = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-        if (!in_array($ext, $validExtensions)) return null;
+        if (!in_array($ext, $validExtensions))
+            return null;
 
         if (move_uploaded_file($image["tmp_name"], $targetFile)) {
             return "/imageServices/" . basename($image["name"]);
@@ -50,7 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $imagePath = uploadImage($_FILES['image'] ?? []);
 
     if (isset($_POST['add_service'])) {
-        if (!$imagePath) $imagePath = '/imageServices/default.jpg';
+        if (!$imagePath)
+            $imagePath = '/imageServices/default.jpg';
         $serviceManager->add($nom, $description, $imagePath);
     } elseif (isset($_POST['update_service'])) {
         $id = (int) $_POST['service_id'];
@@ -97,7 +100,7 @@ $horaires = $serviceManager->getHoraires();
             <div class="service">
                 <h3><?= htmlspecialchars($service['nom']) ?></h3>
                 <img src="<?= htmlspecialchars($service['icons_path'] ?? '/imageServices/default.jpg') ?>"
-                     alt="<?= htmlspecialchars($service['nom']) ?>">
+                    alt="<?= htmlspecialchars($service['nom']) ?>">
                 <p><?= nl2br(htmlspecialchars($service['description'])) ?></p>
 
                 <form id="form-<?= $service['service_id'] ?>" class="hidden" method="POST" enctype="multipart/form-data">
@@ -127,11 +130,11 @@ $horaires = $serviceManager->getHoraires();
         <form method="POST">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <label for="ouverture">Ouverture :</label>
-            <input type="time" id="ouverture" name="ouverture"
-                   value="<?= htmlspecialchars($horaires['ouverture']) ?>" required>
+            <input type="time" id="ouverture" name="ouverture" value="<?= htmlspecialchars($horaires['ouverture']) ?>"
+                required>
             <label for="fermeture">Fermeture :</label>
-            <input type="time" id="fermeture" name="fermeture"
-                   value="<?= htmlspecialchars($horaires['fermeture']) ?>" required>
+            <input type="time" id="fermeture" name="fermeture" value="<?= htmlspecialchars($horaires['fermeture']) ?>"
+                required>
             <button type="submit" name="update_horaire">Modifier les horaires</button>
         </form>
     </div>

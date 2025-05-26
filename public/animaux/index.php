@@ -1,8 +1,8 @@
 <?php 
 require_once (__DIR__ . '/../includes/header.php');
-require_once '/var/www/classes/Database.php';
-require_once '/var/www/classes/Animal.php';
-require_once '/var/www/classes/Habitat.php';
+require_once __DIR__ . '/../../classes/Database.php';
+require_once __DIR__ . '/../../classes/Animal.php';
+require_once __DIR__ . '/../../classes/Habitat.php';
 
 $conn = Database::getConnection();
 $animalManager = new Animal();

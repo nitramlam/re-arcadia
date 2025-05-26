@@ -2,8 +2,8 @@
 session_start();
 require_once '/var/www/classes/SessionManager.php';
 SessionManager::requireAuth();
-require_once(__DIR__ . '/../includes/header.php'); 
-require_once '/var/www/classes/Database.php';
+require_once(__DIR__ . '/../includes/header.php');
+require_once __DIR__ . '/../../classes/Database.php';
 $conn = Database::getConnection();
 require_once(__DIR__ . '/mailUser.php');
 
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $role = isset($_POST['role']) ? $_POST['role'] : '';
         $new_password = trim($_POST['new_password']);
         $confirm_new_password = trim($_POST['confirm_new_password']);
-    
+
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error_message = "Adresse e-mail invalide.";
         } elseif (empty($role)) {
@@ -113,6 +113,7 @@ if ($result) {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -151,6 +152,7 @@ if ($result) {
         }
     </script>
 </head>
+
 <body>
     <div class="content-container">
         <h1>Créer un compte utilisateur</h1>
@@ -211,18 +213,23 @@ if ($result) {
                                 <input type="hidden" name="edit_user" value="1">
                                 <input type="text" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
                                 <select name="role" required>
-                                    <option value="veterinaire" <?= $user['role'] == 'veterinaire' ? 'selected' : '' ?>>Vétérinaire</option>
-                                    <option value="employe" <?= $user['role'] == 'employe' ? 'selected' : '' ?>>Employé</option>
-                                    <option value="administrateur" <?= $user['role'] == 'administrateur' ? 'selected' : '' ?>>Administrateur</option>
+                                    <option value="veterinaire" <?= $user['role'] == 'veterinaire' ? 'selected' : '' ?>>
+                                        Vétérinaire</option>
+                                    <option value="employe" <?= $user['role'] == 'employe' ? 'selected' : '' ?>>Employé
+                                    </option>
+                                    <option value="administrateur" <?= $user['role'] == 'administrateur' ? 'selected' : '' ?>>
+                                        Administrateur</option>
                                 </select>
                                 <input type="password" name="new_password" placeholder="Nouveau mot de passe">
-                                <input type="password" name="confirm_new_password" placeholder="Confirmer le nouveau mot de passe">
+                                <input type="password" name="confirm_new_password"
+                                    placeholder="Confirmer le nouveau mot de passe">
                                 <button class="mod" type="submit">Modifier</button>
                             </form>
                             <form method="post" action="" style="display:inline;">
                                 <input type="hidden" name="user_id" value="<?= htmlspecialchars($user['id']) ?>">
                                 <input type="hidden" name="delete_user" value="1">
-                                <button class="supp" type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">Supprimer</button>
+                                <button class="supp" type="submit"
+                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">Supprimer</button>
                             </form>
                         </td>
                     </tr>
@@ -232,4 +239,5 @@ if ($result) {
     </div>
     <?php require_once(__DIR__ . '/../includes/footer.php'); ?>
 </body>
+
 </html>

@@ -3,7 +3,7 @@ session_start();
 require_once '/var/www/classes/SessionManager.php';
 SessionManager::requireAuth();
 require_once(__DIR__ . '/../includes/header.php');
-require_once '/var/www/classes/Database.php';
+require_once __DIR__ . '/../../classes/Database.php';
 $conn = Database::getConnection(); // Inclure le fichier de configuration de la base de données
 
 // Vérification du rôle de l'utilisateur

@@ -2,9 +2,9 @@
 session_start();
 require_once '/var/www/classes/SessionManager.php';
 SessionManager::requireAuth();
-require_once(__DIR__ . '/../includes/header.php'); 
-require_once '/var/www/classes/Database.php';
-$conn = Database::getConnection(); 
+require_once(__DIR__ . '/../includes/header.php');
+require_once __DIR__ . '/../../classes/Database.php';
+$conn = Database::getConnection();
 
 // Vérification du rôle de l'utilisateur
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'employe') {
@@ -40,6 +40,7 @@ $all_avis = $result_all_avis->fetch_all(MYSQLI_ASSOC);
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Gestion des Avis</title>
@@ -50,42 +51,45 @@ $all_avis = $result_all_avis->fetch_all(MYSQLI_ASSOC);
             padding: 10px;
             border: 1px solid #ccc;
         }
+
         .avis .actions {
             margin-top: 10px;
         }
     </style>
 </head>
+
 <body>
-<main>
-    <div class="validation">
-        <h1>Gestion des Avis</h1>
+    <main>
+        <div class="validation">
+            <h1>Gestion des Avis</h1>
 
-        <?php if (empty($all_avis)) : ?>
-            <p>Aucun avis trouvé.</p>
-        <?php else : ?>
-            <?php foreach ($all_avis as $avis) : ?>
-                <div class="avis">
-                    <p><strong>Pseudo:</strong> <?= htmlspecialchars($avis['pseudo']); ?></p>
-                    <p><strong>Commentaire:</strong> <?= htmlspecialchars($avis['commentaire']); ?></p>
-                    <div class="actions">
-                        <form method="post" action="<?= $_SERVER['PHP_SELF']; ?>">
-                            <input type="hidden" name="avis_id" value="<?= $avis['avis_id']; ?>">
-                            <?php if (!$avis['isApproved'] || !$avis['isVisible']) : ?>
-                                <!-- Boutons pour les avis en attente de validation -->
-                                <button type="submit" name="action" value="approve">Approuver</button>
-                                <button type="submit" name="action" value="delete">Supprimer</button>
-                            <?php else : ?>
-                                <!-- Bouton uniquement pour les avis approuvés -->
-                                <button type="submit" name="action" value="delete">Supprimer</button>
-                            <?php endif; ?>
-                        </form>
+            <?php if (empty($all_avis)): ?>
+                <p>Aucun avis trouvé.</p>
+            <?php else: ?>
+                <?php foreach ($all_avis as $avis): ?>
+                    <div class="avis">
+                        <p><strong>Pseudo:</strong> <?= htmlspecialchars($avis['pseudo']); ?></p>
+                        <p><strong>Commentaire:</strong> <?= htmlspecialchars($avis['commentaire']); ?></p>
+                        <div class="actions">
+                            <form method="post" action="<?= $_SERVER['PHP_SELF']; ?>">
+                                <input type="hidden" name="avis_id" value="<?= $avis['avis_id']; ?>">
+                                <?php if (!$avis['isApproved'] || !$avis['isVisible']): ?>
+                                    <!-- Boutons pour les avis en attente de validation -->
+                                    <button type="submit" name="action" value="approve">Approuver</button>
+                                    <button type="submit" name="action" value="delete">Supprimer</button>
+                                <?php else: ?>
+                                    <!-- Bouton uniquement pour les avis approuvés -->
+                                    <button type="submit" name="action" value="delete">Supprimer</button>
+                                <?php endif; ?>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
-</main>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+    </main>
 
-<?php require_once(__DIR__ . '/../includes/footer.php'); ?>
+    <?php require_once(__DIR__ . '/../includes/footer.php'); ?>
 </body>
+
 </html>

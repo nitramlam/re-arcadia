@@ -1,23 +1,16 @@
 <?php
 require_once (__DIR__ . '/../includes/header.php');
 require_once '/var/www/classes/Database.php';
+require_once __DIR__ . '/../../classes/Service.php';
 
-$conn = Database::getConnection();// Connexion à la base de données
-
-// Vérifier si la connexion à la base de données est établie
+$conn = Database::getConnection();
 if (!$conn) {
     die("Erreur de connexion à la base de données");
 }
 
-// Sélection et affichage des données des services
-$sql = "SELECT * FROM service";
-$result = $conn->query($sql);
-$services = $result->fetch_all(MYSQLI_ASSOC);
-
-// Sélection et affichage des horaires d'ouverture
-$sqlHoraires = "SELECT * FROM horaires LIMIT 1";
-$resultHoraires = $conn->query($sqlHoraires);
-$horaires = $resultHoraires->fetch_assoc();
+$serviceManager = new Service($conn);
+$services = $serviceManager->getAll();
+$horaires = $serviceManager->getHoraires();
 ?>
 
 <link rel="stylesheet" href="services.css">
@@ -54,4 +47,4 @@ $horaires = $resultHoraires->fetch_assoc();
     </div>
 </main>
 
-<?php require_once (__DIR__ . '/../includes/footer.php'); ?> 
+<?php require_once (__DIR__ . '/../includes/footer.php'); ?>

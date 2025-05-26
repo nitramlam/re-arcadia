@@ -4,97 +4,69 @@ require_once '/var/www/classes/SessionManager.php';
 SessionManager::requireAuth();
 require_once(__DIR__ . '/../includes/header.php');
 require_once '/var/www/classes/Database.php';
-$conn = Database::getConnection(); // Connexion à la base de données
+require_once __DIR__ . '/../../classes/Service.php';
 
-// Définir la fonction uploadImage pour gérer le téléchargement d'images
-function uploadImage($image)
-{
-    // Vérifie si une image a été téléchargée sans erreur
-    if ($image['error'] === UPLOAD_ERR_OK) {
-        $targetDir = __DIR__ . "/../imageServices/"; // Répertoire de destination
-        $targetFile = $targetDir . basename($image["name"]);
-        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
-        // Types d'extensions autorisés
-        $validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-        if (!in_array($imageFileType, $validExtensions)) {
-            return null; // Retourne null si le fichier n'est pas valide
-        }
-
-        // Déplace le fichier téléchargé vers le répertoire cible
-        if (move_uploaded_file($image["tmp_name"], $targetFile)) {
-            return "/imageServices/" . basename($image["name"]); // Chemin de l'image
-        }
-    }
-    return null; // Retourne null si l'upload échoue
+$conn = Database::getConnection();
+if (!$conn) {
+    die("Erreur de connexion à la base de données");
 }
 
-// Vérification que l'utilisateur est connecté
-if (!isset($_SESSION['role'])) {
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'administrateur') {
     header("Location: /connexion/connexion.php");
     exit();
 }
 
-// Générer un token CSRF s'il n'existe pas déjà dans la session
 if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Gestion des soumissions des formulaires
-if ($conn && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Vérification du token CSRF
+function uploadImage($image): ?string {
+    if ($image['error'] === UPLOAD_ERR_OK) {
+        $targetDir = __DIR__ . "/../imageServices/";
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0777, true);
+        }
+        $targetFile = $targetDir . basename($image["name"]);
+        $validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $ext = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+        if (!in_array($ext, $validExtensions)) return null;
+
+        if (move_uploaded_file($image["tmp_name"], $targetFile)) {
+            return "/imageServices/" . basename($image["name"]);
+        }
+    }
+    return null;
+}
+
+$serviceManager = new Service($conn);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-        die('Échec de la validation CSRF.');
+        die('Validation CSRF échouée.');
     }
 
+    $nom = $_POST['nom'] ?? '';
+    $description = $_POST['description'] ?? '';
+    $imagePath = uploadImage($_FILES['image'] ?? []);
+
     if (isset($_POST['add_service'])) {
-        $nom = $_POST['nom'];
-        $description = $_POST['description'];
-
-        // Gestion du téléchargement de l'image
-        $imagePath = uploadImage($_FILES['image']);
-        if ($imagePath === null) {
-            $imagePath = '/imageServices/default.jpg';
-        }
-
-        $stmt = $conn->prepare("INSERT INTO service (nom, description, icons_path) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $nom, $description, $imagePath);
-        $stmt->execute();
+        if (!$imagePath) $imagePath = '/imageServices/default.jpg';
+        $serviceManager->add($nom, $description, $imagePath);
     } elseif (isset($_POST['update_service'])) {
-        $service_id = $_POST['service_id'];
-        $nom = $_POST['nom'];
-        $description = $_POST['description'];
-        $imagePath = uploadImage($_FILES['image']);
-
-        if ($imagePath) {
-            $stmt = $conn->prepare("UPDATE service SET nom = ?, description = ?, icons_path = ? WHERE service_id = ?");
-            $stmt->bind_param("sssi", $nom, $description, $imagePath, $service_id);
-        } else {
-            $stmt = $conn->prepare("UPDATE service SET nom = ?, description = ? WHERE service_id = ?");
-            $stmt->bind_param("ssi", $nom, $description, $service_id);
-        }
-        $stmt->execute();
+        $id = (int) $_POST['service_id'];
+        $serviceManager->update($id, $nom, $description, $imagePath);
     } elseif (isset($_POST['delete_service'])) {
-        $service_id = $_POST['service_id'];
-        $stmt = $conn->prepare("DELETE FROM service WHERE service_id = ?");
-        $stmt->bind_param("i", $service_id);
-        $stmt->execute();
+        $id = (int) $_POST['service_id'];
+        $serviceManager->delete($id);
     } elseif (isset($_POST['update_horaire'])) {
         $ouverture = $_POST['ouverture'];
         $fermeture = $_POST['fermeture'];
-        $stmt = $conn->prepare("UPDATE horaires SET ouverture = ?, fermeture = ? WHERE horaire_id = 1");
-        $stmt->bind_param("ss", $ouverture, $fermeture);
-        $stmt->execute();
+        $serviceManager->updateHoraires($ouverture, $fermeture);
     }
 }
 
-// Récupérer les données des services
-$serviceQuery = $conn->query("SELECT * FROM service");
-$services = $serviceQuery->fetch_all(MYSQLI_ASSOC);
-
-// Récupérer les données des horaires
-$horaireQuery = $conn->query("SELECT * FROM horaires");
-$horaires = $horaireQuery->fetch_assoc();
+$services = $serviceManager->getAll();
+$horaires = $serviceManager->getHoraires();
 ?>
 
 <!DOCTYPE html>

@@ -1,9 +1,9 @@
 <?php
 session_start();
-require_once '/var/www/classes/SessionManager.php';
+require_once __DIR__ . '/../../classes/SessionManager.php';
 SessionManager::requireAuth();
 require_once(__DIR__ . '/../includes/header.php');
-require_once '/var/www/classes/Database.php';
+require_once __DIR__ . '/../../classes/Database.php';
 require_once __DIR__ . '/../../classes/Animal.php';
 
 $conn = Database::getConnection();
@@ -26,14 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die('Échec de la validation CSRF.');
     }
 
-   if (isset($_POST['update_animal'])) {
-    $animalManager->updatePassageEmploye(
-        (int)$_POST['animal_id'],
-        $_POST['date_heure_passage_employe'],
-        (float)$_POST['grammage_donne'],
-        $_POST['nourriture_donnee']
-    );
-}
+    if (isset($_POST['update_animal'])) {
+        $animalManager->updatePassageEmploye(
+            (int) $_POST['animal_id'],
+            $_POST['date_heure_passage_employe'],
+            (float) $_POST['grammage_donne'],
+            $_POST['nourriture_donnee']
+        );
+    }
 }
 
 $animals = $animalManager->getAll();

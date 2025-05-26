@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '/var/www/classes/SessionManager.php';
+require_once __DIR__ . '/../../classes/SessionManager.php';
 SessionManager::requireAuth();
 
 if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['administrateur', 'employe'])) {

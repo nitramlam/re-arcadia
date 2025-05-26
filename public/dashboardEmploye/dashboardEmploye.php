@@ -1,17 +1,19 @@
 <?php
-require_once '/var/www/classes/SessionManager.php';
+require_once __DIR__ . '/../../classes/SessionManager.php';
 SessionManager::requireAuth();
-require_once(__DIR__ . '/../includes/header.php');   
+require_once(__DIR__ . '/../includes/header.php');
 ?>
 
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Dashboard Employé</title>
     <link rel="stylesheet" href="dashboardEmploye.css">
 </head>
+
 <body>
     <main>
         <section class="employee-space">
@@ -29,6 +31,7 @@ require_once(__DIR__ . '/../includes/header.php');
             </div>
         </section>
     </main>
-    <?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+    <?php require_once(__DIR__ . '/../includes/footer.php'); ?>
 </body>
+
 </html>

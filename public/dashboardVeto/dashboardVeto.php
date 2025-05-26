@@ -1,14 +1,15 @@
-<?php 
-require_once '/var/www/classes/SessionManager.php';
+<?php
+require_once __DIR__ . '/../../classes/SessionManager.php';
 SessionManager::requireAuth();
-require_once(__DIR__ . '/../includes/header.php'); 
+require_once(__DIR__ . '/../includes/header.php');
 ; ?>
 
 
 <head>
- 
+
     <link rel="stylesheet" href="dashboardVeto.css">
 </head>
+
 <body>
     <main>
         <section class="employee-space">
@@ -25,10 +26,10 @@ require_once(__DIR__ . '/../includes/header.php');
                 </div>
         </section>
     </main>
-    
 
 
-<?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+
+    <?php require_once(__DIR__ . '/../includes/footer.php'); ?>
 </body>
-</html>
 
+</html>

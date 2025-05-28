@@ -1,16 +1,23 @@
 <?php 
 require_once (__DIR__ . '/../includes/header.php');
 require_once __DIR__ . '/../../classes/Database.php';
-require_once __DIR__ . '/../../classes/Animal.php';
+require_once __DIR__ . '/../../classes/AnimalManager.php';
 require_once __DIR__ . '/../../classes/Habitat.php';
 
+// Connexion à la base de données
 $conn = Database::getConnection();
-$animalManager = new Animal();
+
+// Gestionnaire des animaux
+$animalManager = new AnimalManager($conn);
+
+// Gestionnaire des habitats
 $habitatManager = new Habitat($conn);
 
+// Récupération de tous les animaux et des habitats
 $animaux = $animalManager->getAll();
 $habitats = $habitatManager->getAll();
 
+// Organisation des animaux par habitat
 $animalsByHabitat = [];
 foreach ($habitats as $habitat) {
     $animalsByHabitat[$habitat['nom']] = $animalManager->getByHabitat($habitat['nom']);
@@ -30,15 +37,16 @@ foreach ($habitats as $habitat) {
 <main>
     <div class="intro">
         <h1>Nos Animaux</h1>
-        <p>Au Zoo Écologique de la Forêt de Brocéliande, nous créons des habitats fidèles aux milieux naturels de nos animaux, assurant  leur bien-être et contribuant à la préservation des écosystèmes. Rencontrez nos majestueux lions, éléphants, alligators et bien d'autres résidents fascinants au cœur de notre zoo.</p>
+        <p>Au Zoo Écologique de la Forêt de Brocéliande, nous créons des habitats fidèles aux milieux naturels de nos animaux, assurant leur bien-être et contribuant à la préservation des écosystèmes. Rencontrez nos majestueux lions, éléphants, alligators et bien d'autres résidents fascinants au cœur de notre zoo.</p>
     </div>
+
     <div class="animaux">
         <?php foreach ($animaux as $animal): ?>
             <div class="animal">
-                <h3><?= htmlspecialchars($animal['nom']) ?></h3>
-                <p><?= htmlspecialchars($animal['espece']) ?></p>
-                <a href="<?= htmlspecialchars($animal['page_personnalisee_url']) ?>">
-                    <img src="<?= htmlspecialchars($animal['image_path'] ?? '/animaux/default.jpg') ?>" alt="<?= htmlspecialchars($animal['nom']) ?>" style="max-width: 200px;">
+                <h3><?= htmlspecialchars($animal->getNom()) ?></h3>
+                <p><?= htmlspecialchars($animal->getEspece()) ?></p>
+                <a href="<?= htmlspecialchars($animal->getPageUrl()) ?>">
+                    <img src="<?= htmlspecialchars($animal->getImagePath() ?? '/animaux/default.jpg') ?>" alt="<?= htmlspecialchars($animal->getNom()) ?>" style="max-width: 200px;">
                 </a>
             </div>
         <?php endforeach; ?>
@@ -52,8 +60,8 @@ foreach ($habitats as $habitat) {
                 <div class="animals-in-habitat">
                     <?php foreach ($animalsByHabitat[$habitat['nom']] as $animal): ?>
                         <div class="animal-in-habitat">
-                            <a href="<?= htmlspecialchars($animal['page_personnalisee_url']) ?>">
-                                <img src="<?= htmlspecialchars($animal['image_path'] ?? '/animaux/default.jpg') ?>" alt="<?= htmlspecialchars($animal['nom']) ?>">
+                            <a href="<?= htmlspecialchars($animal->getPageUrl()) ?>">
+                                <img src="<?= htmlspecialchars($animal->getImagePath() ?? '/animaux/default.jpg') ?>" alt="<?= htmlspecialchars($animal->getNom()) ?>">
                             </a>
                         </div>
                     <?php endforeach; ?>
@@ -63,6 +71,6 @@ foreach ($habitats as $habitat) {
     </div>
 </main>
 
-<?php require_once (__DIR__ . '/../includes/footer.php'); ?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
 </body>
 </html>

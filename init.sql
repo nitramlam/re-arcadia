@@ -108,8 +108,8 @@ CREATE TABLE `utilisateurs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=11;
 
 INSERT INTO `utilisateurs` (`id`, `email`, `password`, `role`) VALUES
-(5, 'employearcadia33@gmail.com', '$2y$10$aVzMCuiPYD2IckR/WbwDf.SPXmWjB2BVs4s6M1we5OvP5HLQ7zP5HLQ7zP5HLQ7zP5HLQ7zP', 'employe'),
-(7, 'josearcadia33@gmail.com', '$2y$10$7bLW7qlA5i8SRhjKKoaaOenUcdUg5UFNBwzoEKHqs/lc2nbsLNsaC', 'administrateur'),
-(8, 'veterinairearcadia@gmail.com', '$2y$10$cmwkfzfKilA0Mnpj4TGwj.inRAHNGaJY0LwOl3JsoymuY3zzhTLBa', 'veterinaire');
+(5, 'employearcadia33@gmail.com', '$2a$12$2YNwNb2kLBtv/uDDqqXZuOVKgcvEjZ0D9066Nk3mHC8TzBQIgwidu', 'employe'),
+(7, 'josearcadia33@gmail.com', '$2a$12$adN4kCf9XtBjPmLKMNJNzOoOX.RKAxkWzDHkEHFCFC16uP8ktrv6y', 'administrateur'),
+(8, 'veterinairearcadia@gmail.com', '$2a$12$4.cMG/B0YCQ8tXN3F/kSKeqS2IdjNmigjgqn4CXAIJpN.eV9fDF4y', 'veterinaire');
 
 COMMIT;

@@ -117,19 +117,20 @@ class AnimalManager {
         $this->mongo->executeBulkWrite('arcadia.animal_views', $bulk);
     }
 
+    
     private function generatePage(int $id): string {
-        $animal = $this->getById($id);
-        if (!$animal) throw new Exception("Animal introuvable.");
+    $animal = $this->getById($id);
+    if (!$animal) throw new Exception("Animal introuvable.");
 
-        $uploadDir = __DIR__ . '/../animaux_pages/';
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+    $uploadDir = __DIR__ . '/../public/animaux_pages/';
+    if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
-        $pagePath = $uploadDir . "animal_{$id}.php";
-        $html = $this->buildPageHtml($animal);
-        file_put_contents($pagePath, $html);
+    $pagePath = $uploadDir . "animal_{$id}.php";
+    $html = $this->buildPageHtml($animal);
+    file_put_contents($pagePath, $html);
 
-        return "/animaux_pages/animal_{$id}.php";
-    }
+    return "/animaux_pages/animal_{$id}.php";
+}
 
     private function buildPageHtml(Animal $a): string {
         return <<<HTML

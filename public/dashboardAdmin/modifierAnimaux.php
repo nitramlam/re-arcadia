@@ -1,9 +1,11 @@
 <?php
 session_start();
+ini_set('display_errors', 0);
+error_reporting(E_ALL & ~E_WARNING);
 require_once(__DIR__ . '/../includes/auth.php');
 require_once(__DIR__ . '/../includes/header.php');
 require_once __DIR__ . '/../../classes/Database.php';
-require_once __DIR__ . '/../../classes/Animal.php';
+require_once __DIR__ . '/../../classes/AnimalManager.php';
 
 // Authentification admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'administrateur') {
@@ -16,8 +18,8 @@ if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-$animalManager = new Animal();
-
+$conn = Database::getConnection();
+$animalManager = new AnimalManager($conn);
 function uploadImage($file): ?string
 {
     if (isset($file) && $file['error'] === 0) {
@@ -71,37 +73,29 @@ $animals = $animalManager->getAll();
         <section class="animal-list">
             <?php foreach ($animals as $animal): ?>
                 <div class="animal-card">
-                    <h3><?= htmlspecialchars($animal['nom']) ?></h3>
-                    <img src="<?= htmlspecialchars($animal['image_path'] ?? '/animaux/default.jpg') ?>"
-                        alt="<?= htmlspecialchars($animal['nom']) ?>">
+                    <h3><?= htmlspecialchars($animal->getNom()) ?></h3>
+                    <img src="<?= htmlspecialchars($animal->getImagePath() ?? '/animaux/default.jpg') ?>"
+                        alt="<?= htmlspecialchars($animal->getNom()) ?>">
                     <button class="view-report">Afficher le compte rendu</button>
                     <div class="animal-details" style="display: none;">
-                        <p><strong>État général:</strong> <?= htmlspecialchars($animal['etat_general'] ?? '') ?></p>
-                        <p><strong>Nourriture proposée:</strong> <?= htmlspecialchars($animal['regime'] ?? '') ?></p>
-                        <p><strong>Grammage proposé:</strong> <?= htmlspecialchars($animal['grammage'] ?? '') ?> kg</p>
-                        <p><strong>Dernière visite:</strong> <?= htmlspecialchars($animal['derniere_visite'] ?? '') ?></p>
-                        <p><strong>Commentaire:</strong> <?= htmlspecialchars($animal['commentaire'] ?? '') ?></p>
+                        <p><strong>État général:</strong> <?= htmlspecialchars($animal->getEtatGeneral() ?? '') ?></p>
+                        <p><strong>Nourriture proposée:</strong> <?= htmlspecialchars($animal->getRegime() ?? '') ?></p>
+                        <p><strong>Grammage proposé:</strong> <?= htmlspecialchars($animal->getGrammage() ?? '') ?> kg</p>
+                        <p><strong>Dernière visite:</strong> <?= htmlspecialchars($animal->getDerniereVisite() ?? '') ?></p>
+                        <p><strong>Commentaire:</strong> <?= htmlspecialchars($animal->getCommentaire() ?? '') ?></p>
                     </div>
                     <button class="edit-toggle">✏️</button>
                     <form method="POST" class="animal-form" style="display: none;" enctype="multipart/form-data">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-                        <input type="hidden" name="animal_id" value="<?= (int) $animal['animal_id'] ?>">
-                        <label>Nom: <input type="text" name="nom" value="<?= htmlspecialchars($animal['nom']) ?>"
-                                required></label>
-                        <label>Description: <textarea name="description"
-                                required><?= htmlspecialchars($animal['description']) ?></textarea></label>
-                        <label>Poids: <input type="number" step="0.01" name="poids"
-                                value="<?= htmlspecialchars($animal['poids']) ?>" required></label>
-                        <label>Sexe: <input type="text" name="sexe" value="<?= htmlspecialchars($animal['sexe']) ?>"
-                                required></label>
-                        <label>Continent: <input type="text" name="continent_origine"
-                                value="<?= htmlspecialchars($animal['continent_origine']) ?>" required></label>
-                        <label>Âge: <input type="number" name="age" value="<?= htmlspecialchars($animal['age']) ?>"
-                                required></label>
-                        <label>Habitat: <input type="text" name="habitat"
-                                value="<?= htmlspecialchars($animal['habitat']) ?>" required></label>
-                        <label>Espèce: <input type="text" name="espece" value="<?= htmlspecialchars($animal['espece']) ?>"
-                                required></label>
+                        <input type="hidden" name="animal_id" value="<?= $animal->getId() ?>">
+                        <label>Nom: <input type="text" name="nom" value="<?= htmlspecialchars($animal->getNom()) ?>" required></label>
+                        <label>Description: <textarea name="description" required><?= htmlspecialchars($animal->getDescription()) ?></textarea></label>
+                        <label>Poids: <input type="number" step="0.01" name="poids" value="<?= htmlspecialchars($animal->getPoids()) ?>" required></label>
+                        <label>Sexe: <input type="text" name="sexe" value="<?= htmlspecialchars($animal->getSexe()) ?>" required></label>
+                        <label>Continent: <input type="text" name="continent_origine" value="<?= htmlspecialchars($animal->getContinentOrigine()) ?>" required></label>
+                        <label>Âge: <input type="number" name="age" value="<?= htmlspecialchars($animal->getAge()) ?>" required></label>
+                        <label>Habitat: <input type="text" name="habitat" value="<?= htmlspecialchars($animal->getHabitat()) ?>" required></label>
+                        <label>Espèce: <input type="text" name="espece" value="<?= htmlspecialchars($animal->getEspece()) ?>" required></label>
                         <label>Image: <input type="file" name="image" accept="image/*"></label>
                         <button type="submit" name="update_animal">Modifier</button>
                         <button type="submit" name="delete_animal">Supprimer</button>
@@ -111,8 +105,7 @@ $animals = $animalManager->getAll();
         </section>
 
         <button class="add-animal" onclick="openAddForm()">Ajouter un animal</button>
-        <form method="POST" class="add-animal-form" id="add-animal-form" style="display: none;"
-            enctype="multipart/form-data">
+        <form method="POST" class="add-animal-form" id="add-animal-form" style="display: none;" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <label>Nom: <input type="text" name="nom" required></label>
             <label>Description: <textarea name="description" required></textarea></label>

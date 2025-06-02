@@ -126,8 +126,8 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
     <main>
         <section class="intro">
             <h2>Suivi Vétérinaire des Animaux</h2>
-            <p>Sur cette page, les vétérinaires peuvent mettre à jour l'état général des animaux, leur régime
-                alimentaire, le grammage de nourriture, la date de visite et ajouter des commentaires.</p>
+
+
         </section>
         <section class="animal-list">
             <?php foreach ($animals as $animal): ?>
@@ -145,8 +145,11 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
                                 value="<?= htmlspecialchars($animal['regime'] ?? ''); ?>" required></label>
                         <label>Grammage proposé: <input type="number" step="0.01" name="grammage"
                                 value="<?= htmlspecialchars($animal['grammage'] ?? ''); ?>" required></label>
-                        <label>Date de visite: <input type="date" name="derniere_visite"
-                                value="<?= htmlspecialchars($animal['derniere_visite'] ?? ''); ?>" required></label>
+                        <label>Date de visite:
+                            <input type="date" name="derniere_visite"
+                                value="<?= htmlspecialchars($animal['derniere_visite'] ?? ''); ?>" min="1900-01-01"
+                                max="2099-12-31" required>
+                        </label>
                         <label>Commentaire: <textarea
                                 name="commentaire"><?= htmlspecialchars($animal['commentaire'] ?? ''); ?></textarea></label>
                         <button type="submit" name="update_animal" class="edit-btn">Mettre à jour</button>

@@ -1,11 +1,22 @@
 <?php
 session_start();
+
+// On vérifie l'authentification AVANT tout affichage
 require_once __DIR__ . '/../../classes/SessionManager.php';
 SessionManager::requireAuth();
-require_once(__DIR__ . '/../includes/header.php');
+
+// Vérifie que l'utilisateur a le rôle "administrateur" AVANT tout output HTML
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'administrateur') {
+    header("Location: /connexion/connexion.php");
+    exit();
+}
+
+// Ensuite seulement, on peut charger des fichiers susceptibles de produire du HTML
 require_once __DIR__ . '/../../classes/Database.php';
+require_once __DIR__ . '/mailUser.php';
+require_once __DIR__ . '/../includes/header.php';
+
 $conn = Database::getConnection();
-require_once(__DIR__ . '/mailUser.php');
 
 $error_message = '';
 $success_message = '';

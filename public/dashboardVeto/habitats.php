@@ -56,8 +56,7 @@ $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
     <main>
         <section class="intro">
             <h2>Gestion de la Propreté des Habitats</h2>
-            <p>Cette page permet au vétérinaire de mettre à jour les commentaires sur la propreté des habitats et de
-                visualiser les animaux qui y vivent.</p>
+        
         </section>
         <section class="habitat-list">
             <?php foreach ($habitats as $habitat): ?>

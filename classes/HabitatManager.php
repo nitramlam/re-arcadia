@@ -36,19 +36,31 @@ class HabitatManager {
     }
 
     public function add(Habitat $habitat): bool {
+        $nom = $habitat->getNom();
+        $description = $habitat->getDescription();
+        $commentaire = $habitat->getCommentaire();
+        $imagePath = $habitat->getImagePath();
+
         $stmt = $this->conn->prepare("INSERT INTO habitat (nom, description, commentaire_habitat, image_path) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $habitat->getNom(), $habitat->getDescription(), $habitat->getCommentaire(), $habitat->getImagePath());
+        $stmt->bind_param("ssss", $nom, $description, $commentaire, $imagePath);
         return $stmt->execute();
     }
 
     public function update(Habitat $habitat): bool {
+        $nom = $habitat->getNom();
+        $description = $habitat->getDescription();
+        $commentaire = $habitat->getCommentaire();
+        $id = $habitat->getId();
+
         if ($habitat->getImagePath()) {
+            $imagePath = $habitat->getImagePath();
             $stmt = $this->conn->prepare("UPDATE habitat SET nom = ?, description = ?, commentaire_habitat = ?, image_path = ? WHERE habitat_id = ?");
-            $stmt->bind_param("ssssi", $habitat->getNom(), $habitat->getDescription(), $habitat->getCommentaire(), $habitat->getImagePath(), $habitat->getId());
+            $stmt->bind_param("ssssi", $nom, $description, $commentaire, $imagePath, $id);
         } else {
             $stmt = $this->conn->prepare("UPDATE habitat SET nom = ?, description = ?, commentaire_habitat = ? WHERE habitat_id = ?");
-            $stmt->bind_param("sssi", $habitat->getNom(), $habitat->getDescription(), $habitat->getCommentaire(), $habitat->getId());
+            $stmt->bind_param("sssi", $nom, $description, $commentaire, $id);
         }
+
         return $stmt->execute();
     }
 

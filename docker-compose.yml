@@ -24,7 +24,7 @@ services:
       MYSQL_DATABASE: arcadia
     volumes:
       - db_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+     #- ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - arcadia-network
 

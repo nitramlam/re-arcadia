@@ -1,14 +1,14 @@
 <?php
 require_once(__DIR__ . '/../includes/header.php');
 require_once __DIR__ . '/../../classes/Database.php';
-require_once __DIR__ . '/../../classes/Service.php';
+require_once __DIR__ . '/../../classes/ServiceManager.php';
 
 $conn = Database::getConnection();
 if (!$conn) {
     die("Erreur de connexion à la base de données");
 }
 
-$serviceManager = new Service($conn);
+$serviceManager = new ServiceManager($conn);
 $services = $serviceManager->getAll();
 $horaires = $serviceManager->getHoraires();
 ?>
@@ -26,9 +26,11 @@ $horaires = $serviceManager->getHoraires();
             </p>
             <img src="assets/restaurant-services.png" alt="Zoo Map" class="zoo-map">
         </div>
+
         <div class="icons-services">
             <img src="assets/icons-services.png" alt="Icons Services">
         </div>
+
         <div class="opening-hours">
             <h2>HORAIRES D'OUVERTURE</h2>
             <?php if ($horaires): ?>
@@ -38,13 +40,14 @@ $horaires = $serviceManager->getHoraires();
                 <p>Horaires non disponibles</p>
             <?php endif; ?>
         </div>
+
         <div class="services-list">
             <?php foreach ($services as $service): ?>
                 <div class="service-item">
-                    <h3 class="service-titre"><?= htmlspecialchars($service['nom']) ?></h3>
-                    <img src="<?= htmlspecialchars($service['icons_path'] ?? '/imageServices/default.jpg') ?>"
-                        alt="<?= htmlspecialchars($service['nom']) ?>" class="service-image">
-                    <p class="service-description"><?= nl2br(htmlspecialchars($service['description'])) ?></p>
+                    <h3 class="service-titre"><?= htmlspecialchars($service->getNom()) ?></h3>
+                    <img src="<?= htmlspecialchars($service->getIconsPath() ?? '/imageServices/default.jpg') ?>"
+                         alt="<?= htmlspecialchars($service->getNom()) ?>" class="service-image">
+                    <p class="service-description"><?= nl2br(htmlspecialchars($service->getDescription())) ?></p>
                 </div>
             <?php endforeach; ?>
         </div>

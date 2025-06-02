@@ -1,26 +1,23 @@
 <?php 
-require_once (__DIR__ . '/../includes/header.php');
+require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../../classes/Database.php';
 require_once __DIR__ . '/../../classes/AnimalManager.php';
-require_once __DIR__ . '/../../classes/Habitat.php';
+require_once __DIR__ . '/../../classes/HabitatManager.php';
 
-// Connexion à la base de données
 $conn = Database::getConnection();
 
-// Gestionnaire des animaux
+// Managers
 $animalManager = new AnimalManager($conn);
+$habitatManager = new HabitatManager($conn);
 
-// Gestionnaire des habitats
-$habitatManager = new Habitat($conn);
-
-// Récupération de tous les animaux et des habitats
+// Données
 $animaux = $animalManager->getAll();
 $habitats = $habitatManager->getAll();
 
-// Organisation des animaux par habitat
+// Animaux par habitat
 $animalsByHabitat = [];
 foreach ($habitats as $habitat) {
-    $animalsByHabitat[$habitat['nom']] = $animalManager->getByHabitat($habitat['nom']);
+    $animalsByHabitat[$habitat->getNom()] = $animalManager->getByHabitat($habitat->getNom());
 }
 ?>
 
@@ -56,9 +53,9 @@ foreach ($habitats as $habitat) {
         <h2>Habitats</h2>
         <?php foreach ($habitats as $habitat): ?>
             <div class="habitat">
-                <h3><?= htmlspecialchars($habitat['nom']) ?></h3>
+                <h3><?= htmlspecialchars($habitat->getNom()) ?></h3>
                 <div class="animals-in-habitat">
-                    <?php foreach ($animalsByHabitat[$habitat['nom']] as $animal): ?>
+                    <?php foreach ($animalsByHabitat[$habitat->getNom()] as $animal): ?>
                         <div class="animal-in-habitat">
                             <a href="<?= htmlspecialchars($animal->getPageUrl()) ?>">
                                 <img src="<?= htmlspecialchars($animal->getImagePath() ?? '/animaux/default.jpg') ?>" alt="<?= htmlspecialchars($animal->getNom()) ?>">

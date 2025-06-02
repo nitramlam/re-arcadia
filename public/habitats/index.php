@@ -1,19 +1,19 @@
 <?php
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../../classes/Database.php';
-require_once __DIR__ . '/../../classes/Habitat.php';
+require_once __DIR__ . '/../../classes/HabitatManager.php';
 
 $conn = Database::getConnection();
 if (!$conn) {
     die("Erreur de connexion à la base de données");
 }
 
-$habitatManager = new Habitat($conn);
+$habitatManager = new HabitatManager($conn);
 $habitats = $habitatManager->getAll();
 
 $animalsByHabitat = [];
 foreach ($habitats as $habitat) {
-    $animalsByHabitat[$habitat['nom']] = $habitatManager->getAnimalsByHabitat($habitat['nom']);
+    $animalsByHabitat[$habitat->getNom()] = $habitatManager->getAnimalsByHabitat($habitat->getNom());
 }
 ?>
 
@@ -36,20 +36,20 @@ foreach ($habitats as $habitat) {
             <?php foreach ($habitats as $index => $habitat): ?>
                 <div class="habitat" id="habitat-<?= $index ?>">
                     <div class="habitat-header" onclick="toggleHabitatDetails(<?= $index ?>)">
-                        <img class="habitat-image" src="<?= htmlspecialchars($habitat['image_path']) ?>"
-                             alt="<?= htmlspecialchars($habitat['nom']) ?>"/>
+                        <img class="habitat-image" src="<?= htmlspecialchars($habitat->getImagePath()) ?>"
+                             alt="<?= htmlspecialchars($habitat->getNom()) ?>"/>
                         <div class="habitat-overlay">
-                            <span class="habitat-link"><?= htmlspecialchars($habitat['nom']) ?></span>
+                            <span class="habitat-link"><?= htmlspecialchars($habitat->getNom()) ?></span>
                         </div>
                     </div>
                     <div id="habitat-details-<?= $index ?>" class="habitat-details" style="display:none;">
-                        <h2><?= htmlspecialchars($habitat['nom']) ?></h2>
-                        <p><?= htmlspecialchars($habitat['description']) ?></p>
+                        <h2><?= htmlspecialchars($habitat->getNom()) ?></h2>
+                        <p><?= htmlspecialchars($habitat->getDescription()) ?></p>
                         <div class="animal-list-header">Animaux dans cet habitat :</div>
                         <div class="animal-list">
-                            <?php foreach ($animalsByHabitat[$habitat['nom']] as $animal): ?>
+                            <?php foreach ($animalsByHabitat[$habitat->getNom()] as $animal): ?>
                                 <div class="animal-item">
-                                    <img src="<?= htmlspecialchars($animal['image_path'] ?: 'default-animal.jpg') ?>"
+                                    <img src="<?= htmlspecialchars($animal['image_path'] ?? 'default-animal.jpg') ?>"
                                          alt="<?= htmlspecialchars($animal['nom']) ?>" class="animal-image"/>
                                 </div>
                             <?php endforeach; ?>
@@ -76,13 +76,3 @@ function toggleHabitatDetails(index) {
 </script>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
-
-
-
-
-
-
-
-
-
-

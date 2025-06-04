@@ -30,9 +30,9 @@ class AnimalManager {
         return $data ? new Animal($data) : null;
     }
 
-    public function getByHabitat(string $habitat): array {
-        $stmt = $this->conn->prepare("SELECT * FROM animal WHERE habitat = ?");
-        $stmt->bind_param("s", $habitat);
+    public function getByHabitatId(int $habitatId): array {
+        $stmt = $this->conn->prepare("SELECT * FROM animal WHERE habitat_id = ?");
+        $stmt->bind_param("i", $habitatId);
         $stmt->execute();
         $result = $stmt->get_result();
         $animaux = [];
@@ -49,10 +49,10 @@ class AnimalManager {
     }
 
     public function add(array $data, ?string $imagePath): int {
-        $stmt = $this->conn->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat, espece, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssdsdssss",
+        $stmt = $this->conn->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat_id, espece, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssdsdisss",
             $data['nom'], $data['description'], $data['poids'], $data['sexe'],
-            $data['continent_origine'], $data['age'], $data['habitat'], $data['espece'], $imagePath
+            $data['continent_origine'], $data['age'], $data['habitat_id'], $data['espece'], $imagePath
         );
         $stmt->execute();
         $id = $this->conn->insert_id;
@@ -69,17 +69,17 @@ class AnimalManager {
 
     public function update(int $id, array $data, ?string $imagePath = null): bool {
         if ($imagePath) {
-            $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat = ?, espece = ?, image_path = ? WHERE animal_id = ?");
-            $stmt->bind_param("ssdsdsssii",
+            $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ?, image_path = ? WHERE animal_id = ?");
+            $stmt->bind_param("ssdsdisssi",
                 $data['nom'], $data['description'], $data['poids'], $data['sexe'],
-                $data['continent_origine'], $data['age'], $data['habitat'], $data['espece'],
+                $data['continent_origine'], $data['age'], $data['habitat_id'], $data['espece'],
                 $imagePath, $id
             );
         } else {
-            $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat = ?, espece = ? WHERE animal_id = ?");
-            $stmt->bind_param("ssdsdsssi",
+            $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ? WHERE animal_id = ?");
+            $stmt->bind_param("ssdsdisssi",
                 $data['nom'], $data['description'], $data['poids'], $data['sexe'],
-                $data['continent_origine'], $data['age'], $data['habitat'], $data['espece'], $id
+                $data['continent_origine'], $data['age'], $data['habitat_id'], $data['espece'], $id
             );
         }
 
@@ -117,20 +117,19 @@ class AnimalManager {
         $this->mongo->executeBulkWrite('arcadia.animal_views', $bulk);
     }
 
-    
     private function generatePage(int $id): string {
-    $animal = $this->getById($id);
-    if (!$animal) throw new Exception("Animal introuvable.");
+        $animal = $this->getById($id);
+        if (!$animal) throw new Exception("Animal introuvable.");
 
-    $uploadDir = __DIR__ . '/../public/animaux_pages/';
-    if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+        $uploadDir = __DIR__ . '/../public/animaux_pages/';
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
-    $pagePath = $uploadDir . "animal_{$id}.php";
-    $html = $this->buildPageHtml($animal);
-    file_put_contents($pagePath, $html);
+        $pagePath = $uploadDir . "animal_{$id}.php";
+        $html = $this->buildPageHtml($animal);
+        file_put_contents($pagePath, $html);
 
-    return "/animaux_pages/animal_{$id}.php";
-}
+        return "/animaux_pages/animal_{$id}.php";
+    }
 
     private function buildPageHtml(Animal $a): string {
         return <<<HTML
@@ -159,7 +158,7 @@ require_once (__DIR__ . '/../includes/header.php');
             <p><strong>Poids :</strong> {$a->getPoids()} kg</p>
             <p><strong>Sexe :</strong> {$a->getSexe()}</p>
             <p><strong>Continent d'origine :</strong> {$a->getContinentOrigine()}</p>
-            <p><strong>Habitat :</strong> {$a->getHabitat()}</p>
+            <p><strong>Habitat ID :</strong> {$a->getHabitatId()}</p>
         </div>
         <div class="medical-section">
             <h2>Données Médicales</h2>

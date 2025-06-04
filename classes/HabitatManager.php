@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Habitat.php';
+require_once 'Animal.php';
 
 class HabitatManager {
     private mysqli $conn;
@@ -27,12 +28,18 @@ class HabitatManager {
         return $data ? new Habitat($data) : null;
     }
 
-    public function getAnimalsByHabitat(string $habitatNom): array {
-        $stmt = $this->conn->prepare("SELECT * FROM animal WHERE habitat = ?");
-        $stmt->bind_param("s", $habitatNom);
+    // Mise à jour : retourne des objets Animal
+    public function getAnimalsByHabitat(int $habitatId): array {
+        $stmt = $this->conn->prepare("SELECT * FROM animal WHERE habitat_id = ?");
+        $stmt->bind_param("i", $habitatId);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+
+        $animaux = [];
+        while ($row = $result->fetch_assoc()) {
+            $animaux[] = new Animal($row);
+        }
+        return $animaux;
     }
 
     public function add(Habitat $habitat): bool {

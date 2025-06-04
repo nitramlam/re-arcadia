@@ -13,7 +13,7 @@ $habitats = $habitatManager->getAll();
 
 $animalsByHabitat = [];
 foreach ($habitats as $habitat) {
-    $animalsByHabitat[$habitat->getNom()] = $habitatManager->getAnimalsByHabitat($habitat->getNom());
+    $animalsByHabitat[$habitat->getId()] = $habitatManager->getAnimalsByHabitat($habitat->getId());
 }
 ?>
 
@@ -25,9 +25,7 @@ foreach ($habitats as $habitat) {
             <h1 class="titreHabitats">NOS HABITATS</h1>
             <p class="paragrapheHabitats">
                 Découvrez nos trois habitats distincts : la jungle, les marais et la savane, conçus de manière
-                écologique et adaptée. Chaque environnement offre à nos animaux un espace immersif qui respecte leur
-                bien-être et leur comportement naturel. Notre engagement envers la préservation de la biodiversité se
-                reflète dans chaque détail de ces écosystèmes uniques.
+                écologique et adaptée...
             </p>
             <img src="assets/panthere-habitats.png" alt="" class="panthere">
         </div>
@@ -47,10 +45,10 @@ foreach ($habitats as $habitat) {
                         <p><?= htmlspecialchars($habitat->getDescription()) ?></p>
                         <div class="animal-list-header">Animaux dans cet habitat :</div>
                         <div class="animal-list">
-                            <?php foreach ($animalsByHabitat[$habitat->getNom()] as $animal): ?>
+                            <?php foreach ($animalsByHabitat[$habitat->getId()] as $animal): ?>
                                 <div class="animal-item">
-                                    <img src="<?= htmlspecialchars($animal['image_path'] ?? 'default-animal.jpg') ?>"
-                                         alt="<?= htmlspecialchars($animal['nom']) ?>" class="animal-image"/>
+                                    <img src="<?= htmlspecialchars($animal->getImagePath() ?? 'default-animal.jpg') ?>"
+                                         alt="<?= htmlspecialchars($animal->getNom()) ?>" class="animal-image"/>
                                 </div>
                             <?php endforeach; ?>
                         </div>

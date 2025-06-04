@@ -12,7 +12,7 @@ class Animal {
     private ?string $commentaire;
     private string $continent_origine;
     private int $age;
-    private string $habitat;
+    private int $habitat_id;
     private ?float $grammage;
     private ?string $description;
     private ?string $date_heure_passage_employe;
@@ -33,7 +33,7 @@ class Animal {
         $this->commentaire = $data['commentaire'] ?? null;
         $this->continent_origine = $data['continent_origine'] ?? '';
         $this->age = (int)($data['age'] ?? 0);
-        $this->habitat = $data['habitat'] ?? '';
+        $this->habitat_id = (int)($data['habitat_id'] ?? 0);
         $this->grammage = isset($data['grammage']) ? (float)$data['grammage'] : null;
         $this->description = $data['description'] ?? null;
         $this->date_heure_passage_employe = $data['date_heure_passage_employe'] ?? null;
@@ -55,7 +55,7 @@ class Animal {
     public function getCommentaire(): ?string { return $this->commentaire; }
     public function getContinentOrigine(): string { return $this->continent_origine; }
     public function getAge(): int { return $this->age; }
-    public function getHabitat(): string { return $this->habitat; }
+    public function getHabitatId(): int { return $this->habitat_id; }
     public function getGrammage(): ?float { return $this->grammage; }
     public function getDescription(): ?string { return $this->description; }
     public function getDatePassageEmploye(): ?string { return $this->date_heure_passage_employe; }

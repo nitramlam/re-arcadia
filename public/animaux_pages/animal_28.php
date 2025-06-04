@@ -2,7 +2,7 @@
 require_once (__DIR__ . '/../includes/header.php');
 $manager = new MongoDB\Driver\Manager("mongodb+srv://martinlamalle:456123Fx37!@arcadia.t7ei6.mongodb.net/?retryWrites=true&w=majority&appName=arcadia");
 $bulk = new MongoDB\Driver\BulkWrite;
-$bulk->update(['animal_id' => "27"], ['$inc' => ['view_count' => 1]]);
+$bulk->update(['animal_id' => "28"], ['$inc' => ['view_count' => 1]]);
 $manager->executeBulkWrite('arcadia.animal_views', $bulk);
 ?>
 <!DOCTYPE html>
@@ -19,11 +19,11 @@ $manager->executeBulkWrite('arcadia.animal_views', $bulk);
         <div class="info-section">
             <h2>Informations Générales</h2>
             <p><strong>Espèce :</strong> 0</p>
-            <p><strong>Description :</strong> rtgrt</p>
-            <p><strong>Poids :</strong> 5 kg</p>
-            <p><strong>Sexe :</strong> fr</p>
+            <p><strong>Description :</strong> rat</p>
+            <p><strong>Poids :</strong> 4 kg</p>
+            <p><strong>Sexe :</strong> rat</p>
             <p><strong>Continent d'origine :</strong> rat</p>
-            <p><strong>Habitat ID :</strong> 3</p>
+            <p><strong>Habitat ID :</strong> 1</p>
         </div>
         <div class="medical-section">
             <h2>Données Médicales</h2>

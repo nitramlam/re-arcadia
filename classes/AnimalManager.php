@@ -56,19 +56,22 @@ class AnimalManager
 
     public function add(array $data, ?string $imagePath): int
     {
-        $stmt = $this->conn->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat_id, espece, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param(
-            "ssdsssiiis",
-            $data['nom'],
-            $data['description'],
-            $data['poids'],
-            $data['sexe'],
-            $data['continent_origine'],
-            $data['age'],
-            $data['habitat_id'],
-            $data['espece'],
-            $imagePath
-        );
+        if ($imagePath !== null) {
+            $stmt = $this->conn->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat_id, espece, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssdsssisss",
+                $data['nom'], $data['description'], $data['poids'], $data['sexe'],
+                $data['continent_origine'], $data['age'], $data['habitat_id'],
+                $data['espece'], $imagePath
+            );
+        } else {
+            $stmt = $this->conn->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat_id, espece) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssdsssii",
+                $data['nom'], $data['description'], $data['poids'], $data['sexe'],
+                $data['continent_origine'], $data['age'], $data['habitat_id'],
+                $data['espece']
+            );
+        }
+
         $stmt->execute();
         $id = $this->conn->insert_id;
 
@@ -82,32 +85,32 @@ class AnimalManager
         return $id;
     }
 
-    public function update(int $id, array $data, ?string $imagePath = null): bool
-    {
-        $nom = $data['nom'];
-        $description = $data['description'];
-        $poids = $data['poids'];
-        $sexe = $data['sexe'];
-        $continent = $data['continent_origine'];
-        $age = (int)$data['age'];
-        $habitat_id = (int)$data['habitat_id'];
-        $espece = $data['espece'];
+ public function update(int $id, array $data, ?string $imagePath = null): bool
+{
+    $nom = $data['nom'];
+    $description = $data['description'];
+    $poids = $data['poids'];
+    $sexe = $data['sexe'];
+    $continent = $data['continent_origine'];
+    $age = (int) $data['age'];
+    $habitat_id = (int) $data['habitat_id'];
+    $espece = $data['espece'];
 
-        if ($imagePath !== null) {
-            $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ?, image_path = ? WHERE animal_id = ?");
-            $stmt->bind_param("ssdsssiiss", $nom, $description, $poids, $sexe, $continent, $age, $habitat_id, $espece, $imagePath, $id);
-        } else {
-            $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ? WHERE animal_id = ?");
-            $stmt->bind_param("ssdsssiis", $nom, $description, $poids, $sexe, $continent, $age, $habitat_id, $espece, $id);
-        }
-
-        $success = $stmt->execute();
-        if ($success) {
-            $this->syncToMongo($id, $nom);
-            $this->generatePage($id);
-        }
-        return $success;
+    if ($imagePath !== null) {
+        $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ?, image_path = ? WHERE animal_id = ?");
+        $stmt->bind_param("ssdsssiiss", $nom, $description, $poids, $sexe, $continent, $age, $habitat_id, $espece, $imagePath, $id);
+    } else {
+        $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ? WHERE animal_id = ?");
+        $stmt->bind_param("ssdsssiis", $nom, $description, $poids, $sexe, $continent, $age, $habitat_id, $espece, $id);
     }
+
+    $success = $stmt->execute();
+    if ($success) {
+        $this->syncToMongo($id, $nom);
+        $this->generatePage($id);
+    }
+    return $success;
+}
 
     public function delete(int $id): bool
     {

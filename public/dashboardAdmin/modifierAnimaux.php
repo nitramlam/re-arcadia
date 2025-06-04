@@ -87,10 +87,6 @@ $animals = $animalManager->getAll();
 </head>
 <body>
 <main>
-    <section class="intro">
-        <h2>Nos Animaux</h2>
-        <p>Au Zoo Écologique de la Forêt de Brocéliande...</p>
-    </section>
 
     <section class="animal-list">
         <?php foreach ($animals as $animal): ?>

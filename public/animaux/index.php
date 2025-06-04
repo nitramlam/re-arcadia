@@ -14,10 +14,10 @@ $habitatManager = new HabitatManager($conn);
 $animaux = $animalManager->getAll();
 $habitats = $habitatManager->getAll();
 
-// Animaux par habitat (clé = nom habitat, valeur = liste d'animaux en tableau associatif)
+// Animaux par habitat (clé = ID habitat)
 $animalsByHabitat = [];
 foreach ($habitats as $habitat) {
-    $animalsByHabitat[$habitat->getNom()] = $habitatManager->getAnimalsByHabitat($habitat->getId());
+    $animalsByHabitat[$habitat->getId()] = $habitatManager->getAnimalsByHabitat($habitat->getId());
 }
 ?>
 
@@ -55,10 +55,10 @@ foreach ($habitats as $habitat) {
             <div class="habitat">
                 <h3><?= htmlspecialchars($habitat->getNom()) ?></h3>
                 <div class="animals-in-habitat">
-                    <?php foreach ($animalsByHabitat[$habitat->getNom()] as $animal): ?>
+                    <?php foreach ($animalsByHabitat[$habitat->getId()] as $animal): ?>
                         <div class="animal-in-habitat">
-                            <a href="<?= htmlspecialchars($animal['page_personnalisee_url']) ?>">
-                                <img src="<?= htmlspecialchars($animal['image_path'] ?? '/animaux/default.jpg') ?>" alt="<?= htmlspecialchars($animal['nom']) ?>">
+                            <a href="<?= htmlspecialchars($animal->getPageUrl()) ?>">
+                                <img src="<?= htmlspecialchars($animal->getImagePath() ?? '/animaux/default.jpg') ?>" alt="<?= htmlspecialchars($animal->getNom()) ?>">
                             </a>
                         </div>
                     <?php endforeach; ?>

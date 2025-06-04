@@ -51,8 +51,8 @@ class AnimalManager {
     public function add(array $data, ?string $imagePath): int {
         $stmt = $this->conn->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat_id, espece, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssdsdisss",
-            $data['nom'], $data['description'], $data['poids'], $data['sexe'],
-            $data['continent_origine'], $data['age'], $data['habitat_id'], $data['espece'], $imagePath
+            $data['nom'], $data['description'], (float)$data['poids'], $data['sexe'],
+            $data['continent_origine'], (int)$data['age'], (int)$data['habitat_id'], $data['espece'], $imagePath
         );
         $stmt->execute();
         $id = $this->conn->insert_id;
@@ -71,15 +71,15 @@ class AnimalManager {
         if ($imagePath) {
             $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ?, image_path = ? WHERE animal_id = ?");
             $stmt->bind_param("ssdsdisssi",
-                $data['nom'], $data['description'], $data['poids'], $data['sexe'],
-                $data['continent_origine'], $data['age'], $data['habitat_id'], $data['espece'],
+                $data['nom'], $data['description'], (float)$data['poids'], $data['sexe'],
+                $data['continent_origine'], (int)$data['age'], (int)$data['habitat_id'], $data['espece'],
                 $imagePath, $id
             );
         } else {
             $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ? WHERE animal_id = ?");
-            $stmt->bind_param("ssdsdisssi",
-                $data['nom'], $data['description'], $data['poids'], $data['sexe'],
-                $data['continent_origine'], $data['age'], $data['habitat_id'], $data['espece'], $id
+            $stmt->bind_param("ssdsdissi",
+                $data['nom'], $data['description'], (float)$data['poids'], $data['sexe'],
+                $data['continent_origine'], (int)$data['age'], (int)$data['habitat_id'], $data['espece'], $id
             );
         }
 

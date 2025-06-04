@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../classes/SessionManager.php';
 SessionManager::requireAuth();
 require_once(__DIR__ . '/../includes/header.php');
 require_once __DIR__ . '/../../classes/Database.php';
-$conn = Database::getConnection(); // Connexion à la base de données
+$conn = Database::getConnection();
 
 // Vérification du rôle de l'utilisateur
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'veterinaire') {
@@ -19,13 +19,11 @@ if (!isset($_SESSION['csrf_token'])) {
 
 // Gestion des soumissions des formulaires
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Vérification du token CSRF
     if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
         die('Échec de la validation CSRF.');
     }
 
     if (isset($_POST['update_animal'])) {
-        // Mettre à jour les informations vétérinaires de l'animal
         $animal_id = $_POST['animal_id'];
         $etat_general = $_POST['etat_general'];
         $regime = $_POST['regime'];
@@ -36,30 +34,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("ssdsdi", $etat_general, $regime, $grammage, $derniere_visite, $commentaire, $animal_id);
         $stmt->execute();
 
-        // Recréer la page personnalisée pour l'animal mis à jour
         createAnimalPage($animal_id);
     }
 }
 
-// Fonction pour créer une page personnalisée pour chaque animal
 function createAnimalPage($animalId)
 {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT * FROM animal WHERE animal_id = ?");
+    $stmt = $conn->prepare("SELECT animal.*, habitat.nom AS habitat_nom FROM animal LEFT JOIN habitat ON animal.habitat_id = habitat.habitat_id WHERE animal_id = ?");
     $stmt->bind_param("i", $animalId);
     $stmt->execute();
     $result = $stmt->get_result();
     $animal = $result->fetch_assoc();
 
-    if (!$animal) {
-        throw new Exception("Animal non trouvé");
-    }
+    if (!$animal) throw new Exception("Animal non trouvé");
 
     $uploadDir = __DIR__ . '/../animaux_pages/';
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
+    if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+
+    $habitatNom = htmlspecialchars($animal['habitat_nom'] ?? 'Non défini');
 
     $pageContent = <<<PHP
 <?php require_once (__DIR__ . '/../includes/header.php'); ?>
@@ -82,7 +76,7 @@ function createAnimalPage($animalId)
                 <p class="weight-info"><strong>Poids:</strong> {$animal['poids']} kg</p>
                 <p class="sex-info"><strong>Sexe:</strong> {$animal['sexe']}</p>
                 <p class="origin-continent-info"><strong>Continent d'origine:</strong> {$animal['continent_origine']}</p>
-                <p class="habitat-info"><strong>Habitat:</strong> {$animal['habitat']}</p>
+                <p class="habitat-info"><strong>Habitat:</strong> {$habitatNom}</p>
             </div>
         </div>
 
@@ -104,72 +98,67 @@ PHP;
 
     $pagePath = __DIR__ . "/../animaux_pages/animal_{$animalId}.php";
     file_put_contents($pagePath, $pageContent);
-
     return "/animaux_pages/animal_{$animalId}.php";
 }
 
 // Récupérer les données des animaux
-$animalQuery = $conn->query("SELECT * FROM animal");
+$animalQuery = $conn->query("
+    SELECT animal.*, habitat.nom AS habitat_nom
+    FROM animal
+    LEFT JOIN habitat ON animal.habitat_id = habitat.habitat_id
+");
 $animals = $animalQuery->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <title>Page Vétérinaire</title>
     <link rel="stylesheet" href="compteRendu.css">
 </head>
-
 <body>
-    <main>
-        <section class="intro">
-            <h2>Suivi Vétérinaire des Animaux</h2>
+<main>
+    <section class="intro">
+        <h2>Suivi Vétérinaire des Animaux</h2>
+    </section>
 
+    <section class="animal-list">
+        <?php foreach ($animals as $animal): ?>
+            <div class="animal-card">
+                <h3><?= htmlspecialchars($animal['nom'] ?? '') ?></h3>
+                <button class="edit-toggle">✏️</button>
+                <form method="POST" class="animal-form" style="display: none;">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                    <input type="hidden" name="animal_id" value="<?= htmlspecialchars($animal['animal_id']) ?>">
+                    <label>État général: <input type="text" name="etat_general" value="<?= htmlspecialchars($animal['etat_general']) ?>" required></label>
+                    <label>Nourriture proposée: <input type="text" name="regime" value="<?= htmlspecialchars($animal['regime']) ?>" required></label>
+                    <label>Grammage proposé: <input type="number" step="0.01" name="grammage" value="<?= htmlspecialchars($animal['grammage']) ?>" required></label>
+                    <label>Date de visite:
+                        <input type="date" name="derniere_visite" value="<?= htmlspecialchars($animal['derniere_visite']) ?>" required>
+                    </label>
+                    <label>Commentaire:
+                        <textarea name="commentaire"><?= htmlspecialchars($animal['commentaire']) ?></textarea>
+                    </label>
+                    <button type="submit" name="update_animal" class="edit-btn">Mettre à jour</button>
+                </form>
+            </div>
+        <?php endforeach; ?>
+    </section>
+</main>
 
-        </section>
-        <section class="animal-list">
-            <?php foreach ($animals as $animal): ?>
-                <div class="animal-card">
-                    <h3><?= htmlspecialchars($animal['nom'] ?? ''); ?></h3>
-                    <button class="edit-toggle">✏️</button>
-                    <form method="POST" class="animal-form" style="display: none;">
-                        <!-- Ajout du token CSRF -->
-                        <input type="hidden" name="csrf_token"
-                            value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="hidden" name="animal_id" value="<?= htmlspecialchars($animal['animal_id'] ?? ''); ?>">
-                        <label>État général: <input type="text" name="etat_general"
-                                value="<?= htmlspecialchars($animal['etat_general'] ?? ''); ?>" required></label>
-                        <label>Nourriture proposée: <input type="text" name="regime"
-                                value="<?= htmlspecialchars($animal['regime'] ?? ''); ?>" required></label>
-                        <label>Grammage proposé: <input type="number" step="0.01" name="grammage"
-                                value="<?= htmlspecialchars($animal['grammage'] ?? ''); ?>" required></label>
-                        <label>Date de visite:
-                            <input type="date" name="derniere_visite"
-                                value="<?= htmlspecialchars($animal['derniere_visite'] ?? ''); ?>" min="1900-01-01"
-                                max="2099-12-31" required>
-                        </label>
-                        <label>Commentaire: <textarea
-                                name="commentaire"><?= htmlspecialchars($animal['commentaire'] ?? ''); ?></textarea></label>
-                        <button type="submit" name="update_animal" class="edit-btn">Mettre à jour</button>
-                    </form>
-                </div>
-            <?php endforeach; ?>
-        </section>
-    </main>
-    <?php require_once(__DIR__ . '/../includes/footer.php'); ?>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const editToggles = document.querySelectorAll('.edit-toggle');
-            editToggles.forEach(button => {
-                button.addEventListener('click', () => {
-                    const form = button.nextElementSibling;
-                    form.style.display = form.style.display === 'block' ? 'none' : 'block';
-                });
+<?php require_once(__DIR__ . '/../includes/footer.php'); ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const editToggles = document.querySelectorAll('.edit-toggle');
+        editToggles.forEach(button => {
+            button.addEventListener('click', () => {
+                const form = button.nextElementSibling;
+                form.style.display = form.style.display === 'block' ? 'none' : 'block';
             });
         });
-    </script>
+    });
+</script>
 </body>
-
 </html>

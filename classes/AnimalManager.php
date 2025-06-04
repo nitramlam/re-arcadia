@@ -3,16 +3,19 @@
 require_once __DIR__ . '/Database.php';
 require_once __DIR__ . '/Animal.php';
 
-class AnimalManager {
+class AnimalManager
+{
     private mysqli $conn;
     private MongoDB\Driver\Manager $mongo;
 
-    public function __construct(mysqli $conn) {
+    public function __construct(mysqli $conn)
+    {
         $this->conn = $conn;
         $this->mongo = new MongoDB\Driver\Manager("mongodb+srv://martinlamalle:456123Fx37!@arcadia.t7ei6.mongodb.net/?retryWrites=true&w=majority&appName=arcadia");
     }
 
-    public function getAll(): array {
+    public function getAll(): array
+    {
         $result = $this->conn->query("SELECT * FROM animal");
         $animaux = [];
         while ($row = $result->fetch_assoc()) {
@@ -21,7 +24,8 @@ class AnimalManager {
         return $animaux;
     }
 
-    public function getById(int $id): ?Animal {
+    public function getById(int $id): ?Animal
+    {
         $stmt = $this->conn->prepare("SELECT * FROM animal WHERE animal_id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -30,7 +34,8 @@ class AnimalManager {
         return $data ? new Animal($data) : null;
     }
 
-    public function getByHabitatId(int $habitatId): array {
+    public function getByHabitatId(int $habitatId): array
+    {
         $stmt = $this->conn->prepare("SELECT * FROM animal WHERE habitat_id = ?");
         $stmt->bind_param("i", $habitatId);
         $stmt->execute();
@@ -42,17 +47,27 @@ class AnimalManager {
         return $animaux;
     }
 
-    public function updatePassageEmploye(int $animalId, string $datetime, float $grammage, string $nourriture): bool {
+    public function updatePassageEmploye(int $animalId, string $datetime, float $grammage, string $nourriture): bool
+    {
         $stmt = $this->conn->prepare("UPDATE animal SET date_heure_passage_employe = ?, grammage_donne = ?, nourriture_donnee = ? WHERE animal_id = ?");
         $stmt->bind_param("sdsi", $datetime, $grammage, $nourriture, $animalId);
         return $stmt->execute();
     }
 
-    public function add(array $data, ?string $imagePath): int {
+    public function add(array $data, ?string $imagePath): int
+    {
         $stmt = $this->conn->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat_id, espece, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssdsdisss",
-            $data['nom'], $data['description'], (float)$data['poids'], $data['sexe'],
-            $data['continent_origine'], (int)$data['age'], (int)$data['habitat_id'], $data['espece'], $imagePath
+        $stmt->bind_param(
+            "ssdsssiiis",
+            $data['nom'],
+            $data['description'],
+            $data['poids'],
+            $data['sexe'],
+            $data['continent_origine'],
+            $data['age'],
+            $data['habitat_id'],
+            $data['espece'],
+            $imagePath
         );
         $stmt->execute();
         $id = $this->conn->insert_id;
@@ -67,31 +82,35 @@ class AnimalManager {
         return $id;
     }
 
-    public function update(int $id, array $data, ?string $imagePath = null): bool {
-        if ($imagePath) {
+    public function update(int $id, array $data, ?string $imagePath = null): bool
+    {
+        $nom = $data['nom'];
+        $description = $data['description'];
+        $poids = $data['poids'];
+        $sexe = $data['sexe'];
+        $continent = $data['continent_origine'];
+        $age = (int)$data['age'];
+        $habitat_id = (int)$data['habitat_id'];
+        $espece = $data['espece'];
+
+        if ($imagePath !== null) {
             $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ?, image_path = ? WHERE animal_id = ?");
-            $stmt->bind_param("ssdsdisssi",
-                $data['nom'], $data['description'], (float)$data['poids'], $data['sexe'],
-                $data['continent_origine'], (int)$data['age'], (int)$data['habitat_id'], $data['espece'],
-                $imagePath, $id
-            );
+            $stmt->bind_param("ssdsssiiss", $nom, $description, $poids, $sexe, $continent, $age, $habitat_id, $espece, $imagePath, $id);
         } else {
             $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ? WHERE animal_id = ?");
-            $stmt->bind_param("ssdsdissi",
-                $data['nom'], $data['description'], (float)$data['poids'], $data['sexe'],
-                $data['continent_origine'], (int)$data['age'], (int)$data['habitat_id'], $data['espece'], $id
-            );
+            $stmt->bind_param("ssdsssiis", $nom, $description, $poids, $sexe, $continent, $age, $habitat_id, $espece, $id);
         }
 
         $success = $stmt->execute();
         if ($success) {
-            $this->syncToMongo($id, $data['nom']);
+            $this->syncToMongo($id, $nom);
             $this->generatePage($id);
         }
         return $success;
     }
 
-    public function delete(int $id): bool {
+    public function delete(int $id): bool
+    {
         $stmt = $this->conn->prepare("DELETE FROM animal WHERE animal_id = ?");
         $stmt->bind_param("i", $id);
         $success = $stmt->execute();
@@ -101,27 +120,30 @@ class AnimalManager {
         return $success;
     }
 
-    private function syncToMongo(int $id, string $nom): void {
+    private function syncToMongo(int $id, string $nom): void
+    {
         $bulk = new MongoDB\Driver\BulkWrite;
         $bulk->update(
-            ['animal_id' => (string) $id],
-            ['$set' => ['animal_id' => (string) $id, 'animal_name' => $nom, 'view_count' => 0]],
+            ['animal_id' => (string)$id],
+            ['$set' => ['animal_id' => (string)$id, 'animal_name' => $nom, 'view_count' => 0]],
             ['upsert' => true]
         );
         $this->mongo->executeBulkWrite('arcadia.animal_views', $bulk);
     }
 
-    private function deleteFromMongo(int $id): void {
+    private function deleteFromMongo(int $id): void
+    {
         $bulk = new MongoDB\Driver\BulkWrite;
-        $bulk->delete(['animal_id' => (string) $id]);
+        $bulk->delete(['animal_id' => (string)$id]);
         $this->mongo->executeBulkWrite('arcadia.animal_views', $bulk);
     }
 
-    private function generatePage(int $id): string {
+    private function generatePage(int $id): string
+    {
         $animal = $this->getById($id);
         if (!$animal) throw new Exception("Animal introuvable.");
 
-        $uploadDir = __DIR__ . '/../public/animaux_pages/';
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/animaux_pages/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
         $pagePath = $uploadDir . "animal_{$id}.php";
@@ -131,12 +153,13 @@ class AnimalManager {
         return "/animaux_pages/animal_{$id}.php";
     }
 
-    private function buildPageHtml(Animal $a): string {
+    private function buildPageHtml(Animal $a): string
+    {
         return <<<HTML
 <?php
 require_once (__DIR__ . '/../includes/header.php');
-\$manager = new MongoDB\\Driver\\Manager("mongodb+srv://martinlamalle:456123Fx37!@arcadia.t7ei6.mongodb.net/?retryWrites=true&w=majority&appName=arcadia");
-\$bulk = new MongoDB\\Driver\\BulkWrite;
+\$manager = new MongoDB\Driver\Manager("mongodb+srv://martinlamalle:456123Fx37!@arcadia.t7ei6.mongodb.net/?retryWrites=true&w=majority&appName=arcadia");
+\$bulk = new MongoDB\Driver\BulkWrite;
 \$bulk->update(['animal_id' => "{$a->getId()}"], ['\$inc' => ['view_count' => 1]]);
 \$manager->executeBulkWrite('arcadia.animal_views', \$bulk);
 ?>

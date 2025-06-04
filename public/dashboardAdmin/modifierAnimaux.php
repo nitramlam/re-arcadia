@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $imagePath = uploadImage($_FILES['image'] ?? []);
 
-    // On convertit le nom d'habitat en ID
+    // Convertit le nom d'habitat en ID
     $habitatNom = $_POST['habitat'] ?? '';
     $habitatId = null;
     foreach ($habitats as $h) {
@@ -52,12 +52,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
         }
     }
-    $_POST['habitat_id'] = $habitatId;
+
+    // Préparation des données propres à envoyer
+    $data = [
+        'nom' => $_POST['nom'] ?? '',
+        'description' => $_POST['description'] ?? '',
+        'poids' => $_POST['poids'] ?? '',
+        'sexe' => $_POST['sexe'] ?? '',
+        'continent_origine' => $_POST['continent_origine'] ?? '',
+        'age' => $_POST['age'] ?? '',
+        'habitat_id' => $habitatId,
+        'espece' => $_POST['espece'] ?? '',
+    ];
 
     if (isset($_POST['add_animal'])) {
-        $animalManager->add($_POST, $imagePath);
+        $animalManager->add($data, $imagePath);
     } elseif (isset($_POST['update_animal'])) {
-        $animalManager->update((int) $_POST['animal_id'], $_POST, $imagePath);
+        $animalManager->update((int) $_POST['animal_id'], $data, $imagePath);
     } elseif (isset($_POST['delete_animal'])) {
         $animalManager->delete((int) $_POST['animal_id']);
     }
@@ -66,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $animals = $animalManager->getAll();
 ?>
 
+<!-- Le reste du HTML reste inchangé -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>

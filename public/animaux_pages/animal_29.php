@@ -2,27 +2,27 @@
 require_once (__DIR__ . '/../includes/header.php');
 $manager = new MongoDB\Driver\Manager("mongodb+srv://martinlamalle:456123Fx37!@arcadia.t7ei6.mongodb.net/?retryWrites=true&w=majority&appName=arcadia");
 $bulk = new MongoDB\Driver\BulkWrite;
-$bulk->update(['animal_id' => "27"], ['$inc' => ['view_count' => 1]]);
+$bulk->update(['animal_id' => "29"], ['$inc' => ['view_count' => 1]]);
 $manager->executeBulkWrite('arcadia.animal_views', $bulk);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>rattte - Page Personnalisée</title>
+    <title>ferf - Page Personnalisée</title>
     <link rel="stylesheet" href="animauxPage.css">
 </head>
 <body>
     <div class="animal-main">
-        <h1 class="animal-title">rattte</h1>
-        <img class="animal-photo" src="" alt="rattte">
+        <h1 class="animal-title">ferf</h1>
+        <img class="animal-photo" src="/animaux/iconGuide-services.png" alt="ferf">
         <div class="info-section">
             <h2>Informations Générales</h2>
-            <p><strong>Espèce :</strong> 0</p>
-            <p><strong>Description :</strong> rtgrt</p>
-            <p><strong>Poids :</strong> 5 kg</p>
-            <p><strong>Sexe :</strong> fr</p>
-            <p><strong>Continent d'origine :</strong> rat</p>
+            <p><strong>Espèce :</strong> ergre</p>
+            <p><strong>Description :</strong> reg</p>
+            <p><strong>Poids :</strong> 45 kg</p>
+            <p><strong>Sexe :</strong> f</p>
+            <p><strong>Continent d'origine :</strong> fr</p>
             <p><strong>Habitat ID :</strong> 3</p>
         </div>
         <div class="medical-section">

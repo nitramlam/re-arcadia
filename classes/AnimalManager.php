@@ -58,16 +58,29 @@ class AnimalManager
     {
         if ($imagePath !== null) {
             $stmt = $this->conn->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat_id, espece, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssdsssisss",
-                $data['nom'], $data['description'], $data['poids'], $data['sexe'],
-                $data['continent_origine'], $data['age'], $data['habitat_id'],
-                $data['espece'], $imagePath
+            $stmt->bind_param(
+                "ssdsssiss",
+                $data['nom'],
+                $data['description'],
+                $data['poids'],
+                $data['sexe'],
+                $data['continent_origine'],
+                $data['age'],
+                $data['habitat_id'],
+                $data['espece'],
+                $imagePath
             );
         } else {
             $stmt = $this->conn->prepare("INSERT INTO animal (nom, description, poids, sexe, continent_origine, age, habitat_id, espece) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssdsssii",
-                $data['nom'], $data['description'], $data['poids'], $data['sexe'],
-                $data['continent_origine'], $data['age'], $data['habitat_id'],
+            $stmt->bind_param(
+                "ssdsssii",
+                $data['nom'],
+                $data['description'],
+                $data['poids'],
+                $data['sexe'],
+                $data['continent_origine'],
+                $data['age'],
+                $data['habitat_id'],
                 $data['espece']
             );
         }
@@ -85,32 +98,32 @@ class AnimalManager
         return $id;
     }
 
- public function update(int $id, array $data, ?string $imagePath = null): bool
-{
-    $nom = $data['nom'];
-    $description = $data['description'];
-    $poids = $data['poids'];
-    $sexe = $data['sexe'];
-    $continent = $data['continent_origine'];
-    $age = (int) $data['age'];
-    $habitat_id = (int) $data['habitat_id'];
-    $espece = $data['espece'];
+    public function update(int $id, array $data, ?string $imagePath = null): bool
+    {
+        $nom = $data['nom'];
+        $description = $data['description'];
+        $poids = $data['poids'];
+        $sexe = $data['sexe'];
+        $continent = $data['continent_origine'];
+        $age = (int) $data['age'];
+        $habitat_id = (int) $data['habitat_id'];
+        $espece = $data['espece'];
 
-    if ($imagePath !== null) {
-        $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ?, image_path = ? WHERE animal_id = ?");
-        $stmt->bind_param("ssdsssiiss", $nom, $description, $poids, $sexe, $continent, $age, $habitat_id, $espece, $imagePath, $id);
-    } else {
-        $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ? WHERE animal_id = ?");
-        $stmt->bind_param("ssdsssiis", $nom, $description, $poids, $sexe, $continent, $age, $habitat_id, $espece, $id);
-    }
+        if ($imagePath !== null) {
+            $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ?, image_path = ? WHERE animal_id = ?");
+            $stmt->bind_param("ssdsssiiss", $nom, $description, $poids, $sexe, $continent, $age, $habitat_id, $espece, $imagePath, $id);
+        } else {
+            $stmt = $this->conn->prepare("UPDATE animal SET nom = ?, description = ?, poids = ?, sexe = ?, continent_origine = ?, age = ?, habitat_id = ?, espece = ? WHERE animal_id = ?");
+            $stmt->bind_param("ssdsssiis", $nom, $description, $poids, $sexe, $continent, $age, $habitat_id, $espece, $id);
+        }
 
-    $success = $stmt->execute();
-    if ($success) {
-        $this->syncToMongo($id, $nom);
-        $this->generatePage($id);
+        $success = $stmt->execute();
+        if ($success) {
+            $this->syncToMongo($id, $nom);
+            $this->generatePage($id);
+        }
+        return $success;
     }
-    return $success;
-}
 
     public function delete(int $id): bool
     {
@@ -127,8 +140,8 @@ class AnimalManager
     {
         $bulk = new MongoDB\Driver\BulkWrite;
         $bulk->update(
-            ['animal_id' => (string)$id],
-            ['$set' => ['animal_id' => (string)$id, 'animal_name' => $nom, 'view_count' => 0]],
+            ['animal_id' => (string) $id],
+            ['$set' => ['animal_id' => (string) $id, 'animal_name' => $nom, 'view_count' => 0]],
             ['upsert' => true]
         );
         $this->mongo->executeBulkWrite('arcadia.animal_views', $bulk);
@@ -137,17 +150,19 @@ class AnimalManager
     private function deleteFromMongo(int $id): void
     {
         $bulk = new MongoDB\Driver\BulkWrite;
-        $bulk->delete(['animal_id' => (string)$id]);
+        $bulk->delete(['animal_id' => (string) $id]);
         $this->mongo->executeBulkWrite('arcadia.animal_views', $bulk);
     }
 
     private function generatePage(int $id): string
     {
         $animal = $this->getById($id);
-        if (!$animal) throw new Exception("Animal introuvable.");
+        if (!$animal)
+            throw new Exception("Animal introuvable.");
 
         $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/animaux_pages/';
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+        if (!is_dir($uploadDir))
+            mkdir($uploadDir, 0777, true);
 
         $pagePath = $uploadDir . "animal_{$id}.php";
         $html = $this->buildPageHtml($animal);
